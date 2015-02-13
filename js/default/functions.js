@@ -168,6 +168,13 @@ $(document).ready(function(){
 		});
 	})();
 	
+	/* Bootstrap Tooltips */
+	(function(){
+		$('.ttips').each(function(e) {
+			$(this).tooltip();
+		});
+	})();
+	
 	/* dataTable */
 	(function(){
 		$('.dataTable').each(function () {
@@ -455,10 +462,5 @@ $(window).load(function(){
 				$("#page-wrapper").css("min-height", (height) + "px");
 			}
 		});
-	})();
-	
-	/* Bootstrap Tooltips */
-	(function(){
-		$('.ttips').tooltip();
 	})();
 });
