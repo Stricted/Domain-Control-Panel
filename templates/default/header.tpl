@@ -9,9 +9,9 @@
 		<title>Domain Control Panel</title>
 		<link href="css/default/bootstrap{if !$smarty.const.ENABLE_DEBUG_MODE}.min{/if}.css" rel="stylesheet">
 		<link href="css/default/metisMenu{if !$smarty.const.ENABLE_DEBUG_MODE}.min{/if}.css" rel="stylesheet">
-		<link href="css/default/dataTables.bootstrap.css" rel="stylesheet">
-		<link href="css/default/dataTables.responsive.css" rel="stylesheet">
-		<link href="css/default/sb-admin-2.css" rel="stylesheet">
+		<link href="css/default/dataTables.bootstrap{if !$smarty.const.ENABLE_DEBUG_MODE}.min{/if}.css" rel="stylesheet">
+		<link href="css/default/dataTables.responsive{if !$smarty.const.ENABLE_DEBUG_MODE}.min{/if}.css" rel="stylesheet">
+		<link href="css/default/sb-admin-2{if !$smarty.const.ENABLE_DEBUG_MODE}.min{/if}.css" rel="stylesheet">
 		<link href="css/default/font-awesome{if !$smarty.const.ENABLE_DEBUG_MODE}.min{/if}.css" rel="stylesheet" type="text/css">
 
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
