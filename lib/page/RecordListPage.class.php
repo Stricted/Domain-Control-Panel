@@ -100,6 +100,7 @@ class RecordListPage extends AbstractPage {
 			'soa' => $soa,
 			'pageNo' => $pageNo,
 			'pages' => $pages,
+			'count' => $count,
 			'sortField' => $sortField,
 			'sortOrder' => $sortOrder
 		));

@@ -16,7 +16,7 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div class="panel panel-default">
-			<div class="panel-heading">Domains <span class="badge badge-black">{$domains|count}</span></div>
+			<div class="panel-heading">Domains <span class="badge badge-black">{$count}</span></div>
 			<div class="panel-body">
 				{pages controller='DomainList'}
 				<div class="table-responsive">

@@ -20,7 +20,7 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div class="panel panel-default">
-			<div class="panel-heading">Records <span class="badge badge-black">{$records|count}</span></div>
+			<div class="panel-heading">Records <span class="badge badge-black">{$count}</span></div>
 			<div class="panel-body">
 				{pages controller='RecordList' id=$soa['id']}
 				<div class="table-responsive">

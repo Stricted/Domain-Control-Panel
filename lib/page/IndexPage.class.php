@@ -68,6 +68,7 @@ class IndexPage extends AbstractPage {
 			'domains' => $domains,
 			'pageNo' => $pageNo,
 			'pages' => $pages,
+			'count' => count($soaIDs),
 			'sortField' => $sortField,
 			'sortOrder' => $sortOrder
 		));
