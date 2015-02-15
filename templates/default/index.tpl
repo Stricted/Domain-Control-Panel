@@ -13,19 +13,19 @@
 		</div>
 	</div>
 </div>
-
 <div class="row">
 	<div class="col-lg-12">
 		<div class="panel panel-default">
 			<div class="panel-heading">Domains <span class="badge badge-black">{$domains|count}</span></div>
 			<div class="panel-body">
+				{pages controller='DomainList'}
 				<div class="dataTable_wrapper">
-					<table class="table table-bordered table-hover radius table-striped dataTable" data-dontsort="4">
+					<table class="table table-bordered table-hover radius table-striped dataTable">
 						<thead>
 							<tr>
-								<th>ID</th>
-								<th>Name</th>
-								<th>Serial</th>
+								<th><a class="sorting{if $sortField == 'id'}_{$sortOrder|strtolower}{/if}" href="index.php?page=DomainList&pageNo={$pageNo}&sortField=id&sortOrder={if $sortField == 'id' && $sortOrder == 'ASC'}DESC{else}ASC{/if}">ID</a></th>
+								<th><a class="sorting{if $sortField == 'origin'}_{$sortOrder|strtolower}{/if}" href="index.php?page=DomainList&pageNo={$pageNo}&sortField=origin&sortOrder={if $sortField == 'origin' && $sortOrder == 'ASC'}DESC{else}ASC{/if}">Name</a></th>
+								<th><a class="sorting{if $sortField == 'serial'}_{$sortOrder|strtolower}{/if}" href="index.php?page=DomainList&pageNo={$pageNo}&sortField=serial&sortOrder={if $sortField == 'serial' && $sortOrder == 'ASC'}DESC{else}ASC{/if}">Serial</a></th>
 								<th>Records</th>
 								<th>Manage</th>
 							</tr>
@@ -48,6 +48,7 @@
 						</tbody>
 					</table>
 				</div>
+				{pages controller='DomainList'}
 			</div>
 		</div>
 	</div>

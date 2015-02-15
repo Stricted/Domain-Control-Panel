@@ -22,16 +22,17 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">Records <span class="badge badge-black">{$records|count}</span></div>
 			<div class="panel-body">
+				{pages controller='RecordList' id=$soa['id']}
 				<div class="dataTable_wrapper">
-					<table class="table table-bordered table-hover radius table-striped dataTable" data-dontsort="6" data-sort="asc,3">
+					<table class="table table-bordered table-hover radius table-striped dataTable">
 						<thead>
 							<tr>
-								<th>ID</th>
-								<th>Host</th>
-								<th>TTL</th>
-								<th>Type</th>
+								<th><a class="sorting{if $sortField == 'id'}_{$sortOrder|strtolower}{/if}" href="index.php?page=RecordList&id={$soa['id']}&pageNo={$pageNo}&sortField=id&sortOrder={if $sortField == 'id' && $sortOrder == 'ASC'}DESC{else}ASC{/if}">ID</th>
+								<th><a class="sorting{if $sortField == 'name'}_{$sortOrder|strtolower}{/if}" href="index.php?page=RecordList&id={$soa['id']}&pageNo={$pageNo}&sortField=name&sortOrder={if $sortField == 'name' && $sortOrder == 'ASC'}DESC{else}ASC{/if}">Host</th>
+								<th><a class="sorting{if $sortField == 'ttl'}_{$sortOrder|strtolower}{/if}" href="index.php?page=RecordList&id={$soa['id']}&pageNo={$pageNo}&sortField=ttl&sortOrder={if $sortField == 'ttl' && $sortOrder == 'ASC'}DESC{else}ASC{/if}">TTL</th>
+								<th><a class="sorting{if $sortField == 'type'}_{$sortOrder|strtolower}{/if}" href="index.php?page=RecordList&id={$soa['id']}&pageNo={$pageNo}&sortField=type&sortOrder={if $sortField == 'type' && $sortOrder == 'ASC'}DESC{else}ASC{/if}">Type</th>
 								<th>Prio</th>
-								<th>Data</th>
+								<th><a class="sorting{if $sortField == 'data'}_{$sortOrder|strtolower}{/if}" href="index.php?page=RecordList&id={$soa['id']}&pageNo={$pageNo}&sortField=data&sortOrder={if $sortField == 'data' && $sortOrder == 'ASC'}DESC{else}ASC{/if}">Data</th>
 								<th>Manage</th>
 							</tr>
 						</thead>
@@ -55,6 +56,7 @@
 						</tbody>
 					</table>
 				</div>
+				{pages controller='RecordList' id=$soa['id']}
 			</div>
 		</div>
 	</div>
