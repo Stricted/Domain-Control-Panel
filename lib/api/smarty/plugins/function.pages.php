@@ -1,4 +1,5 @@
 <?php
+use dns\system\DNS;
 
 function smarty_function_pages($tagArgs, $tplObj) {
 	// needed params: controller, pageNo, pages
@@ -77,7 +78,7 @@ function smarty_function_pages($tagArgs, $tplObj) {
 				$html .= makeLink($link, 2, $tagArgs['pageNo'], $tagArgs['pages']);
 			}
 			else {
-				$html .= '<li class="button jumpTo"><a title="Gehe zu Seite" class="ttips">&hellip;</a></li>'."\n";
+				$html .= '<li class="button jumpTo"><a>&hellip;</a></li>'."\n";
 			}
 		}
 		
@@ -122,7 +123,7 @@ function insertPageNumber($link, $pageNo) {
 function makeLink($link, $pageNo, $activePage, $pages) {
 	// first page
 	if ($activePage != $pageNo) {
-		return '<li><a href="'.insertPageNumber($link, $pageNo).'" class="ttips" title="Seite '.$pageNo.'">'.intval($pageNo).'</a></li>'."\n";
+		return '<li><a href="'.insertPageNumber($link, $pageNo).'" class="ttips" title="'.DNS::getLanguageVariable('pagination.page', array('page' => $pageNo)).'">'.intval($pageNo).'</a></li>'."\n";
 	}
 	else {
 		return '<li class="active"><a>'.intval($pageNo).'</a></li>'."\n";
@@ -131,7 +132,7 @@ function makeLink($link, $pageNo, $activePage, $pages) {
 
 function makePreviousLink($link, $pageNo) {
 	if ($pageNo > 1) {
-		return '<li class="skip"><a href="'.insertPageNumber($link, $pageNo - 1).'" title="Vorherige Seite" class="ttips"><span class="fa fa-angle-double-left"></span></a></li>'."\n";
+		return '<li class="skip"><a href="'.insertPageNumber($link, $pageNo - 1).'" title="'.DNS::getLanguageVariable('pagination.previous').'" class="ttips"><span class="fa fa-angle-double-left"></span></a></li>'."\n";
 	}
 	else {
 		return '<li class="skip disabled"><span class="fa fa-angle-double-left disabled"></span></li>'."\n";
@@ -141,7 +142,7 @@ function makePreviousLink($link, $pageNo) {
 
 function makeNextLink($link, $pageNo, $pages) {
 	if ($pageNo && $pageNo < $pages) {
-		return '<li class="skip"><a href="'.insertPageNumber($link, $pageNo + 1).'" title="Nächste Seite" class="ttips"><span class="fa fa-angle-double-right"></span></a></li>'."\n";
+		return '<li class="skip"><a href="'.insertPageNumber($link, $pageNo + 1).'" title="'.DNS::getLanguageVariable('pagination.next').'" class="ttips"><span class="fa fa-angle-double-right"></span></a></li>'."\n";
 	}
 	else {
 		return '<li class="skip disabled"><span class="fa fa-angle-double-right disabled"></span></li>'."\n";
