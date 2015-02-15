@@ -23,8 +23,8 @@
 			<div class="panel-heading">Records <span class="badge badge-black">{$records|count}</span></div>
 			<div class="panel-body">
 				{pages controller='RecordList' id=$soa['id']}
-				<div class="dataTable_wrapper">
-					<table class="table table-bordered table-hover radius table-striped dataTable">
+				<div class="table-responsive">
+					<table class="table table-bordered table-hover radius table-striped">
 						<thead>
 							<tr>
 								<th><a class="sorting{if $sortField == 'id'}_{$sortOrder|strtolower}{/if}" href="index.php?page=RecordList&id={$soa['id']}&pageNo={$pageNo}&sortField=id&sortOrder={if $sortField == 'id' && $sortOrder == 'ASC'}DESC{else}ASC{/if}">ID</th>

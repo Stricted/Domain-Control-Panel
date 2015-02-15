@@ -122,7 +122,7 @@ function insertPageNumber($link, $pageNo) {
 function makeLink($link, $pageNo, $activePage, $pages) {
 	// first page
 	if ($activePage != $pageNo) {
-		return '<li><a href="'.insertPageNumber($link, $pageNo).'" title="Seite '.$pageNo.'">'.intval($pageNo).'</a></li>'."\n";
+		return '<li><a href="'.insertPageNumber($link, $pageNo).'" class="ttips" title="Seite '.$pageNo.'">'.intval($pageNo).'</a></li>'."\n";
 	}
 	else {
 		return '<li class="active"><a>'.intval($pageNo).'</a></li>'."\n";
