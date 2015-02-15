@@ -52,13 +52,14 @@ $(document).ready(function(){
 						success: function(output) {
 							if (output == 'success') {
 								// check if table is a dataTable
+								/*
 								if (t.parent().parent().parent().parent().hasClass('dataTable')) {
 									// remove entry from dataTable
 									var row = t.parent().parent().closest("tr").get(0);
 									var oTable = $('.dataTable').dataTable();
 									oTable.fnDeleteRow(oTable.fnGetPosition(row));
 								}
-								
+								*/
 								t.parent().parent().remove();
 							}
 							else {
@@ -176,6 +177,7 @@ $(document).ready(function(){
 	})();
 	
 	/* dataTable */
+	/*
 	(function(){
 		$('.dataTable').each(function () {
 			var t = $(this);
@@ -185,7 +187,7 @@ $(document).ready(function(){
 			var sortTarget = [];
 			var length = undefined;
 			
-			/* dynamic default sort */
+			// dynamic default sort
 			// example: data-sort="asc,1"
 			data = t.attr('data-sort');
 			if (data) {
@@ -200,12 +202,12 @@ $(document).ready(function(){
 				});
 			}
 			else {
-				/* default */
+				// default
 				sortType = 'asc';
 				sortTarget = [ 0 ];
 			}
 			
-			/* dynamic sort disabling */
+			// dynamic sort disabling
 			// example: data-dontsort="4"
 			data = t.attr('data-dontsort');
 			if (data) {
@@ -215,18 +217,18 @@ $(document).ready(function(){
 				});
 			}
 			else {
-				/* default */
+				// default
 				// nothing
 			}
 			
-			/* dynamic length */
+			// dynamic length
 			// example: data-length="40"
 			data = t.attr('data-length');
 			if (data && data != 0) {
 				length = parseInt(t.attr('data-length'));
 			}
 			else {
-				/* default */
+				// default
 				length = 20;
 			}
 			
@@ -254,7 +256,7 @@ $(document).ready(function(){
 			$('.dataTables_wrapper .pagin').wrapAll('<div class="sOption_wrapper"></div>');
 		});
 	})();
-	
+	*/
 	/* dns input fields */
 	(function(){
 		$('#type').unbind('keyup keydown keypress change');
