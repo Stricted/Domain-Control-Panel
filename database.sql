@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS dns_rr (
 	data VARCHAR(255) NOT NULL,
 	aux INT(10) NOT NULL,
 	ttl INT(10) NOT NULL DEFAULT '86400',
-	type enum('A','AAAA','CNAME','HINFO','MX','NAPTR','NS','PTR','RP','SRV','TXT', 'DNSKEY', 'TLSA', 'DS') DEFAULT NULL,
+	type enum('A', 'AAAA', 'CNAME', 'MX', 'PTR', 'SRV', 'TXT', 'TLSA', 'NS', 'DS') DEFAULT NULL,
 	active boolean NOT NULL DEFAULT 1,
 	UNIQUE KEY dns_rr (zone, name, type, data)
 ) ENGINE=InnoDB;
@@ -66,11 +66,18 @@ CREATE TABLE IF NOT EXISTS dns_api (
 	apiKey VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS dns_template (
+	templateID INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	userID INT(10) NOT NULL,
+	template TEXT
+) ENGINE=InnoDB;
+
 ALTER TABLE dns_api ADD FOREIGN KEY (userID) REFERENCES dns_user (userID) ON DELETE CASCADE;
 ALTER TABLE dns_sec ADD FOREIGN KEY (zone) REFERENCES dns_soa (id) ON DELETE CASCADE;
 ALTER TABLE dns_rr ADD FOREIGN KEY (zone) REFERENCES dns_soa (id) ON DELETE CASCADE;
 ALTER TABLE dns_soa_to_user ADD FOREIGN KEY (userID) REFERENCES dns_user (userID) ON DELETE CASCADE;
 ALTER TABLE dns_soa_to_user ADD FOREIGN KEY (soaID) REFERENCES dns_soa (id) ON DELETE CASCADE;
+ALTER TABLE dns_template ADD FOREIGN KEY (userID) REFERENCES dns_user (userID) ON DELETE CASCADE;
 
 INSERT INTO dns_options VALUES (1, 'dns_api_key', 'aa');
 INSERT INTO dns_options VALUES (4, 'dns_soa_minimum_ttl', '60');
