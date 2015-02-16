@@ -6,42 +6,46 @@
 	</ol>
 </div>
 {hascontent}
-<div class="c-block" id="tableHover">
-	<div class="table-head">
-		<h3 class="panel-title">Records <span class="badge label-white">{$records|count}</span></h3>
-	</div>
-	<div class="table-responsive">
-		<table class="table table-bordered table-hover radius table-striped">
-			<thead>
-				<tr>
-					<th>Algorithmus</a></th>
-					<th>Type</th>
-					<th>DNSSEC Public Key</a></th>
-					<th>DNSSEC Private Key</th>
-					<th>verwalten</th>
-				</tr>
-			</thead>
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">Records <span class="badge badge-black">{$records|count}</span></div>
+				<div class="panel-body">
+					<div class="table-responsive">
+						<table class="table table-bordered table-hover radius table-striped">
+							<thead>
+								<tr>
+									<th>Algorithmus</a></th>
+									<th>Type</th>
+									<th>DNSSEC Public Key</a></th>
+									<th>DNSSEC Private Key</th>
+									<th>verwalten</th>
+								</tr>
+							</thead>
 
-			<tbody>
-				{content}
-					{foreach from=$records item=record}
-					<tr>
-						<td>{$record['algo']}</td>
-						<td>{if $record['active'] != 1}<span class="badge badge-red">{lang}domain.disabled{/lang}</span> {/if}{$record['type']}</td>
-						<td>{$record['public']|substr:0:20}&hellip;</td>
-						<td>{$record['private']|substr:0:20}&hellip;</td>
-						<td>
-							<span class="fa fa-remove ttips pointer deleteSec" delete-id="{$record['id']}" delete-confirm="{lang}record.delete.message{/lang}" title="{lang}button.delete{/lang}"></span>
-							<span class="fa fa{if $record['active']}-check{/if}-square-o ttips pointer toggleSec" toggle-id="{$record['id']}" title="{if $record['active']}{lang}button.disable{/lang}{else}{lang}button.enable{/lang}{/if}" data-disable-message="{lang}button.disable{/lang}" data-enable-message="{lang}button.enable{/lang}"></span>
-							<span class="fa fa-pencil ttips pointer" title="Edit"></span>
-						</td>
-					</tr>
-					{/foreach}
-				{/content}
-			</tbody>
-		</table>
+							<tbody>
+								{content}
+									{foreach from=$records item=record}
+									<tr>
+										<td>{$record['algo']}</td>
+										<td>{if $record['active'] != 1}<span class="badge badge-red">{lang}domain.disabled{/lang}</span> {/if}{$record['type']}</td>
+										<td>{$record['public']|substr:0:20}&hellip;</td>
+										<td>{$record['private']|substr:0:20}&hellip;</td>
+										<td>
+											<span class="fa fa-remove ttips pointer deleteSec" delete-id="{$record['id']}" delete-confirm="{lang}record.delete.message{/lang}" title="{lang}button.delete{/lang}"></span>
+											<span class="fa fa{if $record['active']}-check{/if}-square-o ttips pointer toggleSec" toggle-id="{$record['id']}" title="{if $record['active']}{lang}button.disable{/lang}{else}{lang}button.enable{/lang}{/if}" data-disable-message="{lang}button.disable{/lang}" data-enable-message="{lang}button.enable{/lang}"></span>
+											<span class="fa fa-pencil ttips pointer" title="Edit"></span>
+										</td>
+									</tr>
+									{/foreach}
+								{/content}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-</div>
 {hascontentelse}
 	<div class="alert alert-icon alert-info">
 		<i class="fa fa-info-circle"></i> No Records found.
