@@ -54,10 +54,10 @@ CREATE TABLE IF NOT EXISTS dns_soa_to_user (
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS dns_options (
-  optionID int(255) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `option` varchar(255) DEFAULT NULL,
-  `value` varchar(255) DEFAULT NULL,
-  UNIQUE KEY dns_options (`option`, `value`)
+	optionID int(255) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	optionName VARCHAR(255) NOT NULL DEFAULT '',
+	optionValue MEDIUMTEXT,
+	UNIQUE KEY optionName (optionName)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS dns_api (
@@ -80,8 +80,8 @@ ALTER TABLE dns_soa_to_user ADD FOREIGN KEY (soaID) REFERENCES dns_soa (id) ON D
 ALTER TABLE dns_template ADD FOREIGN KEY (userID) REFERENCES dns_user (userID) ON DELETE CASCADE;
 
 INSERT INTO dns_options VALUES (1, 'dns_api_key', 'aa');
-INSERT INTO dns_options VALUES (4, 'dns_soa_minimum_ttl', '60');
 INSERT INTO dns_options VALUES (3, 'enable_debug_mode', '1');
 INSERT INTO dns_options VALUES (2, 'offline', '0');
+INSERT INTO dns_options VALUES (4, 'dns_soa_minimum_ttl', '60');
 
 INSERT INTO `dns_user` VALUES (1, 'admin', 'example@example.net', '$2a$08$XfcfTGc1LlmOHWUt/2sfNeFLEwqESy6wmrIIJMyQS1j5pwembqiae', '0', '2');

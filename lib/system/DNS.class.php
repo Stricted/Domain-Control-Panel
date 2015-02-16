@@ -210,7 +210,7 @@ class DNS {
 			$content = "<?php\n/* generated at ".gmdate('r')." */\n";
 			
 			while ($row = self::getDB()->fetch_array($options)) {
-				$content .= 'if (!defined("'.strtoupper($row['option']).'")) define("'.strtoupper($row['option']).'", "'.$row['value'].'");'."\n";
+				$content .= "if (!defined('".strtoupper($row['optionName'])."')) define('".strtoupper($row['optionName'])."', ".((is_bool($row['optionValue']) || is_numeric($row['optionValue'])) ? intval($row['optionValue']) : "'".addcslashes($row['optionValue'], "'\\")."'").");\n";
 			}
 			
 			$handler = fOpen($file, "a+");
