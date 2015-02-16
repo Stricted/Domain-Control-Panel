@@ -80,8 +80,17 @@ ALTER TABLE dns_soa_to_user ADD FOREIGN KEY (soaID) REFERENCES dns_soa (id) ON D
 ALTER TABLE dns_template ADD FOREIGN KEY (userID) REFERENCES dns_user (userID) ON DELETE CASCADE;
 
 INSERT INTO dns_options VALUES (1, 'dns_api_key', 'aa');
-INSERT INTO dns_options VALUES (3, 'enable_debug_mode', '1');
 INSERT INTO dns_options VALUES (2, 'offline', '0');
-INSERT INTO dns_options VALUES (4, 'dns_soa_minimum_ttl', '60');
+INSERT INTO dns_options VALUES (3, 'enable_debug_mode', '1');
+INSERT INTO dns_options VALUES (4, 'dns_default_records', '{domain}:NS:ns1.stricted.de.\n{domain}:NS:ns2.stricted.de.\n{domain}:NS:ns3.stricted.de.\n{domain}:NS:ns4.stricted.de.\n{domain}:NS:ns5.stricted.de.\n{domain}:MX:mail.{domain}\n{domain}:A:84.200.248.52\n{domain}:AAAA:2001:1608:12:1::def\n*.{domain}:A:84.200.248.52\n*.{domain}:AAAA:2001:1608:12:1::def\n{domain}:TXT:\"v=spf1 mx -all\"');
+INSERT INTO dns_options VALUES (5, 'dns_soa_mbox', 'info.stricted.de.');
+INSERT INTO dns_options VALUES (6, 'dns_soa_ns', 'ns1.stricted.de.');
+INSERT INTO dns_options VALUES (7, 'dns_soa_ttl', '86400');
+INSERT INTO dns_options VALUES (8, 'dns_soa_refresh', '28800');
+INSERT INTO dns_options VALUES (9, 'dns_soa_retry', '7200');
+INSERT INTO dns_options VALUES (10, 'dns_soa_expire', '604800');
+INSERT INTO dns_options VALUES (11, 'dns_soa_minimum_ttl', '60');
+
+
 
 INSERT INTO `dns_user` VALUES (1, 'admin', 'example@example.net', '$2a$08$XfcfTGc1LlmOHWUt/2sfNeFLEwqESy6wmrIIJMyQS1j5pwembqiae', '0', '2');
