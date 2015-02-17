@@ -14,6 +14,11 @@
 		</div>
 	</div>
 </div>
+{if isset($success)}
+	<div class="alert alert-success">
+		Record erfolgreich hinzugefügt.
+	</div>
+{/if}
 <form method="post" action="index.php?page=RecordAdd&id={$soa['id']}">
 	<div class="row">
 		<div class="col-lg-12">

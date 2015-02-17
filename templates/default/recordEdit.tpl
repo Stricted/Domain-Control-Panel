@@ -14,6 +14,11 @@
 		</div>
 	</div>
 </div>
+{if isset($success)}
+	<div class="alert alert-success">
+		Record erfolgreich bearbeitet.
+	</div>
+{/if}
 <form method="post" action="index.php?page=RecordEdit&id={$rr['id']}">
 	<div class="row">
 		<div class="col-lg-12">

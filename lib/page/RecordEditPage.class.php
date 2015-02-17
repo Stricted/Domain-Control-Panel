@@ -156,6 +156,7 @@ class RecordEditPage extends AbstractPage {
 				}
 				
 				DNS::getTPL()->assign(array('name' => $name, 'type' => $type, 'weight' => $weight, 'port' => $port, 'data' => $data, 'aux' => $aux, 'ttl' => $ttl));
+				DNS::getTPL()->assign(array('success' => true));
 			}
 			else {
 				if ($type == "SRV" || $type == "DS" || $type == "TLSA") {

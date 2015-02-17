@@ -123,6 +123,7 @@ class RecordAddPage extends AbstractPage {
 				
 				$sql = "UPDATE dns_soa SET serial = ? WHERE id = ?";
 				DNS::getDB()->query($sql, array($this->fixSerial($soa['serial']), $soa['id']));
+				DNS::getTPL()->assign(array('success' => true));
 			}
 			else {
 				if ($type == "SRV" || $type == "DS" || $type == "TLSA") {

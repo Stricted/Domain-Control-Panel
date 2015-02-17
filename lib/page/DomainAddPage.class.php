@@ -14,7 +14,7 @@ class DomainAddPage extends AbstractPage {
 	public function prepare() {
 		if (isset($_POST['origin']) && isset($_POST['submit'])) {
 			if (!empty($_POST['origin'])) {
-				$origin = $_REQUEST['origin'];
+				$origin = $_POST['origin'];
 				if (substr($origin, -1) != ".") {
 					$origin = $origin.".";
 				}
@@ -57,9 +57,10 @@ class DomainAddPage extends AbstractPage {
 							DNS::getDB()->query($sql, $rrData);
 						}
 					}
+					DNS::getTPL()->assign(array("error" => '', 'success' => true));
 				}
 				else {
-					DNS::getTPL()->assign(array("error" => 'origin'));
+					DNS::getTPL()->assign(array("error" => 'origin', 'origin' => $_POST['origin']));
 				}
 			}
 			else {
