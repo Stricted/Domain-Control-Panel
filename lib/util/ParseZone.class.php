@@ -1,5 +1,5 @@
 <?php
-namespace dns\system;
+namespace dns\util;
 
 /**
  * @author      Jan Altensen (Stricted)

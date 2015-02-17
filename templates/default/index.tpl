@@ -6,6 +6,7 @@
 		</ol>
 	</div>
 </div>
+{if $isReseller === true}
 <div class="row">
 	<div class="col-lg-12">
 		<div class="page-header pull-right">
@@ -13,6 +14,7 @@
 		</div>
 	</div>
 </div>
+{/if}
 {hascontent}
 	<div class="row">
 		<div class="col-lg-12">
@@ -41,8 +43,10 @@
 									<td>{$domain['serial']}</td>
 									<td>{$domain['rrc']}</td>
 									<td>
-										<span class="fa fa-remove ttips pointer deleteDomain" delete-id="{$domain['id']}" delete-confirm="{lang}domain.delete.message{/lang}" title="{lang}button.delete{/lang}"></span>
-										<span class="fa fa{if $domain['active']}-check{/if}-square-o ttips pointer toggleDomain" toggle-id="{$domain['id']}" title="{if $domain['active']}{lang}button.disable{/lang}{else}{lang}button.enable{/lang}{/if}" data-disable-message="{lang}button.disable{/lang}" data-enable-message="{lang}button.enable{/lang}"></span>
+										{if $isReseller === true}
+											<span class="fa fa-remove ttips pointer deleteDomain" delete-id="{$domain['id']}" delete-confirm="{lang}domain.delete.message{/lang}" title="{lang}button.delete{/lang}"></span>
+											<span class="fa fa{if $domain['active']}-check{/if}-square-o ttips pointer toggleDomain" toggle-id="{$domain['id']}" title="{if $domain['active']}{lang}button.disable{/lang}{else}{lang}button.enable{/lang}{/if}" data-disable-message="{lang}button.disable{/lang}" data-enable-message="{lang}button.enable{/lang}"></span>
+										{/if}
 										<a href="index.php?page=SecList&id={$domain['id']}" class="ttips" title="Edit DNSSEC"><span class="fa fa-key"></span></a>
 									</td>
 								</tr>

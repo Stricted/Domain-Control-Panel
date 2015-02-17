@@ -12,6 +12,9 @@ class DomainAddPage extends AbstractPage {
 	public $activeMenuItem = 'add';
 	
 	public function prepare() {
+		if (User::isReseller() === false) {
+			throw new \Exeption('Forbidden', 403);
+		}
 		if (isset($_POST['origin']) && isset($_POST['submit'])) {
 			if (!empty($_POST['origin'])) {
 				$origin = $_POST['origin'];

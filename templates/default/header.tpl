@@ -50,7 +50,7 @@
 								<a href="#"><i class="fa fa-home"></i> Domains<span class="fa arrow"></span></a>
 								<ul class="{if $activeMenuItem == 'index' || $activeMenuItem == 'add' || $activeMenuItem == 'update'}nav nav-second-level collapse in{else}nav nav-second-level{/if}">
 									<li><a {if $activeMenuItem == 'index'}class="active" {/if}href="index.php?page=DomainList"><i class="fa fa-list"></i> Auflisten</a></li>
-									<li><a {if $activeMenuItem == 'add'}class="active" {/if}href="index.php?page=DomainAdd"><i class="fa fa-plus"></i> Hinzufügen</a></li>
+									{if $isReseller === true}<li><a {if $activeMenuItem == 'add'}class="active" {/if}href="index.php?page=DomainAdd"><i class="fa fa-plus"></i> Hinzufügen</a></li>{/if}
 								</ul>
 							</li>
 							<li{if $activeMenuItem == 'settings' || $activeMenuItem == 'api'} class="active"{/if}>

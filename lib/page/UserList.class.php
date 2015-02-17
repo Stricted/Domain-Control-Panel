@@ -29,5 +29,8 @@ class UserListPage extends AbstractPage {
 			
 			DNS::getTPL()->assign(array("user" => $user));
 		}
+		else {
+			throw new \Exeption('Forbidden', 403);
+		}
 	}
 }

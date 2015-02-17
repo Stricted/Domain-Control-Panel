@@ -1,6 +1,6 @@
 <?php
 namespace dns\page;
-use dns\system\ParseZone;
+use dns\util\ParseZone;
 use dns\system\DNS;
 use dns\system\User;
 
@@ -19,6 +19,11 @@ class ActionPage extends AbstractPage {
 		$action = trim($_POST['action']);
 		$dataID = intval(trim($_POST['dataID']));
 		if ($action == "toggleDomain") {
+			if (User::isReseller() === false) {
+				echo "failure";
+				exit;
+			}
+			
 			$soaIDs = User::getAccessibleDomains();
 			if (!in_array($dataID, $soaIDs)) {
 				echo "failure";
@@ -38,6 +43,11 @@ class ActionPage extends AbstractPage {
 			exit;
 		}
 		else if ($action == "deleteDomain") {
+			if (User::isReseller() === false) {
+				echo "failure";
+				exit;
+			}
+			
 			$soaIDs = User::getAccessibleDomains();
 			if (!in_array($dataID, $soaIDs)) {
 				echo "failure";
@@ -169,7 +179,7 @@ class ActionPage extends AbstractPage {
 				$row = DNS::getDB()->fetch_array($res);
 				
 				if (empty($row)) {
-					$apiKey = sha1(uniqid(sha1(uniqid().time().uniqid())));
+					$apiKey = DNS::generateRandomID();
 					
 					$sql = "INSERT INTO dns_api (id, userID, apiKey) VALUES (NULL, ?, ?)";
 					DNS::getDB()->query($sql, array($_SESSION['userID'], $apiKey));
@@ -183,6 +193,12 @@ class ActionPage extends AbstractPage {
 			if (isset($_POST['zone']) && !empty($_POST['zone'])) {
 				if ($dataID == 0) {
 					if (isset($_POST['origin']) && !empty($_POST['origin'])) {
+						/*
+						if (User::isReseller() === false) {
+							echo "failure";
+							exit;
+						}
+						*/
 						// new zone
 					}
 				}

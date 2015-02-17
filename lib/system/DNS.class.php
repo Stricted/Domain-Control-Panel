@@ -183,7 +183,11 @@ class DNS {
 		*/
 		
 		/* assign language variables */
-		self::getTPL()->assign(array("language" => $this->language));
+		self::getTPL()->assign(array(
+				"language" => $this->language,
+				"isReseller" => User::isReseller(),
+				"isAdmin" => User::isAdmin()
+			));
 	}
 	
 	/**
@@ -191,6 +195,15 @@ class DNS {
 	 */
 	public static function getTPL () {
 		return self::$tplObj;
+	}
+	
+	/**
+	 * Creates a random hash.
+	 * 
+	 * @return	string
+	 */
+	public static function generateRandomID() {
+		return sha1(microtime() . uniqid(mt_rand(), true));
 	}
 	
 	/**
