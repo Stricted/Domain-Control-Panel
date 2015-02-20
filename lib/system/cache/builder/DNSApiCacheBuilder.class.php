@@ -34,11 +34,13 @@ class DNSApiCacheBuilder extends AbstractCacheBuilder {
 				$data[$zone['origin']]['rr'][] = $rr;
 			}
 			
-			/* dnssec keys */
-			$sql3 = "SELECT * FROM dns_sec where zone = ? and active = ?";
-			$statement3 = DNS::getDB()->query($sql3, array($zone['id'], 1));
-			while ($sec = DNS::getDB()->fetch_array($statement3)) {
-				$data[$zone['origin']]['sec'][] = $sec;
+			if (ENABLE_DNSSEC) {
+				/* dnssec keys */
+				$sql3 = "SELECT * FROM dns_sec where zone = ? and active = ?";
+				$statement3 = DNS::getDB()->query($sql3, array($zone['id'], 1));
+				while ($sec = DNS::getDB()->fetch_array($statement3)) {
+					$data[$zone['origin']]['sec'][] = $sec;
+				}
 			}
 		}
 		

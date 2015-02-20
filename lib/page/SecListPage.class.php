@@ -12,7 +12,7 @@ class SecListPage extends AbstractPage {
 	public $activeMenuItem = 'index';
 	
 	public function prepare() {
-		if (!isset($_GET['id']) || empty($_GET['id'])) {
+		if (!isset($_GET['id']) || empty($_GET['id']) || !ENABLE_DNSSEC) {
 			throw new \Exception('The link you are trying to reach is no longer available or invalid.', 404);
 		}
 		

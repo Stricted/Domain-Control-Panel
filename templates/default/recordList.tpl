@@ -47,9 +47,9 @@
 								<td>{$record['aux']}</td>
 								<td>{if $record['data']|strlen > 40}{$record['data']|substr:0:40}&hellip;{else}{$record['data']}{/if}</td>
 								<td>
-									<span class="fa fa-remove ttips pointer deleteRecord" delete-id="{$record['id']}" delete-confirm="{lang}record.delete.message{/lang}" title="{lang}button.delete{/lang}"></span>
-									<span class="fa fa{if $record['active']}-check{/if}-square-o ttips pointer toggleRecord" toggle-id="{$record['id']}" title="{if $record['active']}{lang}button.disable{/lang}{else}{lang}button.enable{/lang}{/if}" data-disable-message="{lang}button.disable{/lang}" data-enable-message="{lang}button.enable{/lang}"></span>
 									<a href="index.php?page=RecordEdit&id={$record['id']}"><span class="fa fa-pencil ttips pointer" title="Edit"></span></a>
+									<span class="fa fa{if $record['active']}-check{/if}-square-o ttips pointer toggleRecord" toggle-id="{$record['id']}" title="{if $record['active']}{lang}button.disable{/lang}{else}{lang}button.enable{/lang}{/if}" data-disable-message="{lang}button.disable{/lang}" data-enable-message="{lang}button.enable{/lang}"></span>
+									<span class="fa fa-remove ttips pointer deleteRecord" delete-id="{$record['id']}" delete-confirm="{lang}record.delete.message{/lang}" title="{lang}button.delete{/lang}"></span>
 								</td>
 							</tr>
 							{/foreach}

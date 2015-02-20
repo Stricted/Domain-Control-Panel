@@ -30,7 +30,7 @@
 									<th><a class="sorting{if $sortField == 'origin'}_{$sortOrder|strtolower}{/if}" href="index.php?page=DomainList&pageNo={$pageNo}&sortField=origin&sortOrder={if $sortField == 'origin' && $sortOrder == 'ASC'}DESC{else}ASC{/if}">Name</a></th>
 									<th><a class="sorting{if $sortField == 'serial'}_{$sortOrder|strtolower}{/if}" href="index.php?page=DomainList&pageNo={$pageNo}&sortField=serial&sortOrder={if $sortField == 'serial' && $sortOrder == 'ASC'}DESC{else}ASC{/if}">Serial</a></th>
 									<th>Records</th>
-									<th>Manage</th>
+									{if $isReseller === true || $smarty.const.ENABLE_DNSSEC}<th>Manage</th>{/if}
 								</tr>
 							</thead>
 							
@@ -43,11 +43,9 @@
 									<td>{$domain['serial']}</td>
 									<td>{$domain['rrc']}</td>
 									<td>
-										{if $isReseller === true}
-											<span class="fa fa-remove ttips pointer deleteDomain" delete-id="{$domain['id']}" delete-confirm="{lang}domain.delete.message{/lang}" title="{lang}button.delete{/lang}"></span>
-											<span class="fa fa{if $domain['active']}-check{/if}-square-o ttips pointer toggleDomain" toggle-id="{$domain['id']}" title="{if $domain['active']}{lang}button.disable{/lang}{else}{lang}button.enable{/lang}{/if}" data-disable-message="{lang}button.disable{/lang}" data-enable-message="{lang}button.enable{/lang}"></span>
-										{/if}
-										<a href="index.php?page=SecList&id={$domain['id']}" class="ttips" title="Edit DNSSEC"><span class="fa fa-key"></span></a>
+										{if $isReseller === true}<span class="fa fa{if $domain['active']}-check{/if}-square-o ttips pointer toggleDomain" toggle-id="{$domain['id']}" title="{if $domain['active']}{lang}button.disable{/lang}{else}{lang}button.enable{/lang}{/if}" data-disable-message="{lang}button.disable{/lang}" data-enable-message="{lang}button.enable{/lang}"></span>&nbsp;{/if}
+										{if $smarty.const.ENABLE_DNSSEC}<a href="index.php?page=SecList&id={$domain['id']}" class="ttips" title="Edit DNSSEC"><span class="fa fa-key"></span></a>&nbsp;{/if}
+										{if $isReseller === true}<span class="fa fa-remove ttips pointer deleteDomain" delete-id="{$domain['id']}" delete-confirm="{lang}domain.delete.message{/lang}" title="{lang}button.delete{/lang}"></span>{/if}
 									</td>
 								</tr>
 								{/foreach}
