@@ -1,6 +1,5 @@
 <?php
 namespace dns\page;
-use dns\system\cache\builder\DNSApiCacheBuilder;
 use dns\system\DNS;
 
 /**
@@ -12,6 +11,7 @@ class ApiPage extends AbstractPage {
 	const AVAILABLE_DURING_OFFLINE_MODE = true;
 	
 	public function prepare() {
+		// todo: user/server seletion
 		$key = "";
 		if (isset($_REQUEST['key'])) {
 			$key = $_REQUEST['key'];
@@ -23,7 +23,34 @@ class ApiPage extends AbstractPage {
 			exit;
 		}
 		else {
-			$data = DNSApiCacheBuilder::getInstance()->getData();
+			$data = array();
+			
+			$sql = "SELECT * FROM dns_soa where active = ?";
+			$statement = DNS::getDB()->query($sql, array(1));
+			
+			while ($zone = DNS::getDB()->fetch_array($statement)) {
+				$data[$zone['origin']] = array();
+				$data[$zone['origin']]['soa'] = $zone;
+				$data[$zone['origin']]['rr'] = array();
+				$data[$zone['origin']]['sec'] = array();
+				
+				/* resource records */
+				$sql2 = "SELECT * FROM dns_rr where zone = ? and active = ?";
+				$statement2 = DNS::getDB()->query($sql2, array($zone['id'], 1));
+				while ($rr = DNS::getDB()->fetch_array($statement2)) {
+					$data[$zone['origin']]['rr'][] = $rr;
+				}
+				
+				if (ENABLE_DNSSEC) {
+					/* dnssec keys */
+					$sql3 = "SELECT * FROM dns_sec where zone = ? and active = ?";
+					$statement3 = DNS::getDB()->query($sql3, array($zone['id'], 1));
+					while ($sec = DNS::getDB()->fetch_array($statement3)) {
+						$data[$zone['origin']]['sec'][] = $sec;
+					}
+				}
+			}
+
 			header('Content-Type: application/json');
 			echo json_encode($data, JSON_PRETTY_PRINT);
 			exit;
