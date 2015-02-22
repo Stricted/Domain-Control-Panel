@@ -5,6 +5,12 @@
 		<li class="active"><a href="index.php?page=SecList&id={$soa['id']}">{$soa['origin']}</a></li>
 	</ol>
 </div>
+{if !empty($ds)}
+	<div class="alert alert-icon alert-info">
+		{$soa['origin']} IN DS {$ds['keyid']} {$ds['algo']} 1 {$ds['sha1']}<br />
+		{$soa['origin']} IN DS {$ds['keyid']} {$ds['algo']} 2 {$ds['sha256']}
+	</div>
+{/if}
 {hascontent}
 	<div class="row">
 		<div class="col-lg-12">

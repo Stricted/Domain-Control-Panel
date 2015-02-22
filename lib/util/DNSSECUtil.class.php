@@ -17,13 +17,13 @@ class DNSSECUtil {
 		
 		$string = hex2bin($owner.$flags.$protocol.$algorithm.$publicKey);
 		
-		$sha1 = sha1($string);
-		$sha256 = hash('sha256', $string);
+		$sha1 = strtoupper(sha1($string));
+		$sha256 = strtoupper(hash('sha256', $string));
 		
 		return array('sha1' => $sha1, 'sha256' => $sha256);
 	}
 	
-	public static convertOwner ($owner) {
+	public static function convertOwner ($owner) {
 		$return = '';
 		
 		$data = explode(".", $owner);
@@ -54,7 +54,7 @@ class DNSSECUtil {
 		$pattern .= "; Created: (?P<created>[0-9]+) \(([a-z0-9: ]+)\)\n";
 		$pattern .= "; Publish: (?P<publish>[0-9]+) \(([a-z0-9: ]+)\)\n";
 		$pattern .= "; Activate: (?P<activate>[0-9]+) \(([a-z0-9: ]+)\)\n";
-		$pattern .= "([\s\S]+). IN DNSKEY 25(6|7) 3 (?P<algorithm>[0-9]+) (?P<key>[\s\S]+)";
+		$pattern .= "([\s\S]+). IN DNSKEY 25(6|7) 3 (?P<algorithm>[0-9]+) (?P<key>[\s\S]+)(\n)?";
 		preg_match('/'.$pattern.'/i', $content, $matches);
 		if (!empty($matches)) {
 			if (!in_array($matches['algorithm'], array(1, 2, 3, 5, 6, 7, 8, 10, 12, 13, 14))) {
@@ -87,7 +87,7 @@ class DNSSECUtil {
 		$pattern .= "Coefficient: (?P<coefficient>[\s\S]+)\n";
 		$pattern .= "Created: (?P<created>[0-9]+)\n";
 		$pattern .= "Publish: (?P<publish>[0-9]+)\n";
-		$pattern .= "Activate: (?P<activate>[0-9]+)";
+		$pattern .= "Activate: (?P<activate>[0-9]+)(\n)?";
 
 		preg_match('/'.$pattern.'/i', $content, $matches);
 		if (!empty($matches)) {
