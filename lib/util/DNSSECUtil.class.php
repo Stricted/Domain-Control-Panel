@@ -8,6 +8,14 @@ namespace dns\util;
  */
 class DNSSECUtil {
 	
+	/**
+	 * calculate the DS record for parent zone
+	 *
+	 * @param	string	$owner
+	 * @param	string	$algorithm
+	 * @param	string	$publicKey
+	 * @return	array
+	 */
 	public static function calculateDS ($owner, $algorithm, $publicKey) {
 		$owner = self::convertOwner($owner);
 		$flags = '0101';
@@ -23,6 +31,12 @@ class DNSSECUtil {
 		return array('sha1' => $sha1, 'sha256' => $sha256);
 	}
 	
+	/**
+	 * convert the domain name to HEX
+	 *
+	 * @param	string	$owner
+	 * @return	string
+	 */
 	public static function convertOwner ($owner) {
 		$return = '';
 		
@@ -49,7 +63,13 @@ class DNSSECUtil {
 		return $return;
 	}
 	
-	public static function validatePublicKey ($content) {
+	/**
+	 * validate DNSSEC public key
+	 *
+	 * @param	string	$content
+	 * @return	boolean
+	 */
+	 public static function validatePublicKey ($content) {
 		$pattern = "; This is a (key|zone)-signing key, keyid (?P<keyid>[0-9]+), for (?P<domain>[\s\S]+)\.\n";
 		$pattern .= "; Created: (?P<created>[0-9]+) \(([a-z0-9: ]+)\)\n";
 		$pattern .= "; Publish: (?P<publish>[0-9]+) \(([a-z0-9: ]+)\)\n";
@@ -75,6 +95,12 @@ class DNSSECUtil {
 		return true;
 	}
 	
+	/**
+	 * validate DNSSEC private key
+	 *
+	 * @param	string	$content
+	 * @return	boolean
+	 */
 	public static function validatePrivateKey ($content) {
 		$pattern = "Private-key-format: v([0-9a-z.]+)\n";
 		$pattern .= "Algorithm: (?P<algorithm>[0-9]+) \(([0-9a-z\-]+)\)\n";
@@ -88,7 +114,7 @@ class DNSSECUtil {
 		$pattern .= "Created: (?P<created>[0-9]+)\n";
 		$pattern .= "Publish: (?P<publish>[0-9]+)\n";
 		$pattern .= "Activate: (?P<activate>[0-9]+)(\n)?";
-
+		
 		preg_match('/'.$pattern.'/i', $content, $matches);
 		if (!empty($matches)) {
 			if (!in_array($matches['algorithm'], array(1, 2, 3, 5, 6, 7, 8, 10, 12, 13, 14))) {
