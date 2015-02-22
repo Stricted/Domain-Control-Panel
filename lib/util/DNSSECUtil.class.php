@@ -54,9 +54,13 @@ class DNSSECUtil {
 		$pattern .= "; Created: (?P<created>[0-9]+) \(([a-z0-9: ]+)\)\n";
 		$pattern .= "; Publish: (?P<publish>[0-9]+) \(([a-z0-9: ]+)\)\n";
 		$pattern .= "; Activate: (?P<activate>[0-9]+) \(([a-z0-9: ]+)\)\n";
-		$pattern .= "([\s\S]+). IN DNSKEY (?P<type>[0-9]+) ([0-9]+) (?P<algorithm>[0-9]+) (?P<key>[\s\S]+)";
+		$pattern .= "([\s\S]+). IN DNSKEY 25(6|7) 3 (?P<algorithm>[0-9]+) (?P<key>[\s\S]+)";
 		preg_match('/'.$pattern.'/i', $content, $matches);
 		if (!empty($matches)) {
+			if (!in_array($matches['algorithm'], array(1, 2, 3, 5, 6, 7, 8, 10, 12, 13, 14))) {
+				return false;
+			}
+			
 			$data = explode(' ', $matches['key']);
 			foreach ($data as $d) {
 				if (base64_encode(base64_decode($d, true)) !== $d) {
@@ -87,7 +91,30 @@ class DNSSECUtil {
 
 		preg_match('/'.$pattern.'/i', $content, $matches);
 		if (!empty($matches)) {
-			/* to be continued */
+			if (!in_array($matches['algorithm'], array(1, 2, 3, 5, 6, 7, 8, 10, 12, 13, 14))) {
+				return false;
+			}
+			else if (base64_encode(base64_decode($matches['modulus'], true)) !== $matches['modulus']) {
+				return false;
+			}
+			else if (base64_encode(base64_decode($matches['publicexponent'], true)) !== $matches['publicexponent']) {
+				return false;
+			}
+			else if (base64_encode(base64_decode($matches['prime1'], true)) !== $matches['prime1']) {
+				return false;
+			}
+			else if (base64_encode(base64_decode($matches['prime2'], true)) !== $matches['prime2']) {
+				return false;
+			}
+			else if (base64_encode(base64_decode($matches['exponent1'], true)) !== $matches['exponent1']) {
+				return false;
+			}
+			else if (base64_encode(base64_decode($matches['exponent2'], true)) !== $matches['exponent2']) {
+				return false;
+			}
+			else if (base64_encode(base64_decode($matches['coefficient'], true)) !== $matches['coefficient']) {
+				return false;
+			}
 		}
 		else {
 			return false;
