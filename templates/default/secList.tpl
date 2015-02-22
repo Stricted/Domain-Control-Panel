@@ -32,9 +32,9 @@
 										<td>{$record['public']|substr:0:20}&hellip;</td>
 										<td>{$record['private']|substr:0:20}&hellip;</td>
 										<td>
+											<span class="fa fa-pencil ttips pointer" title="Edit"></span>&nbsp;
+											<span class="fa fa{if $record['active']}-check{/if}-square-o ttips pointer toggleSec" toggle-id="{$record['id']}" title="{if $record['active']}{lang}button.disable{/lang}{else}{lang}button.enable{/lang}{/if}" data-disable-message="{lang}button.disable{/lang}" data-enable-message="{lang}button.enable{/lang}"></span>&nbsp;
 											<span class="fa fa-remove ttips pointer deleteSec" delete-id="{$record['id']}" delete-confirm="{lang}record.delete.message{/lang}" title="{lang}button.delete{/lang}"></span>
-											<span class="fa fa{if $record['active']}-check{/if}-square-o ttips pointer toggleSec" toggle-id="{$record['id']}" title="{if $record['active']}{lang}button.disable{/lang}{else}{lang}button.enable{/lang}{/if}" data-disable-message="{lang}button.disable{/lang}" data-enable-message="{lang}button.enable{/lang}"></span>
-											<span class="fa fa-pencil ttips pointer" title="Edit"></span>
 										</td>
 									</tr>
 									{/foreach}

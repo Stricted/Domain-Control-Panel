@@ -269,6 +269,7 @@ class ParseZone {
 				if (!empty($matches[2])) {
 					$this->soa['minimum'] = $matches[2];
 					$this->soa['ttl'] = $matches[2];
+					$this->ttl = $this->soa['ttl'];
 				}
 				else {
 					$this->soa['minimum'] = $this->ttl;
