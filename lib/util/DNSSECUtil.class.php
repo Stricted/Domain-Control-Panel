@@ -7,6 +7,8 @@ namespace dns\util;
  * @copyright   2015 Jan Altensen (Stricted)
  */
 class DNSSECUtil {
+	// see: http://www.iana.org/assignments/dns-sec-alg-numbers/dns-sec-alg-numbers.xhtml
+	public static $availableAlgorithm = array(3, 5, 6, 7, 8, 10, 12, 13, 14);
 	
 	/**
 	 * calculate the DS record for parent zone
@@ -38,24 +40,22 @@ class DNSSECUtil {
 	 * @return	string
 	 */
 	public static function convertOwner ($owner) {
-		$return = '';
-		
-		$data = explode(".", $owner);
-		$return .= '0'.dechex(strlen($data[0]));
-		$data[0] = str_split($data[0]);
-		for ($i = 0; $i < count($data[0]); $i++) {
-			$byte = strtoupper(dechex(ord($data[0][$i])));
-			$byte = str_repeat('0', 2 - strlen($byte)).$byte;
-			$return .= $byte;
+		if (substr($owner, -1) == '.') {
+			$owner = substr($owner, 0, -1);
 		}
 		
-		$return .= '0'.dechex(strlen($data[1]));
-		$data[1] = str_split($data[1]);
+		$return = '';
 		
-		for ($i = 0; $i < count($data[1]); $i++) {
-			$byte = strtoupper(dechex(ord($data[1][$i])));
-			$byte = str_repeat('0', 2 - strlen($byte)).$byte;
-			$return .= $byte;
+		$parts = explode(".", $owner);
+		foreach ($parts as $part) {
+			$len = dechex(strlen($part));
+			$return .= str_repeat('0', 2 - strlen($len)).$len;
+			$part = str_split($part);
+			for ($i = 0; $i < count($part); $i++) {
+				$byte = strtoupper(dechex(ord($part[$i])));
+				$byte = str_repeat('0', 2 - strlen($byte)).$byte;
+				$return .= $byte;
+			}
 		}
 		
 		$return .= '00';
@@ -69,7 +69,7 @@ class DNSSECUtil {
 	 * @param	string	$content
 	 * @return	boolean
 	 */
-	 public static function validatePublicKey ($content) {
+	public static function validatePublicKey ($content) {
 		$pattern = "; This is a (key|zone)-signing key, keyid (?P<keyid>[0-9]+), for (?P<domain>[\s\S]+)\.\n";
 		$pattern .= "; Created: (?P<created>[0-9]+) \(([a-z0-9: ]+)\)\n";
 		$pattern .= "; Publish: (?P<publish>[0-9]+) \(([a-z0-9: ]+)\)\n";
@@ -77,7 +77,7 @@ class DNSSECUtil {
 		$pattern .= "([\s\S]+). IN DNSKEY 25(6|7) 3 (?P<algorithm>[0-9]+) (?P<key>[\s\S]+)(\n)?";
 		preg_match('/'.$pattern.'/i', $content, $matches);
 		if (!empty($matches)) {
-			if (!in_array($matches['algorithm'], array(1, 2, 3, 5, 6, 7, 8, 10, 12, 13, 14))) {
+			if (!in_array($matches['algorithm'], self::$availableAlgorithm)) {
 				return false;
 			}
 			
@@ -106,6 +106,7 @@ class DNSSECUtil {
 		$pattern .= "Algorithm: (?P<algorithm>[0-9]+) \(([0-9a-z\-]+)\)\n";
 		$pattern .= "Modulus: (?P<modulus>[\s\S]+)\n";
 		$pattern .= "PublicExponent: (?P<publicexponent>[\s\S]+)\n";
+		$pattern .= "PrivateExponent: (?P<privatexponent>[\s\S]+)\n";
 		$pattern .= "Prime1: (?P<prime1>[\s\S]+)\n";
 		$pattern .= "Prime2: (?P<prime2>[\s\S]+)\n";
 		$pattern .= "Exponent1: (?P<exponent1>[\s\S]+)\n";
@@ -117,13 +118,16 @@ class DNSSECUtil {
 		
 		preg_match('/'.$pattern.'/i', $content, $matches);
 		if (!empty($matches)) {
-			if (!in_array($matches['algorithm'], array(1, 2, 3, 5, 6, 7, 8, 10, 12, 13, 14))) {
+			if (!in_array($matches['algorithm'], self::$availableAlgorithm)) {
 				return false;
 			}
 			else if (base64_encode(base64_decode($matches['modulus'], true)) !== $matches['modulus']) {
 				return false;
 			}
 			else if (base64_encode(base64_decode($matches['publicexponent'], true)) !== $matches['publicexponent']) {
+				return false;
+			}
+			else if (base64_encode(base64_decode($matches['privatexponent'], true)) !== $matches['privatexponent']) {
 				return false;
 			}
 			else if (base64_encode(base64_decode($matches['prime1'], true)) !== $matches['prime1']) {
