@@ -70,6 +70,9 @@ class DNSSECUtil {
 	 * @return	boolean
 	 */
 	public static function validatePublicKey ($content) {
+		// unify newlines
+		$content = preg_replace("/(\r\n)|(\r)/", "\n", $content);
+		
 		$pattern = "; This is a (key|zone)-signing key, keyid (?P<keyid>[0-9]+), for (?P<domain>[\s\S]+)\.\n";
 		$pattern .= "; Created: (?P<created>[0-9]+) \(([a-z0-9: ]+)\)\n";
 		$pattern .= "; Publish: (?P<publish>[0-9]+) \(([a-z0-9: ]+)\)\n";
@@ -102,6 +105,9 @@ class DNSSECUtil {
 	 * @return	boolean
 	 */
 	public static function validatePrivateKey ($content) {
+		// unify newlines
+		$content = preg_replace("/(\r\n)|(\r)/", "\n", $content);
+		
 		$pattern = "Private-key-format: v([0-9a-z.]+)\n";
 		$pattern .= "Algorithm: (?P<algorithm>[0-9]+) \(([0-9a-z\-]+)\)\n";
 		$pattern .= "Modulus: (?P<modulus>[\s\S]+)\n";

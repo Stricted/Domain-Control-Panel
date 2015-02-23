@@ -50,6 +50,10 @@ class ParseZone {
 	 */
 	public function __construct ($file, $origin = "") {
 		if (!empty($origin)) $this->origin = $origin;
+		
+		// unify newlines
+		$file = preg_replace("/(\r\n)|(\r)/", "\n", $file);
+		
 		// unify all lines
 		$file = preg_replace_callback('/(\([^()]*\))/', function ($matches) {
 			$a = explode("\n", $matches[0]);
