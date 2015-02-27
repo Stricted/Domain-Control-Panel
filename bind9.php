@@ -19,10 +19,7 @@ if (is_array($data) && !isset($data['error'])) {
 		$out .=	";\n";
 		
 		foreach ($zone['rr'] as $record) {
-			if ($record['type'] == "DNSKEY") {
-				// nothing
-			}
-			else if ($record['type'] == "MX" || $record['type'] == "SRV" || $record['type'] == "TLSA" || $record['type'] == "DS") {
+			if ($record['type'] == "MX" || $record['type'] == "SRV" || $record['type'] == "TLSA" || $record['type'] == "DS") {
 				$out .= $record['name']."\t".$record['ttl']."\tIN\t".$record['type']."\t".$record['aux']."\t".$record['data']."\n";
 			}
 			else if ($record['type'] == "TXT") {
@@ -55,7 +52,7 @@ if (is_array($data) && !isset($data['error'])) {
 				shell_exec("mkdir -p /srv/bind/dnssec/".$zone['soa']['origin']."/");
 			}
 			
-			if ($sec['type'] == "ZSK") {
+			if ($sec['type'] == "ZSK" || $sec['type'] == "KSK") {
 				if (!empty($sec['public']) && !empty($sec['private'])) {
 					preg_match("/; This is a (key|zone)-signing key, keyid ([0-9]+), for ".$zone['soa']['origin']."/i", $sec['public'], $match);
 					$filename1 = getFileName ($zone['soa']['origin'], $sec['algo'], $match[2], "pub");
@@ -80,44 +77,29 @@ if (is_array($data) && !isset($data['error'])) {
 					if (file_exists("/srv/bind/dnssec/".$zone['soa']['origin']."/".$filename1) && file_exists("/srv/bind/dnssec/".$zone['soa']['origin']."/".$filename2)) {
 						preg_match("/".$zone['soa']['origin']." IN DNSKEY ([0-9]+) ([0-9]+) ([0-9]+) ([\s\S]+)/i", $sec['public'], $match);
 						$out .= $zone['soa']['origin']."\t60\tIN\tDNSKEY\t".$match[1]."\t".$match[2]." ".$match[3]." ".$match[4]."\n";
-						$zsk = true;
-					}
-				}
-			}
-			else if ($sec['type'] == "KSK") {
-				if (!empty($sec['public']) && !empty($sec['private'])) {
-					preg_match("/; This is a (key|zone)-signing key, keyid ([0-9]+), for ([a-z0-9.-]+)/i", $sec['public'], $match);
-					$filename1 = getFileName ($zone['soa']['origin'], $sec['algo'], $match[2], "pub");
-					$filename2 = getFileName ($zone['soa']['origin'], $sec['algo'], $match[2], "priv");
-					
-					if (file_exists("/srv/bind/dnssec/".$zone['soa']['origin']."/".$filename1)) {
-						unlink("/srv/bind/dnssec/".$zone['soa']['origin']."/".$filename1);
-					}
-					
-					if (file_exists("/srv/bind/dnssec/".$zone['soa']['origin']."/".$filename2)) {
-						unlink("/srv/bind/dnssec/".$zone['soa']['origin']."/".$filename2);
-					}
-					
-					$handler = fOpen("/srv/bind/dnssec/".$zone['soa']['origin']."/".$filename1, "a+");
-					fWrite($handler, $sec['public']);
-					fClose($handler);
-					
-					$handler = fOpen("/srv/bind/dnssec/".$zone['soa']['origin']."/".$filename2, "a+");
-					fWrite($handler, $sec['private']);
-					fClose($handler);
-					
-					if (file_exists("/srv/bind/dnssec/".$zone['soa']['origin']."/".$filename1) && file_exists("/srv/bind/dnssec/".$zone['soa']['origin']."/".$filename2)) {
-						preg_match("/".$zone['soa']['origin']." IN DNSKEY ([0-9]+) ([0-9]+) ([0-9]+) ([\s\S]+)/i", $sec['public'], $match);
-						$out .= $zone['soa']['origin']."\t60\tIN\tDNSKEY\t".$match[1]."\t".$match[2]." ".$match[3]." ".$match[4]."\n";
-						$ksk = true;
+						
+						if ($sec['type'] == "ZSK") {
+							$zsk = true;
+						}
+						else if ($sec['type'] == "ZSK") {
+							$ksk = true;
+						}
 					}
 				}
 			}
 		}
 		
-		$signed = false;
+		$sign = false;
 		if ($zsk === true && $ksk === true) {
-			$signed = true;
+			$sign = true;
+		}
+		
+		$signed = false;
+		if ($sign === true) {
+			shell_exec("cd /srv/bind/ && /usr/sbin/dnssec-signzone -r /dev/urandom -A -N INCREMENT -K /srv/bind/dnssec/".$zone['soa']['origin']."/ -o ".$zone['soa']['origin']." -t ".$zone['soa']['origin']."db");
+			if (file_exists("/srv/bind/".$zone['soa']['origin']."db.signed")) {
+				$signed = true;
+			}
 		}
 		
 		$cout = "zone \"" . $zone['soa']['origin'] . "\" {\n";
@@ -126,16 +108,13 @@ if (is_array($data) && !isset($data['error'])) {
 		$cout .= "\tfile \"/srv/bind/".$zone['soa']['origin']."db".($signed === true ? ".signed" : "")."\";\n";
 		$cout .= "};\n\n";
 		
-		$handler = fOpen("/srv/bind/domains.cfg", "a+");
-		fWrite($handler, $cout);
-		fClose($handler);
-		$handler = fOpen("/srv/bind/".$zone['soa']['origin']."db", "a+");
-		fWrite($handler, $out);
-		fClose($handler);
+		$handler = fopen("/srv/bind/domains.cfg", "a+");
+		fwrite($handler, $cout);
+		fclose($handler);
 		
-		if ($signed === true) {
-			shell_exec("cd /srv/bind/ && /usr/sbin/dnssec-signzone -r /dev/urandom -A -N INCREMENT -K /srv/bind/dnssec/".$zone['soa']['origin']."/ -o ".$zone['soa']['origin']." -t ".$zone['soa']['origin']."db");
-		}
+		$handler = fopen("/srv/bind/".$zone['soa']['origin']."db", "a+");
+		fwrite($handler, $out);
+		fclose($handler);
 	}
 	shell_exec("/etc/init.d/bind9 reload");
 }
