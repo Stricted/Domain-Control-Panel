@@ -10,7 +10,7 @@ if (is_array($data) && !isset($data['error'])) {
 	shell_exec("rm -rf /srv/bind/*");
 	
 	foreach ($data as $zone) {
-		$out = $zone['soa']['origin']."     ".$zone['soa']['minimum']."  IN      SOA     ".$zone['soa']['ns']." ".$zone['soa']['mbox']." (\n";
+		$out = $zone['soa']['origin']."\t".$zone['soa']['minimum']."\tIN\tSOA\t".$zone['soa']['ns']."\t".$zone['soa']['mbox']." (\n";
 		$out .=	"\t\t\t\t".$zone['soa']['serial']."\t; Serial\n";
 		$out .=	"\t\t\t\t".$zone['soa']['refresh']."\t\t; Refresh\n";
 		$out .=	"\t\t\t\t".$zone['soa']['retry']."\t\t; Retry\n";

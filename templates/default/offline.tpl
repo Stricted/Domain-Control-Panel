@@ -7,9 +7,9 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 		<title>Domain Control Panel</title>
-		<link href="css/default/bootstrap{if !$smarty.const.ENABLE_DEBUG_MODE}.min{/if}.css" rel="stylesheet">
+		<link href="css/default/bootstrap{if !$smarty.const.ENABLE_DEBUG}.min{/if}.css" rel="stylesheet">
 		<link href="css/default/sb-admin-2.css" rel="stylesheet">
-		<link href="css/default/font-awesome{if !$smarty.const.ENABLE_DEBUG_MODE}.min{/if}.css" rel="stylesheet" type="text/css">
+		<link href="css/default/font-awesome{if !$smarty.const.ENABLE_DEBUG}.min{/if}.css" rel="stylesheet" type="text/css">
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 		<!--[if lt IE 9]>
@@ -73,8 +73,8 @@
 			</div>
 		</div>
 
-		<script src="js/default/jquery{if !$smarty.const.ENABLE_DEBUG_MODE}.min{/if}.js"></script>
-		<script src="js/default/bootstrap{if !$smarty.const.ENABLE_DEBUG_MODE}.min{/if}.js"></script>
+		<script src="js/default/jquery{if !$smarty.const.ENABLE_DEBUG}.min{/if}.js"></script>
+		<script src="js/default/bootstrap{if !$smarty.const.ENABLE_DEBUG}.min{/if}.js"></script>
 		<script type="text/javascript">
 			{literal}
 			function loadDomain() {

@@ -34,9 +34,16 @@ class RecordAddPage extends AbstractPage {
 		$types = array('A', 'AAAA', 'CNAME', 'MX', 'PTR', 'SRV', 'TXT', 'TLSA', 'NS', 'DS');
 		$error = array();
 		if (isset($_POST['submit']) && !empty($_POST['submit'])) {
-			if (isset($_POST['name']) && !empty($_POST['name']) && isset($_POST['ttl']) && !empty($_POST['ttl']) && isset($_POST['type']) && !empty($_POST['type']) && isset($_POST['data']) && !empty($_POST['data'])) {
+			if (isset($_POST['name']) && isset($_POST['ttl']) && !empty($_POST['ttl']) && isset($_POST['type']) && !empty($_POST['type']) && isset($_POST['data']) && !empty($_POST['data'])) {
 				$type = trim($_POST['type']);
-				$name = $idna->encode(trim($_POST['name']));
+				
+				if (!empty($_POST['name'])) {
+					$name = $idna->encode(trim($_POST['name']));
+				}
+				else {
+					$name = $idna->encode(trim($soa['origin']));
+				}
+				
 				if (in_array($type, $types)) {
 					$aux = 0;
 					if (($type == "MX" || $type == "TLSA" || $type == "SRV" || $type == "DS") && isset($_POST['aux']) && !empty($_POST['aux'])) {
@@ -109,7 +116,7 @@ class RecordAddPage extends AbstractPage {
 			$res = DNS::getDB()->query($sql, array($_GET['id'], $name, $type, $data));
 			$rr = DNS::getDB()->fetch_array($res);
 			if (!empty($rr)) {
-				$error = array_merge($error, array('name', 'type', 'data'));
+				$error = array_merge($error, array('type', 'data'));
 			}
 			
 			if (empty($error)) {

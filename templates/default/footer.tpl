@@ -16,9 +16,9 @@
 			language['javascript.confirm'] = '{lang}javascript.confirm{/lang}';
 			language['domain.disabled'] = '{lang}domain.disabled{/lang}';
 		</script>
-		<script src="js/default/jquery{if !$smarty.const.ENABLE_DEBUG_MODE}.min{/if}.js"></script>
-		<script src="js/default/bootstrap{if !$smarty.const.ENABLE_DEBUG_MODE}.min{/if}.js"></script>
-		<script src="js/default/metisMenu{if !$smarty.const.ENABLE_DEBUG_MODE}.min{/if}.js"></script>
-		<script src="js/default/functions{if !$smarty.const.ENABLE_DEBUG_MODE}.min{/if}.js"></script>
+		<script src="js/default/jquery{if !$smarty.const.ENABLE_DEBUG}.min{/if}.js"></script>
+		<script src="js/default/bootstrap{if !$smarty.const.ENABLE_DEBUG}.min{/if}.js"></script>
+		<script src="js/default/metisMenu{if !$smarty.const.ENABLE_DEBUG}.min{/if}.js"></script>
+		<script src="js/default/functions{if !$smarty.const.ENABLE_DEBUG}.min{/if}.js"></script>
 	</body>
 </html>

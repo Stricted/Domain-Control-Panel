@@ -173,7 +173,7 @@ class DNS {
 		self::getTPL()->setPluginsDir(DNS_DIR."/lib/api/smarty/plugins");
 		self::getTPL()->loadFilter('pre', 'hascontent');
 		
-		if (!ENABLE_DEBUG_MODE) {
+		if (!ENABLE_DEBUG) {
 			self::getTPL()->loadFilter('output', 'trimwhitespace');
 		}
 		
@@ -204,6 +204,15 @@ class DNS {
 	 */
 	public static function generateRandomID() {
 		return sha1(microtime() . uniqid(mt_rand(), true));
+	}
+	
+	/**
+	 * Creates an UUID.
+	 * 
+	 * @return	string
+	 */
+	public static function generateUUID() {
+		return strtoupper(sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535)));
 	}
 	
 	/**

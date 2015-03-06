@@ -179,7 +179,7 @@ class ActionPage extends AbstractPage {
 				$row = DNS::getDB()->fetch_array($res);
 				
 				if (empty($row)) {
-					$apiKey = DNS::generateRandomID();
+					$apiKey = DNS::generateUUID();
 					
 					$sql = "INSERT INTO dns_api (id, userID, apiKey) VALUES (NULL, ?, ?)";
 					DNS::getDB()->query($sql, array($_SESSION['userID'], $apiKey));
