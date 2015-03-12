@@ -36,8 +36,8 @@ class RequestHandler {
 			exit;
 		}
 		
-		if (isset($_SESSION['username'])) {
-			DNS::getTPL()->assign(array("username" => $_SESSION['username']));
+		if (DNS::getSession()->username !== null) {
+			DNS::getTPL()->assign(array("username" => DNS::getSession()->username));
 		}
 		
 		if (empty($className)) {

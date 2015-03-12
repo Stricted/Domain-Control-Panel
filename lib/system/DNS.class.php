@@ -15,6 +15,13 @@ class DNS {
 	protected static $dbObj = null;
 	
 	/**
+	 * session object
+	 *
+	 * @var	object
+	 */
+	protected static $sessionObj = null;
+	
+	/**
 	 * template object
 	 *
 	 * @var	object
@@ -36,6 +43,7 @@ class DNS {
 		
 		$this->initDB();
 		self::buildOptions();
+		$this->initSession();
 		$this->initLanguage();
 		$this->initTPL();
 		new RequestHandler();
@@ -54,6 +62,20 @@ class DNS {
 	protected function initDB() {
 		require(DNS_DIR.'/config.inc.php');
 		self::$dbObj = new DB($driver, $host, $user, $pass, $db, $port);
+	}
+	
+	/**
+	 * init session system
+	 */
+	protected function initSession() {
+		self::$sessionObj = new SessionHandler();
+	}
+	
+	/**
+	 * return session object
+	 */
+	public static function getSession() {
+		return self::$sessionObj;
 	}
 	
 	/*
@@ -88,8 +110,8 @@ class DNS {
 				$languageCode = $availableLanguages[$code];
 			}
 		}
-		else if (isset($_SESSION['language'])) {
-			$code = strtolower($_SESSION['language']);
+		else if (DNS::getSession()->language !== null) {
+			$code = strtolower(DNS::getSession()->language);
 			if (in_array($code, $availableLanguages)) {
 				$languageCode = $code;
 			}
@@ -109,7 +131,7 @@ class DNS {
 		}
 		
 		$file = $basedir.$languageCode.'.lang.php';
-		$_SESSION['language'] = $languageCode;
+		DNS::getSession()->register('language', $languageCode);
 		
 		if (file_exists($file)) {
 			require_once($file);
@@ -159,8 +181,8 @@ class DNS {
 	protected function initTPL () {
 		require(DNS_DIR.'/config.inc.php');
 		
-		if (isset($_SESSION['tpl']) && !empty($_SESSION['tpl'])) {
-			$tpl = $_SESSION['tpl'];
+		if (DNS::getSession()->tpl !== null && !empty(DNS::getSession()->tpl)) {
+			$tpl = DNS::getSession()->tpl;
 		}
 		
 		require_once(DNS_DIR.'/lib/api/smarty/Smarty.class.php');

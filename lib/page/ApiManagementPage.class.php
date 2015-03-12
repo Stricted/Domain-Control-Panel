@@ -13,7 +13,7 @@ class ApiManagementPage extends AbstractPage {
 	
 	public function prepare() {
 		$sql = "SELECT * FROM dns_api WHERE userID = ?";
-		$res = DNS::getDB()->query($sql, array($_SESSION['userID']));
+		$res = DNS::getDB()->query($sql, array(DNS::getSession()->userID));
 		$row = DNS::getDB()->fetch_array($res);
 		
 		$apiKey = "";

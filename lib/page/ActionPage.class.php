@@ -175,14 +175,14 @@ class ActionPage extends AbstractPage {
 		else if ($action == "requestApiKey") {
 			if (User::isLoggedIn()) {
 				$sql = "SELECT * FROM dns_api WHERE userID = ?";
-				$res = DNS::getDB()->query($sql, array($_SESSION['userID']));
+				$res = DNS::getDB()->query($sql, array(DNS::getSession()->userID));
 				$row = DNS::getDB()->fetch_array($res);
 				
 				if (empty($row)) {
 					$apiKey = DNS::generateUUID();
 					
 					$sql = "INSERT INTO dns_api (id, userID, apiKey) VALUES (NULL, ?, ?)";
-					DNS::getDB()->query($sql, array($_SESSION['userID'], $apiKey));
+					DNS::getDB()->query($sql, array(DNS::getSession()->userID, $apiKey));
 					
 					echo $apiKey;
 					exit;

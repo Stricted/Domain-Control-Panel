@@ -19,7 +19,7 @@ class UserListPage extends AbstractPage {
 			}
 			else {
 				$sql = "SELECT * from dns_user WHERE reseller = ?";
-				$res = DNS::getDB()->query($sql, array($_SESSION['userID']));
+				$res = DNS::getDB()->query($sql, array(DNS::getSession()->userID));
 			}
 			
 			$user = array();

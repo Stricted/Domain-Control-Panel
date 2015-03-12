@@ -36,10 +36,10 @@ class DomainAddPage extends AbstractPage {
 					$soaID = DNS::getDB()->last_id();
 					
 					$sql = "INSERT INTO dns_soa_to_user (id, userID, soaID) VALUES (null, ?, ?)";
-					DNS::getDB()->query($sql, array($_SESSION['userID'], $soaID));
+					DNS::getDB()->query($sql, array(DNS::getSession()->userID, $soaID));
 					
 					$sql = "SELECT * FROM dns_template WHERE userID = ?";
-					$res = DNS::getDB()->query($sql, array($_SESSION['userID']));
+					$res = DNS::getDB()->query($sql, array(DNS::getSession()->userID));
 					$tpl = DNS::getDB()->fetch_array($res);
 					
 					$records = array();

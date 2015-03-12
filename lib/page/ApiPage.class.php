@@ -14,7 +14,7 @@ class ApiPage extends AbstractPage {
 		// todo: user/server seletion
 		$key = "";
 		if (isset($_REQUEST['key'])) {
-			$key = $_REQUEST['key'];
+			$key = strtoupper(trim($_REQUEST['key']));
 		}
 		
 		if (!defined('DNS_API_KEY') || $key != DNS_API_KEY || empty($key) || !preg_match('/[a-f0-9]{8}\-[a-f0-9]{4}\-4[a-f0-9]{3}\-[89ab][a-f0-9]{3}\-[a-f0-9]{12}/i', $key)) {

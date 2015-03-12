@@ -13,7 +13,7 @@ class User {
 	 * @return	boolean
 	 */
 	public static function isLoggedIn () {		
-		if (isset($_SESSION['login']) && $_SESSION['login'] == 1) {
+		if (DNS::getSession()->login !== null && DNS::getSession()->login == 1) {
 			return true;
 		}
 		
@@ -25,7 +25,7 @@ class User {
 	}
 	
 	public static function isAdmin () {
-		if (isset($_SESSION['status']) && !empty($_SESSION['status']) && $_SESSION['status'] == 2) {
+		if (DNS::getSession()->status !== null && DNS::getSession()->status == 2) {
 			return true;
 		}
 		
@@ -37,7 +37,7 @@ class User {
 			return true;
 		}
 		
-		if (isset($_SESSION['status']) && !empty($_SESSION['status']) && $_SESSION['status'] === 1) {
+		if (DNS::getSession()->status !== null && DNS::getSession()->status == 1) {
 			return true;
 		}
 		
@@ -52,10 +52,11 @@ class User {
 			$sha1Password = sha1($row['password']);
 			$sha1CookieHash = sha1($sha1UserID.$sha1Password);
 			if ($sha1CookieHash == $hash) {
-				$_SESSION['login'] = 1;
-				$_SESSION['username'] = $row["username"];
-				$_SESSION['userID'] = $row["userID"];
-				$_SESSION['status'] = intval($row["status"]);
+				DNS::getSession()->register('login', 1);
+				DNS::getSession()->register('username', $row["username"]);
+				DNS::getSession()->register('userID', $row["userID"]);
+				DNS::getSession()->register('status', intval($row["status"]));
+				
 				return true;
 			}
 		}
@@ -68,10 +69,11 @@ class User {
 		$row = DNS::getDB()->fetch_array($query);
 		if (!empty($row)) {
 			if (crypt(crypt($password, $row['password']), $row['password']) == $row['password']) {
-				$_SESSION['login'] = 1;
-				$_SESSION['username'] = $row["username"];
-				$_SESSION['userID'] = $row["userID"];
-				$_SESSION['status'] = intval($row["status"]);
+				DNS::getSession()->register('login', 1);
+				DNS::getSession()->register('username', $row["username"]);
+				DNS::getSession()->register('userID', $row["userID"]);
+				DNS::getSession()->register('status', intval($row["status"]));
+				
 				if ($remember === true) {
 					$sha1UserID = sha1($row["userID"]);
 					$sha1Password = sha1($row['password']);
@@ -88,9 +90,7 @@ class User {
 		return false;
 	}
 	
-	public static function logout () {
-		$_SESSION = array(); // clear session array before destroy
-		
+	public static function logout () {		
 		if (isset($_COOKIE["userID"])) {
 			setcookie("userID", '', time() - 3600);
 		}
@@ -99,6 +99,7 @@ class User {
 			setcookie("cookieHash", '', time() - 3600);
 		}
 		
+		DNS::getSession()->destroy();
 		session_destroy();
 	}
 	
@@ -155,8 +156,8 @@ class User {
 		$data = array();
 		
 		if ($userID === 0 && self::isLoggedIn()) {
-			if (isset($_SESSION['userID'])) {
-				$userID = $_SESSION['userID'];
+			if (DNS::getSession()->userID !== null) {
+				$userID = DNS::getSession()->userID;
 			}
 			
 			if (self::isAdmin()) {
