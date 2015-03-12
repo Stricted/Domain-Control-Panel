@@ -17,7 +17,7 @@
 					<fieldset>
 						<dl>
 							<dt>userID</dt>
-							<dd>{$smarty.session.userID}</dd>
+							<dd>{$userID}</dd>
 						</dl>
 						<dl>
 							<dt>API-Key</dt>

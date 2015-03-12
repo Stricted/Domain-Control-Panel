@@ -22,6 +22,6 @@ class ApiManagementPage extends AbstractPage {
 			$apiKey = $row['apiKey'];
 		}
 		
-		DNS::getTPL()->assign(array("apiKey" => $apiKey));
+		DNS::getTPL()->assign(array("userID" => DNS::getSession()->userID,"apiKey" => $apiKey));
 	}
 }
