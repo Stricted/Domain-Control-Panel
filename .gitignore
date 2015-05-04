@@ -5,3 +5,5 @@ import.php
 black-pearl
 actor
 open-sans
+/lib/system/SessionHandler2.class.php
+*.komodoproject
