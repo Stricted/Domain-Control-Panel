@@ -24,6 +24,11 @@ class User {
 		return false;
 	}
 	
+	/**
+	 * check if user is an Admin
+	 *
+	 * @return	boolean
+	 */
 	public static function isAdmin () {
 		if (DNS::getSession()->status !== null && DNS::getSession()->status == 2) {
 			return true;
@@ -32,6 +37,11 @@ class User {
 		return false;
 	}
 	
+	/**
+	 * check if user is an Reseller
+	 *
+	 * @return	boolean
+	 */
 	public static function isReseller () {
 		if (self::isAdmin() === true) {
 			return true;
@@ -44,6 +54,13 @@ class User {
 		return false;
 	}
 	
+	/**
+	 * check if user has an login cookie
+	 *
+	 * @param	integer	$userID
+	 * @param	string	$hash
+	 * @return	boolean
+	 */
 	public static function cookieLogin ($userID, $hash) {
 		$query = DNS::getDB()->query("SELECT * FROM dns_user WHERE SHA1(userID) = ?", array($userID));
 		$row = DNS::getDB()->fetch_array($query);
@@ -64,6 +81,14 @@ class User {
 		return false;
 	}
 	
+	/**
+	 * login the user
+	 *
+	 * @param	string	$username
+	 * @param	string	$password
+	 * @param	boolean	$remember
+	 * @return	boolean
+	 */
 	public static function login ($username, $password, $remember = false) {
 		$query = DNS::getDB()->query("SELECT * FROM dns_user WHERE username = ?", array($username));
 		$row = DNS::getDB()->fetch_array($query);
@@ -90,6 +115,9 @@ class User {
 		return false;
 	}
 	
+	/**
+	 * log the user out
+	 */
 	public static function logout () {		
 		if (isset($_COOKIE["userID"])) {
 			setcookie("userID", '', time() - 3600);
@@ -103,6 +131,17 @@ class User {
 		session_destroy();
 	}
 	
+	/**
+	 * create a new user
+	 *
+	 * @param	string	$username
+	 * @param	string	$email
+	 * @param	string	$password
+	 * @param	string	$password2
+	 * @param	integer	$reseller
+	 * @param	integer	$status
+	 * @return	boolean
+	 */
 	public static function createUser ($username, $email, $password, $password2, $reseller = 0, $status = 0) {
 		$res = DNS::getDB()->query("SELECT * FROM dns_user WHERE username = ?", array($username));
 		$row = DNS::getDB()->fetch_array($res);
@@ -118,10 +157,24 @@ class User {
 		return false;
 	}
 	
+	/**
+	 * delete specific user
+	 *
+	 * @param	integer	$userID
+	 */
 	public static function deleteUser ($userID) {
 		DNS::getDB()->query("DELETE FROM dns_user WHERE userID = ?", array($userID));
 	}
 	
+	/**
+	 * change user password
+	 *
+	 * @param	integer	$userID
+	 * @param	string	$oldpassword
+	 * @param	string	$newpassword
+	 * @param	string	$newpassword2
+	 * @return	boolean
+	 */
 	public static function change_password ($userID, $oldpassword, $newpassword, $newpassword2) {
 		$res = DNS::getDB()->query("SELECT * FROM dns_user WHERE userID = ?", array($userID));
 		$row = DNS::getDB()->fetch_array($res);
@@ -139,6 +192,11 @@ class User {
 		return false;
 	}
 	
+	/**
+	 * generate new password salt
+	 *
+	 * @return	string
+	 */
 	public static function generateSalt() {
 		$blowfishCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789./';
 		$maxIndex = strlen($blowfishCharacters) - 1;
@@ -152,6 +210,12 @@ class User {
 		return '$2a$08$' . $salt;
 	}
 	
+	/**
+	 * get accessible domains for given user
+	 *
+	 * @param	integer	$userID
+	 * @return	array
+	 */
 	public static function getAccessibleDomains ($userID = 0) {
 		$data = array();
 		

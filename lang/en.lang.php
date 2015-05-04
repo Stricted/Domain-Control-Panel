@@ -20,4 +20,4 @@ $lang['button.delete'] = 'Delete';
 $lang['button.enable'] = 'Enable';
 $lang['button.disable'] = 'Disable';
 $lang['domain.disabled'] = 'Disabled';
-$lang['footer.copyright'] = '<a href="http://stricted.net"><strong>Domain Control Panel 3.0.0</strong>, developed by <strong>stricted.net</strong></a>';
+$lang['footer.copyright'] = '<a href="http://stricted.net"><strong>Domain Control Panel {$smarty.const.DNS_VERSION}</strong>, developed by <strong>stricted.net</strong></a>';

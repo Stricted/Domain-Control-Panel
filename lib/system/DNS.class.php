@@ -1,6 +1,8 @@
 <?php
 namespace dns\system;
 
+if (!defined('DNS_VERSION')) define('DNS_VERSION', '3.0.0 Beta');
+
 /**
  * @author      Jan Altensen (Stricted)
  * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
@@ -190,19 +192,12 @@ class DNS {
 		
 		self::getTPL()->setTemplateDir(DNS_DIR."/templates/".$tpl);
 		self::getTPL()->setCompileDir(DNS_DIR."/templates/compiled/".$tpl);
-		/*self::getTPL()->setTemplateDir(DNS_DIR."/templates");*/
-		/*self::getTPL()->setCompileDir(DNS_DIR."/templates/compiled");*/
 		self::getTPL()->setPluginsDir(DNS_DIR."/lib/api/smarty/plugins");
 		self::getTPL()->loadFilter('pre', 'hascontent');
 		
 		if (!ENABLE_DEBUG) {
 			self::getTPL()->loadFilter('output', 'trimwhitespace');
 		}
-		
-		/*
-		self::getTPL()->loadFilter('pre', 'url');
-		self::getTPL()->loadFilter('output', 'url');
-		*/
 		
 		/* assign language variables */
 		self::getTPL()->assign(array(
