@@ -1,6 +1,8 @@
 Domain-Control-Panel
 ==================
 
+[![Build Status](https://travis-ci.org/Stricted/Domain-Control-Panel.svg?branch=master)](https://travis-ci.org/Stricted/Domain-Control-Panel)
+
 **Domain-Control-Panel** is powered by [Stricted](https://github.com/Stricted) for easy managing your dns server with MySQL databases. I'm testing my work just on linux (Debian 6/7) machines, so i don't know if it works without problems on Windows machines. Feel free to give me feedback.
 
 ### Requirements

@@ -201,10 +201,13 @@ class DNS {
 		
 		/* assign language variables */
 		self::getTPL()->assign(array(
-				"language" => $this->language,
-				"isReseller" => User::isReseller(),
-				"isAdmin" => User::isAdmin()
-			));
+			"language" => $this->language,
+			"isReseller" => User::isReseller(),
+			"isAdmin" => User::isAdmin()
+		));
+		
+		/*self::getTPL()->assign("version", mb_substr(sha1(DNS_VERSION), 0, 8));*/
+
 	}
 	
 	/**
