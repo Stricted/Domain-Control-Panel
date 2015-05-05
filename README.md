@@ -1,6 +1,8 @@
 Domain-Control-Panel
 ==================
 
+[![Join the chat at https://gitter.im/Stricted/Domain-Control-Panel](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Stricted/Domain-Control-Panel?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 **Domain-Control-Panel** is powered by [Stricted](https://github.com/Stricted) for easy managing your dns server with MySQL databases. I'm testing my work just on linux (Debian 6/7) machines, so i don't know if it works without problems on Windows machines. Feel free to give me feedback.
 
 ### Requirements
