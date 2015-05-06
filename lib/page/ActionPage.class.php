@@ -1,8 +1,8 @@
 <?php
 namespace dns\page;
-use dns\util\ParseZone;
 use dns\system\DNS;
 use dns\system\User;
+use dns\util\ParseZone;
 
 /**
  * @author      Jan Altensen (Stricted)
@@ -322,7 +322,6 @@ class ActionPage extends AbstractPage {
 			echo $out;
 			exit;
 		}
-		
 		
 		echo "failure";
 		exit;

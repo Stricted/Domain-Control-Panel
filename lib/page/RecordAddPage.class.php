@@ -1,8 +1,8 @@
 <?php
 namespace dns\page;
+use dns\api\idna\idna_convert;
 use dns\system\DNS;
 use dns\system\User;
-use dns\api\idna\idna_convert;
 
 /**
  * @author      Jan Altensen (Stricted)

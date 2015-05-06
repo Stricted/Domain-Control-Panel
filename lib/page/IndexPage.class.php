@@ -1,8 +1,8 @@
 <?php
 namespace dns\page;
+use dns\api\idna\idna_convert;
 use dns\system\DNS;
 use dns\system\User;
-use dns\api\idna\idna_convert;
 
 /**
  * @author      Jan Altensen (Stricted)
@@ -49,7 +49,6 @@ class IndexPage extends AbstractPage {
 		$sqlLimit = $itemsPerPage;
 		$sqlOffset = ($pageNo - 1) * $itemsPerPage;
 		$pages = intval(ceil(count($soaIDs) / $itemsPerPage));
-		
 		
 		if (count($soaIDs) > 0) {
 			$sql = "SELECT * FROM dns_soa WHERE id IN (".str_repeat('?, ', count($soaIDs) - 1). "?)".(!empty($sqlOrderBy) ? " ORDER BY ".$sqlOrderBy : '')." LIMIT " . $sqlLimit . " OFFSET " . $sqlOffset;

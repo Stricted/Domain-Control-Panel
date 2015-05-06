@@ -154,7 +154,7 @@ class ParseZone {
 	 * param	string	$line
 	 */
 	public function parseRR ($line) {
-		if(preg_match("/([*-a-z0-9.]+)? ([0-9]+)?(?: )?(IN)?(?: )?([a-z]+) ([\s\S]+)/i", $line, $matches)) {
+		if (preg_match("/([*-a-z0-9.]+)? ([0-9]+)?(?: )?(IN)?(?: )?([a-z]+) ([\s\S]+)/i", $line, $matches)) {
 			$record=array();
 			// parse domain name
 			if (!empty($this->origin) && $matches[1] == "@") {

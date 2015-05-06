@@ -51,7 +51,8 @@ class DNSSECUtil {
 			$len = dechex(strlen($part));
 			$return .= str_repeat('0', 2 - strlen($len)).$len;
 			$part = str_split($part);
-			for ($i = 0; $i < count($part); $i++) {
+			$count = count($part);
+			for ($i = 0; $i < $count; $i++) {
 				$byte = strtoupper(dechex(ord($part[$i])));
 				$byte = str_repeat('0', 2 - strlen($byte)).$byte;
 				$return .= $byte;

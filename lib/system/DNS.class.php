@@ -112,8 +112,8 @@ class DNS {
 				$languageCode = $availableLanguages[$code];
 			}
 		}
-		else if (DNS::getSession()->language !== null) {
-			$code = strtolower(DNS::getSession()->language);
+		else if (self::getSession()->language !== null) {
+			$code = strtolower(self::getSession()->language);
 			if (in_array($code, $availableLanguages)) {
 				$languageCode = $code;
 			}
@@ -133,7 +133,7 @@ class DNS {
 		}
 		
 		$file = $basedir.$languageCode.'.lang.php';
-		DNS::getSession()->register('language', $languageCode);
+		self::getSession()->register('language', $languageCode);
 		
 		if (file_exists($file)) {
 			require_once($file);
@@ -183,8 +183,8 @@ class DNS {
 	protected function initTPL () {
 		require(DNS_DIR.'/config.inc.php');
 		
-		if (DNS::getSession()->tpl !== null && !empty(DNS::getSession()->tpl)) {
-			$tpl = DNS::getSession()->tpl;
+		if (self::getSession()->tpl !== null && !empty(self::getSession()->tpl)) {
+			$tpl = self::getSession()->tpl;
 		}
 		
 		require_once(DNS_DIR.'/lib/api/smarty/Smarty.class.php');
