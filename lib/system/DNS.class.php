@@ -41,7 +41,10 @@ class DNS {
 	 * init main system
 	 */
 	public function __construct() {
-		spl_autoload_register(array('self', 'autoload'));
+		spl_autoload_register(array('dns\system\DNS', 'autoload'));
+		set_exception_handler(array('dns\system\DNS', 'handleException'));
+		set_error_handler(array('dns\system\DNS', 'handleError'), E_ALL);
+		/*register_shutdown_function(array('dns\system\DNS', 'destruct'));*/
 		
 		$this->initDB();
 		self::buildOptions();
@@ -50,6 +53,16 @@ class DNS {
 		$this->initTPL();
 		new RequestHandler();
 	}
+	
+	/*
+	public static function destruct() {
+		$error = error_get_last();
+		if (!empty($error)) {
+			self::handleException(new SystemException($error['message'], $error['line']));
+		}
+
+	}
+	*/
 	
 	/**
 	 * get database
@@ -94,6 +107,66 @@ class DNS {
 				require_once($classPath);
 			}
 		}
+	}
+	
+	/**
+	 * Calls the show method on the given exception.
+	 * 
+	 * @param	\Exception	$e
+	 */
+	public static final function handleException(\Exception $e) {
+		try {
+			if ($e instanceof SystemException) {
+				$e->show();
+				exit;
+			}
+			
+			// repack Exception
+			self::handleException(new SystemException($e->getMessage(), $e->getCode(), '', $e));
+		}
+		catch (\Exception $exception) {
+			die("<pre>DNS::handleException() Unhandled exception: ".$exception->getMessage()."\n\n".$exception->getTraceAsString());
+		}
+	}
+	
+	/**
+	 * Catches php errors and throws instead a system exception.
+	 * 
+	 * @param	integer		$errorNo
+	 * @param	string		$message
+	 * @param	string		$filename
+	 * @param	integer		$lineNo
+	 */
+	public static final function handleError($errorNo, $message, $filename, $lineNo) {
+		if (error_reporting() != 0) {
+			$type = 'error';
+			switch ($errorNo) {
+				case 2: $type = 'warning';
+					break;
+				case 8: $type = 'notice';
+					break;
+			}
+			
+			throw new SystemException('PHP '.$type.' in file '.$filename.' ('.$lineNo.'): '.$message, 0);
+		}
+	}
+	
+	/**
+	 * Returns true if the debug mode is enabled, otherwise false.
+	 * 
+	 * @return	boolean
+	 */
+	public static function debugModeIsEnabled() {
+		// try to load constants
+		if (!defined('ENABLE_DEBUG')) {
+			self::buildOptions();
+		}
+		
+		if (defined('ENABLE_DEBUG') && ENABLE_DEBUG) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/**
