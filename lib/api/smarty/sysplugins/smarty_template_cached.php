@@ -149,14 +149,16 @@ class Smarty_Template_Cached
         }
         while (true) {
             while (true) {
-                $this->handler->populate($this, $_template);
-                if ($this->exists === false || $_template->smarty->force_compile || $_template->smarty->force_cache) {
+                 if ($this->exists === false || $_template->smarty->force_compile || $_template->smarty->force_cache) {
                     $this->valid = false;
                 } else {
                     $this->valid = true;
                 }
                 if ($this->valid && $_template->caching == Smarty::CACHING_LIFETIME_CURRENT && $_template->cache_lifetime >= 0 && time() > ($this->timestamp + $_template->cache_lifetime)) {
                     // lifetime expired
+                    $this->valid = false;
+                }
+                if ($this->valid && $_template->source->timestamp > $this->timestamp) {
                     $this->valid = false;
                 }
                 if ($this->valid || !$_template->smarty->cache_locking) {
@@ -166,6 +168,7 @@ class Smarty_Template_Cached
                     $this->handler->acquireLock($_template->smarty, $this);
                     break 2;
                 }
+                $this->handler->populate($this, $_template);
             }
             if ($this->valid) {
                 if (!$_template->smarty->cache_locking || $this->handler->locked($_template->smarty, $this) === null) {
@@ -200,7 +203,7 @@ class Smarty_Template_Cached
             }
             return $this->valid;
         }
-        return $this->valid = false;
+        return $this->valid;
     }
 
     /**

@@ -240,7 +240,7 @@ class SystemException extends \Exception {
 									Unable to write log file, please make &quot;<?php echo DNS_DIR; ?>/log/&quot; writable!
 								<?php } else { ?>
 									<b>ID:</b> <code><?php echo $this->getExceptionID(); ?></code><br>
-									<?php echo "Please send the ID above to the site administrator."; ?>
+									Please send the ID above to the site administrator.
 								<?php } ?>
 							</p>
 						</div>
