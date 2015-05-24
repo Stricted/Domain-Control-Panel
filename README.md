@@ -21,6 +21,7 @@ You may need for a working webinterface:
 The installation isn't so easy than it will be in the future, when we've have enough time to build a easy and nice installation system. For now, you'll need to import the database structure manually and set up the correct data in the config file. If you're a little bit experienced, it shouldn't be a big problem. Feel free to open a issue, when you need help with the installation process.
 
  * Clone the git repository: `git clone https://github.com/Stricted/Domain-Control-Panel.git`
+ * init and update git submodule `git submodule init` and `git submodule update`
  * Change the `config.inc.php.example` file to your needs and rename it to `config.inc.php`
  * Import the structure in `database.sql` file in your database.
  * Open the page and use the default user and password to login: `admin`
