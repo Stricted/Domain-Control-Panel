@@ -22,6 +22,7 @@ The installation isn't so easy than it will be in the future, when we've have en
 
  * Clone the git repository: `git clone https://github.com/Stricted/Domain-Control-Panel.git`
  * init and update git submodule `git submodule init` and `git submodule update`
+ * or clone it recursive with `git clone --recursive https://github.com/Stricted/Domain-Control-Panel.git`
  * Change the `config.inc.php.example` file to your needs and rename it to `config.inc.php`
  * Import the structure in `database.sql` file in your database.
  * Open the page and use the default user and password to login: `admin`
