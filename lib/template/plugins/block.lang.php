@@ -13,13 +13,13 @@
  * Smarty {lang}{/lang} block plugin
  */
 function smarty_block_lang($params, $content, $template, &$repeat) {
-	if (is_null($content) || empty($content)) {
+	if ($content === null || empty($content)) {
 		return;
 	}
 	
 	$lang = $template->smarty->getTemplateVars('language');
 	
-	if (is_null($lang)) {
+	if ($lang === null) {
 		return $content;
 	}
 	
