@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS dns_permissions (
 
 CREATE TABLE IF NOT EXISTS dns_permissions_to_user (
 	id INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    userID INT(10) NOT NULL,
+	userID INT(10) NOT NULL,
 	permissionID VARCHAR(255) NOT NULL,
 ) ENGINE=InnoDB;
 

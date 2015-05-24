@@ -54,7 +54,6 @@ class SessionHandler {
 	 * @return	boolean
 	 */
 	public function checkPermission($permission) {
-		
 		/* get permissionID */
 		$sql = "SELECT * FROM dns_permissions where permission = ?";
 		$res = DNS::getDB()->query($sql, array($permission));
