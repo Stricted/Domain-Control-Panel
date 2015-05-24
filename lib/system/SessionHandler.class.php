@@ -49,6 +49,30 @@ class SessionHandler {
 	}
 	
 	/**
+	 * Checks if the active user has the given permission
+	 *
+	 * @return	boolean
+	 */
+	public function checkPermission($permission) {
+		
+		/* get permissionID */
+		$sql = "SELECT * FROM dns_permissions where permission = ?";
+		$res = DNS::getDB()->query($sql, array($permission));
+		$data = DNS::getDB()->fetch_array($res);
+		
+		/* get permission from user */
+		$sql = "SELECT * FROM dns_permissions_to_user where userID = ? and permissionID = ?";
+		$res = DNS::getDB()->query($sql, array($this->userID, $data['id']));
+		$row = DNS::getDB()->fetch_array($res);
+		
+		if (isset($row['permission']) && $row['permission'] == $permission) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Provides access to session data.
 	 * 
 	 * @param	string		$key
@@ -70,6 +94,17 @@ class SessionHandler {
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Unsets a session variable.
+	 * 
+	 * @param	string		$key
+	 */
+	public function unregister($key) {
+		if (isset($this->sessionData[$key])) {
+			unset($this->sessionData[$key]);
+		}
 	}
 	
 	/**

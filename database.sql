@@ -79,12 +79,27 @@ CREATE TABLE IF NOT EXISTS dns_session (
 	sessionData TEXT
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS dns_permissions (
+	permissionID INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	permission VARCHAR(255) NOT NULL,
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS dns_permissions_to_user (
+	id INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    userID INT(10) NOT NULL,
+	permissionID VARCHAR(255) NOT NULL,
+) ENGINE=InnoDB;
+
+
+
 ALTER TABLE dns_api ADD FOREIGN KEY (userID) REFERENCES dns_user (userID) ON DELETE CASCADE;
 ALTER TABLE dns_sec ADD FOREIGN KEY (zone) REFERENCES dns_soa (id) ON DELETE CASCADE;
 ALTER TABLE dns_rr ADD FOREIGN KEY (zone) REFERENCES dns_soa (id) ON DELETE CASCADE;
 ALTER TABLE dns_soa_to_user ADD FOREIGN KEY (userID) REFERENCES dns_user (userID) ON DELETE CASCADE;
 ALTER TABLE dns_soa_to_user ADD FOREIGN KEY (soaID) REFERENCES dns_soa (id) ON DELETE CASCADE;
 ALTER TABLE dns_template ADD FOREIGN KEY (userID) REFERENCES dns_user (userID) ON DELETE CASCADE;
+ALTER TABLE dns_permissions_to_user ADD FOREIGN KEY (userID) REFERENCES dns_user (userID) ON DELETE CASCADE;
+ALTER TABLE dns_permissions_to_user ADD FOREIGN KEY (permissionID) REFERENCES dns_permissions (id) ON DELETE CASCADE;
 
 INSERT INTO dns_options VALUES (1, 'dns_api_key', '0E2372C5-E5A3-424B-82E5-75AD723A9447');
 INSERT INTO dns_options VALUES (2, 'offline', '0');
