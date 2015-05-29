@@ -1,7 +1,7 @@
 Domain-Control-Panel
 ==================
 
-[![Build Status](https://travis-ci.org/Stricted/Domain-Control-Panel.svg?branch=master)](https://travis-ci.org/Stricted/Domain-Control-Panel)
+[![Join the chat at https://gitter.im/Stricted/Domain-Control-Panel](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Stricted/Domain-Control-Panel?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/Stricted/Domain-Control-Panel.svg?branch=master)](https://travis-ci.org/Stricted/Domain-Control-Panel) [![Release](https://img.shields.io/github/release/Stricted/Domain-Control-Panel.svg?style=flat-square)](https://github.com/Stricted/Domain-Control-Panel/releases/latest) [![License](https://img.shields.io/badge/license-LGPLv3-brightgreen.svg?style=flat-square)](https://github.com/Stricted/Domain-Control-Panel/blob/master/LICENSE)
 
 **Domain-Control-Panel** is powered by [Stricted](https://github.com/Stricted) for easy managing your dns server with MySQL databases. I'm testing my work just on linux (Debian 6/7) machines, so i don't know if it works without problems on Windows machines. Feel free to give me feedback.
 
