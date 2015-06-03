@@ -35,7 +35,7 @@ if (is_array($data) && !isset($data['error'])) {
 			else if ($record['type'] == "MX" || $record['type'] == "SRV" || $record['type'] == "TLSA" || $record['type'] == "DS") {
 				$out .= $record['name']."\t".$record['ttl']."\tIN\t".$record['type']."\t".$record['aux']."\t".$record['data']."\n";
 			}
-			elseif ($record['type'] == "TXT") {
+			else if ($record['type'] == "TXT") {
 				$txt = $record['data'];
 				
 				if (strpos($txt, " ") !== false) {
@@ -114,8 +114,8 @@ if (is_array($data) && !isset($data['error'])) {
 			$sign = true;
 		}
 		
-		$handler = fOpen("/srv/bind/".$zone['soa']['origin']."db" , "a+");
-		fWrite($handler , $out);
+		$handler = fOpen("/srv/bind/".$zone['soa']['origin']."db", "a+");
+		fWrite($handler, $out);
 		fClose($handler);
 		
 		$signed = false;
@@ -132,15 +132,11 @@ if (is_array($data) && !isset($data['error'])) {
 		$cout .= "\tfile \"/srv/bind/".$zone['soa']['origin']."db".($signed === true ? ".signed" : "")."\";\n";
 		$cout .= "};\n\n";
 
-		$handler = fOpen("/srv/bind/domains.cfg" , "a+");
-		fWrite($handler , $cout);
+		$handler = fOpen("/srv/bind/domains.cfg", "a+");
+		fWrite($handler, $cout);
 		fClose($handler);
-
-		
-		if ($signed === true) {
-			shell_exec("cd /srv/bind/ && /usr/sbin/dnssec-signzone -r /dev/urandom -A -N INCREMENT -K /srv/bind/dnssec/".$zone['soa']['origin']."/ -o ".$zone['soa']['origin']." -t ".$zone['soa']['origin']."db");
-		}
 	}
+	
 	shell_exec("/etc/init.d/bind9 reload");
 }
 
