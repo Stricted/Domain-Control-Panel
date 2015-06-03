@@ -146,13 +146,13 @@ fieldset {
 }
 
 dl > dd {
-	margin-left: 120px;
+	margin-left: 140px;
 }
 
 dl > dt {
 	float: left;
 	text-align: right;
-	width: 100px;
+	width: 120px;
 }
 
 .navbar-top-links {
