@@ -19,7 +19,7 @@ class SecListPage extends AbstractPage {
 		
 		$soaIDs = User::getAccessibleDomains();
 		if (!in_array($_GET['id'], $soaIDs)) {
-			throw new \Exception('Access denied. You’re not authorized to view this page.', 403);
+			throw new \Exception('Access denied. You\'re not authorized to view this page.', 403);
 		}
 		
 		$sql = "SELECT * FROM dns_soa WHERE id = ?";
