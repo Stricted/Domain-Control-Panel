@@ -1,7 +1,7 @@
 <?php
 namespace dns\page;
-use dns\system\User;
 use dns\system\DNS;
+use dns\system\User;
 
 /**
  * @author      Jan Altensen (Stricted)
