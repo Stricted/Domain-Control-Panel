@@ -10,15 +10,15 @@ class RequestHandler {
 	/**
 	 * init RequestHandler
 	 */
-	public function __construct () {
+	public function __construct ($module = '') {		
 		$className = "";
-		$pages = glob(DNS_DIR.'/lib/page/*Page.class.php');
+		$pages = glob(DNS_DIR.'/lib/'.(empty($module) ? '' : $module.'/').'page/*Page.class.php');
 		if (isset($_GET["page"]) && !empty($_GET["page"])) {
 			if (strtolower($_GET["page"]) != "abstract") {
 				foreach ($pages as $page) {
 					$page = str_replace('Page.class.php', '', basename($page));
 					if (strtolower($_GET["page"]) == strtolower($page)) {
-						$class = "\\dns\\page\\".$page."Page";
+						$class = "\\dns".(empty($module) ? '' : "\\".$module)."\\page\\".$page."Page";
 						if (class_exists($class) && is_subclass_of($class, '\\dns\\page\\AbstractPage')) {
 							$className = $class;
 						}
@@ -28,7 +28,7 @@ class RequestHandler {
 			}
 		}
 		else {
-			$className = '\\dns\\page\\IndexPage';
+			$className = '\\dns'.(empty($module) ? '' : '\\'.$module).'\\page\\IndexPage';
 		}
 		
 		if (!User::isLoggedIn() && $className != '\dns\page\LoginPage' && $className != '\dns\page\ApiPage') {
