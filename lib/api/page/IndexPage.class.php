@@ -9,7 +9,7 @@ use dns\page\AbstractPage;
  */
 class IndexPage extends AbstractPage {
     public function prepare () {
-		/* we have no index page */
-       exit;
+        /* we have no index page */
+        exit;
     }
 }

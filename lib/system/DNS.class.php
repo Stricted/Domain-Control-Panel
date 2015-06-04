@@ -52,7 +52,6 @@ class DNS {
 		spl_autoload_register(array('dns\system\DNS', 'autoload'));
 		set_exception_handler(array('dns\system\DNS', 'handleException'));
 		set_error_handler(array('dns\system\DNS', 'handleError'), E_ALL);
-		/*register_shutdown_function(array('dns\system\DNS', 'destruct'));*/
 		
 		$this->initDB();
 		self::buildOptions();
@@ -61,16 +60,6 @@ class DNS {
 		$this->initTPL();
 		new RequestHandler(self::$module);
 	}
-	
-	/*
-	public static function destruct() {
-		$error = error_get_last();
-		if (!empty($error)) {
-			self::handleException(new SystemException($error['message'], $error['line']));
-		}
-
-	}
-	*/
 	
 	/**
 	 * get database

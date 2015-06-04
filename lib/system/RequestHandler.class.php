@@ -10,7 +10,7 @@ class RequestHandler {
 	/**
 	 * init RequestHandler
 	 */
-	public function __construct ($module = '') {		
+	public function __construct ($module = '') {
 		$className = "";
 		$pages = glob(DNS_DIR.'/lib/'.(empty($module) ? '' : $module.'/').'page/*Page.class.php');
 		if (isset($_GET["page"]) && !empty($_GET["page"])) {
