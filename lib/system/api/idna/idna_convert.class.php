@@ -1,5 +1,5 @@
 <?php
-namespace dns\api\idna;
+namespace dns\system\api\idna;
 
 // {{{ license
 

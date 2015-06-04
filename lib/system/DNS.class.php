@@ -260,13 +260,13 @@ class DNS {
 			$tpl = self::getSession()->tpl;
 		}
 		
-		require_once(DNS_DIR.'/lib/api/smarty/libs/Smarty.class.php');
+		require_once(DNS_DIR.'/lib/system/api/smarty/libs/Smarty.class.php');
 		self::$tplObj = new \Smarty;
 		
 		self::getTPL()->setTemplateDir(DNS_DIR."/templates/".$tpl);
 		self::getTPL()->setCompileDir(DNS_DIR."/templates/compiled/".$tpl);
 		self::getTPL()->setPluginsDir(array(
-			DNS_DIR."/lib/api/smarty/libs/plugins",
+			DNS_DIR."/lib/system/api/smarty/libs/plugins",
 			DNS_DIR."/lib/template/plugins"
 		));
 		self::getTPL()->loadFilter('pre', 'hascontent');

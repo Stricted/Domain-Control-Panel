@@ -1,3 +1,3 @@
-[submodule "lib/api/smarty"]
-	path = lib/api/smarty
+[submodule "lib/system/api/smarty"]
+	path = lib/system/api/smarty
 	url = https://github.com/smarty-php/smarty.git
