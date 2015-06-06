@@ -17,13 +17,11 @@ CREATE TABLE IF NOT EXISTS dns_rr (
 	id INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	zone INT(10) NOT NULL,
 	name VARCHAR(255) NOT NULL,
-	--- data VARCHAR(255) NOT NULL,
 	data TEXT,
 	aux INT(10) NOT NULL,
 	ttl INT(10) NOT NULL DEFAULT '86400',
 	type enum('A', 'AAAA', 'CNAME', 'MX', 'PTR', 'SRV', 'TXT', 'TLSA', 'NS', 'DS') DEFAULT NULL,
-	active boolean NOT NULL DEFAULT 1,
-	--- UNIQUE KEY dns_rr (zone, name, type, data)
+	active boolean NOT NULL DEFAULT 1
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS dns_sec (
@@ -88,7 +86,7 @@ CREATE TABLE IF NOT EXISTS dns_permissions (
 CREATE TABLE IF NOT EXISTS dns_permissions_to_user (
 	id INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	userID INT(10) NOT NULL,
-	permissionID VARCHAR(255) NOT NULL
+	permissionID INT(10) NOT NULL
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS dns_language (
@@ -107,7 +105,7 @@ ALTER TABLE dns_soa_to_user ADD FOREIGN KEY (userID) REFERENCES dns_user (userID
 ALTER TABLE dns_soa_to_user ADD FOREIGN KEY (soaID) REFERENCES dns_soa (id) ON DELETE CASCADE;
 ALTER TABLE dns_template ADD FOREIGN KEY (userID) REFERENCES dns_user (userID) ON DELETE CASCADE;
 ALTER TABLE dns_permissions_to_user ADD FOREIGN KEY (userID) REFERENCES dns_user (userID) ON DELETE CASCADE;
-ALTER TABLE dns_permissions_to_user ADD FOREIGN KEY (permissionID) REFERENCES dns_permissions (id) ON DELETE CASCADE;
+ALTER TABLE dns_permissions_to_user ADD FOREIGN KEY (permissionID) REFERENCES dns_permissions (permissionID) ON DELETE CASCADE;
 
 INSERT INTO dns_options VALUES (1, 'dns_api_key', '0E2372C5-E5A3-424B-82E5-75AD723A9447');
 INSERT INTO dns_options VALUES (2, 'offline', '0');

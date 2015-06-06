@@ -30,14 +30,14 @@
 							<dl>
 								<dt>Host</dt>
 								<dd {if 'name'|in_array:$error}class="form-group has-error"{/if}>
-									<input type="text" id="name" name="name" value="{if isset($name)}{$name}{/if}" maxlength="255" class="form-control medium">
+									<input type="text" id="name" name="name" value="{if isset($name)}{$name|escape}{/if}" maxlength="255" class="form-control medium">
 									{if 'name'|in_array:$error}<span class="help-block">Please correct the error</span>{/if}
 								</dd>
 							</dl>
 							<dl>
 								<dt>TTL</dt>
 								<dd {if 'ttl'|in_array:$error}class="form-group has-error"{/if}>
-									<input type="number" id="ttl" name="ttl" value="{if isset($ttl)}{$ttl}{else}60{/if}" maxlength="255" class="form-control medium">
+									<input type="number" id="ttl" name="ttl" value="{if isset($ttl)}{$ttl|escape}{else}60{/if}" maxlength="255" class="form-control medium">
 									{if 'ttl'|in_array:$error}<span class="help-block">Please correct the error</span>{/if}
 								</dd>
 							</dl>
@@ -63,28 +63,28 @@
 							<dl id="aux"{if isset($type) && $type == "SRV" && $type == "DS" && $type == "TLSA" &&  $type == "MX"}{else} style="display: none;"{/if}>
 								<dt>{if isset($type) && $type == "DS"}Key-ID{elseif isset($type) && $type == "TLSA"}Usage{else}Prio{/if}</dt>
 								<dd {if 'aux'|in_array:$error}class="form-group has-error"{/if}>
-									<input type="number" id="aux" name="aux" value="{if isset($aux)}{$aux}{else}0{/if}" maxlength="255" class="form-control medium">
+									<input type="number" id="aux" name="aux" value="{if isset($aux)}{$aux|escape}{else}0{/if}" maxlength="255" class="form-control medium">
 									{if 'aux'|in_array:$error}<span class="help-block">Please correct the error</span>{/if}
 								</dd>
 							</dl>
 							<dl id="weight"{if isset($type) && $type == "SRV" && $type == "DS" && $type == "TLSA"}{else} style="display: none;"{/if}>
 								<dt>{if isset($type) && $type == "DS"}Algorithm{elseif isset($type) && $type == "TLSA"}Selector{else}weight{/if}</dt>
 								<dd {if 'weight'|in_array:$error}class="form-group has-error"{/if}>
-									<input type="number" id="weight" name="weight" value="{if isset($weight)}{$weight}{else}0{/if}" maxlength="255" class="form-control medium">
+									<input type="number" id="weight" name="weight" value="{if isset($weight)}{$weight|escape}{else}0{/if}" maxlength="255" class="form-control medium">
 									{if 'weight'|in_array:$error}<span class="help-block">Please correct the error</span>{/if}
 								</dd>
 							</dl>
 							<dl id="port"{if isset($type) && $type == "SRV" && $type == "DS" && $type == "TLSA"}{else} style="display: none;"{/if}>
 								<dt>{if isset($type) && $type == "DS"}Digest Type{elseif isset($type) && $type == "TLSA"}Hash Type{else}port{/if}</dt>
 								<dd {if 'port'|in_array:$error}class="form-group has-error"{/if}>
-									<input type="number" id="port" name="port" value="{if isset($port)}{$port}{else}0{/if}" maxlength="255" class="form-control medium">
+									<input type="number" id="port" name="port" value="{if isset($port)}{$port|escape}{else}0{/if}" maxlength="255" class="form-control medium">
 									{if 'port'|in_array:$error}<span class="help-block">Please correct the error</span>{/if}
 								</dd>
 							</dl>
 							<dl id="data">
 								<dt>{if isset($type) && $type == "DS"}Digest{elseif isset($type) && $type == "TLSA"}Hash{else}Data{/if}</dt>
 								<dd {if 'data'|in_array:$error}class="form-group has-error"{/if}>
-									<input type="text" id="data" name="data" value="{if isset($data)}{$data}{/if}" maxlength="255" class="form-control medium">
+									<input type="text" id="data" name="data" value="{if isset($data)}{$data|escape}{/if}" maxlength="255" class="form-control medium">
 									{if 'data'|in_array:$error}<span class="help-block">Please correct the error</span>{/if}
 								</dd>
 							</dl>
