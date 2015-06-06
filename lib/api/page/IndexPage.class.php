@@ -8,8 +8,8 @@ use dns\page\AbstractPage;
  * @copyright   2013-2015 Jan Altensen (Stricted)
  */
 class IndexPage extends AbstractPage {
-    public function prepare () {
-        /* we have no index page */
-        exit;
-    }
+	public function prepare () {
+		/* we have no index page */
+		exit;
+	}
 }

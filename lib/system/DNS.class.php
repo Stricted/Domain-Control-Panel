@@ -278,6 +278,10 @@ class DNS {
 			$tpl = self::getSession()->tpl;
 		}
 		
+		if (!file_exists(DNS_DIR.'/lib/system/api/smarty/libs/Smarty.class.php')) {
+			throw new SystemException('Unable to find Smarty');
+		}
+		
 		require_once(DNS_DIR.'/lib/system/api/smarty/libs/Smarty.class.php');
 		self::$tplObj = new \Smarty;
 		
