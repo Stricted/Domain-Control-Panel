@@ -17,12 +17,13 @@ CREATE TABLE IF NOT EXISTS dns_rr (
 	id INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	zone INT(10) NOT NULL,
 	name VARCHAR(255) NOT NULL,
-	data VARCHAR(255) NOT NULL,
+	--- data VARCHAR(255) NOT NULL,
+	data TEXT,
 	aux INT(10) NOT NULL,
 	ttl INT(10) NOT NULL DEFAULT '86400',
 	type enum('A', 'AAAA', 'CNAME', 'MX', 'PTR', 'SRV', 'TXT', 'TLSA', 'NS', 'DS') DEFAULT NULL,
 	active boolean NOT NULL DEFAULT 1,
-	UNIQUE KEY dns_rr (zone, name, type, data)
+	--- UNIQUE KEY dns_rr (zone, name, type, data)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS dns_sec (
