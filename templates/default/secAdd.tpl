@@ -24,41 +24,39 @@
 				<div class="panel-heading">Add Record</div>
 				<div class="panel-body">
 					<div>
-                        <fieldset>
-                            <dl>
-                                <dt>Algorithmus</dt>
-                                <dd>
-                                    <select id="type" name="algo" class="medium">
-                                        <option label="RSA/SHA-256 (8)" value="8">RSA/SHA-256 (8)</option>
-                                        <option label="RSA/SHA-512 (10)" value="10">RSA/SHA-512 (10)</option>
-                                    </select>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>ZSK Public Key</dt>
-                                <dd>
-                                    <textarea cols="70" rows="10" id="zskpub" name="zskpub"></textarea>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>ZSK Private Key</dt>
-                                <dd>
-                                    <textarea cols="70" rows="10" id="zskpriv" name="zskpriv"></textarea>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>KSK Public Key</dt>
-                                <dd>
-                                    <textarea cols="70" rows="10" id="kskpub" name="kskpub"></textarea>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>KSK Private Key</dt>
-                                <dd>
-                                    <textarea cols="70" rows="10" id="kskpriv" name="kskpriv"></textarea>
-                                </dd>
-                            </dl>
-                        </fieldset>
+						<fieldset>
+							<dl>
+								<dt>Algorithmus</dt>
+								<dd>
+									<select id="type" name="algo" class="medium">
+										<option label="RSA/SHA-256 (8)" value="8">RSA/SHA-256 (8)</option>
+										<option label="RSA/SHA-512 (10)" value="10">RSA/SHA-512 (10)</option>
+									</select>
+								</dd>
+							</dl>
+							<dl>
+								<dt>Type</dt>
+								<dd>
+									<select id="type" name="type" class="medium">
+										<option label="ZSK" value="ZSK">ZSK</option>
+										<option label="KSK" value="KSK">KSK</option>
+									</select>
+								</dd>
+							</dl>
+							<dl>
+								<dt>DNSSEC Public Key</dt>
+								<dd>
+									<textarea cols="70" rows="10" id="pub" name="pub"></textarea>
+								</dd>
+							</dl>
+							<dl>
+								<dt>DNSSEC Private Key</dt>
+								<dd>
+									<textarea cols="70" rows="10" id="priv" name="priv"></textarea>
+								</dd>
+							</dl>
+						</fieldset>
+
 					</div>
 				</div>
 			</div>
