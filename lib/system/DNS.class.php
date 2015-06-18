@@ -289,7 +289,7 @@ class DNS {
 		self::getTPL()->setCompileDir(DNS_DIR.(empty(self::$module) ? '' : '/'.self::$module)."/templates/compiled/".$tpl);
 		self::getTPL()->setPluginsDir(array(
 			DNS_DIR."/lib/system/api/smarty/libs/plugins",
-			DNS_DIR."/lib/template/plugins"
+			DNS_DIR."/lib/system/template/plugins"
 		));
 		self::getTPL()->loadFilter('pre', 'hascontent');
 		
