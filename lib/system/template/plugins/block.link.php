@@ -36,5 +36,5 @@ function smarty_block_link($params, $content, $template, &$repeat) {
 		$url .= $content;
 	}
 	
-	return @htmlspecialchars($url, ENT_COMPAT, 'UTF-8');;
+	return @htmlspecialchars($url, ENT_COMPAT, 'UTF-8');
 }
