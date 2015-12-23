@@ -20,7 +20,7 @@ class LoginPage extends AbstractPage {
 				}
 				
 				User::login(trim($_POST['username']), trim($_POST['password']), $remember);
-				header("Location: ?page=index");
+				header("Location: index.php?index");
 			}
 		}
 	}

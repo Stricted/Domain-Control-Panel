@@ -73,13 +73,17 @@ class User {
 				DNS::getSession()->register('username', $row["username"]);
 				DNS::getSession()->register('userID', $row["userID"]);
 				DNS::getSession()->register('status', intval($row["status"]));
-				
+				DNS::getSession()->register('csrf_token', DNS::generateRandomID());
 				return true;
 			}
 		}
 		
 		return false;
 	}
+	
+	public static function getSecurityToken () {
+		return DNS::getSession()->csrf_token;
+	}	
 	
 	/**
 	 * login the user
@@ -98,6 +102,7 @@ class User {
 				DNS::getSession()->register('username', $row["username"]);
 				DNS::getSession()->register('userID', $row["userID"]);
 				DNS::getSession()->register('status', intval($row["status"]));
+				DNS::getSession()->register('csrf_token', DNS::generateRandomID());
 				
 				if ($remember === true) {
 					$sha1UserID = sha1($row["userID"]);

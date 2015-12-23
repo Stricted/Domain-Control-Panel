@@ -18,7 +18,7 @@ function smarty_function_pages($tagArgs, $tplObj) {
 	$html = '';
 	
 	if ($tagArgs['pages'] > 1) {
-		$link = "index.php?page=".$tagArgs['controller'].(isset($tagArgs['id']) ? "&id=".$tagArgs['id'] : "");
+		$link = "index.php?".$tagArgs['controller'].(isset($tagArgs['id']) ? "/".$tagArgs['id'] : "");
 		
 		if (!isset($tagArgs['pageNo'])) {
 			if (($tagArgs['pageNo'] = $tplObj->smarty->getTemplateVars('pageNo')) === null) {

@@ -138,9 +138,11 @@ class DNS {
 		if (error_reporting() != 0) {
 			$type = 'error';
 			switch ($errorNo) {
-				case 2: $type = 'warning';
+				case 2:
+					$type = 'warning';
 					break;
-				case 8: $type = 'notice';
+				case 8:
+					$type = 'notice';
 					break;
 			}
 			
@@ -285,7 +287,12 @@ class DNS {
 		require_once(DNS_DIR.'/lib/system/api/smarty/libs/Smarty.class.php');
 		self::$tplObj = new \Smarty;
 		
-		self::getTPL()->setTemplateDir(DNS_DIR.(empty(self::$module) ? '' : '/'.self::$module)."/templates/".$tpl);
+		if (!empty(self::$module)) {
+			// try first to load the template from module then from core
+			self::getTPL()->addTemplateDir(DNS_DIR.'/'.self::$module."/templates/".$tpl);
+		}
+		
+		self::getTPL()->addTemplateDir(DNS_DIR."/templates/".$tpl);
 		self::getTPL()->setCompileDir(DNS_DIR.(empty(self::$module) ? '' : '/'.self::$module)."/templates/compiled/".$tpl);
 		self::getTPL()->setPluginsDir(array(
 			DNS_DIR."/lib/system/api/smarty/libs/plugins",

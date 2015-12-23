@@ -3,7 +3,8 @@ namespace dns;
 use dns\system\DNS;
 
 session_start();
-
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
 /**
  * @author      Jan Altensen (Stricted)
  * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>

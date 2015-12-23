@@ -1,14 +1,14 @@
 {include file="header.tpl"}
 <div class="c-block" id="breadcrumbs">
 	<ol class="breadcrumb">
-		<li><a href="index.php?page=DomainList"><i class="fa fa-home"></i> Domain Control Panel</a></li>
-		<li class="active"><a href="index.php?page=SecList&id={$soa['id']}">{$soa['origin']}</a></li>
+		<li><a href="{link controller='DomainList'}{/link}"><i class="fa fa-home"></i> Domain Control Panel</a></li>
+		<li class="active"><a href="{link controller='SecList' id=$soa['id'] title=$soa['origin']}{/link}">{$soa['origin']}</a></li>
 	</ol>
 </div>
 <div class="row">
 	<div class="col-lg-12">
 		<div class="page-header pull-right">
-			<a href="index.php?page=SecList&id={$soa['id']}" class="btn btn-gr-gray"><i class="fa fa-list"></i> DESSEC auflisten</a>
+			<a href="{link controller='SecList' id=$soa['id'] title=$soa['origin']}{/link}" class="btn btn-gr-gray"><i class="fa fa-list"></i> DESSEC auflisten</a>
 		</div>
 	</div>
 </div>
@@ -17,7 +17,7 @@
 		Record erfolgreich hinzugefügt.
 	</div>
 {/if}
-<form method="post" action="index.php?page=SecAdd&id={$soa['id']}">
+<form method="post" action="{link controller='SecAdd' id=$soa['id'] title=$soa['origin']}{/link}">
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="panel panel-default">

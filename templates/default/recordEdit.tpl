@@ -2,15 +2,15 @@
 <div class="row">
 	<div class="col-lg-12">
 		<ol class="breadcrumb">
-			<li><a href="index.php?page=DomainList"><i class="fa fa-home"></i> Domain Control Panel</a></li>
-			<li class="active"><a href="index.php?page=RecordList&id={$soa['id']}">{$soa['origin']}</a></li>
+			<li><a href="{link controller='DomainList'}{/link}"><i class="fa fa-home"></i> Domain Control Panel</a></li>
+			<li class="active"><a href="{link controller='RecordList' id=$soa['id'] title=$soa['origin']}{/link}">{$soa['origin']}</a></li>
 		</ol>
 	</div>
 </div>
 <div class="row">
 	<div class="col-lg-12">
 		<div class="page-header pull-right">
-			<a href="index.php?page=RecordList&id={$soa['id']}" class="btn btn-gr-gray"><i class="fa fa-list"></i> Einträge auflisten</a>
+			<a href="{link controller='RecordList' id=$soa['id'] title=$soa['origin']}{/link}" class="btn btn-gr-gray"><i class="fa fa-list"></i> Einträge auflisten</a>
 		</div>
 	</div>
 </div>
@@ -19,7 +19,7 @@
 		Record erfolgreich bearbeitet.
 	</div>
 {/if}
-<form method="post" action="index.php?page=RecordEdit&id={$rr['id']}">
+<form method="post" action="{link controller='RecordEdit' id=$soa['id']}{/link}">
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="panel panel-default">

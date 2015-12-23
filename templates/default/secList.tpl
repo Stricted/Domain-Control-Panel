@@ -1,8 +1,8 @@
 {include file="header.tpl"}
 <div class="c-block" id="breadcrumbs">
 	<ol class="breadcrumb">
-		<li><a href="index.php?page=DomainList"><i class="fa fa-home"></i> Domain Control Panel</a></li>
-		<li class="active"><a href="index.php?page=SecList&id={$soa['id']}">{$soa['origin']}</a></li>
+		<li><a href="{link controller='DomainList'}{/link}"><i class="fa fa-home"></i> Domain Control Panel</a></li>
+		<li class="active"><a href="{link controller='SecList' id=$soa['id'] title=$soa['origin']}{/link}">{$soa['origin']}</a></li>
 	</ol>
 </div>
 {if !empty($ds)}

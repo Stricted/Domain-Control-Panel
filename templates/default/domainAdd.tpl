@@ -2,8 +2,8 @@
 <div class="row">
 	<div class="col-lg-12">
 		<ol class="breadcrumb">
-			<li><a href="index.php?page=DomainList"><i class="fa fa-home"></i> Domain Control Panel</a></li>
-			<li class="active"><a href="index.php?page=DomainAdd">Domain hinzufügen</a></li>
+			<li><a href="{link controller='DomainList'}{/link}"><i class="fa fa-home"></i> Domain Control Panel</a></li>
+			<li class="active"><a href="{link controller='DomainAdd'}{/link}">Domain hinzufügen</a></li>
 		</ol>
 	</div>
 </div>
@@ -12,7 +12,7 @@
 		Domain erfolgreich hinzugefügt.
 	</div>
 {/if}
-<form method="post" action="index.php?page=DomainAdd">
+<form method="post" action="{link controller='DomainAdd'}{/link}">
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="panel panel-default">

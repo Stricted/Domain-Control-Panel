@@ -43,7 +43,7 @@ $(document).ready(function(){
 					}
 				
 					$.ajax({
-						url: 'index.php?page=action',
+						url: 'index.php?Action',
 						data: {
 							action: action,
 							dataID: deleteID
@@ -76,7 +76,7 @@ $(document).ready(function(){
 		$('#requestApiKey').unbind('click');
 		$("#requestApiKey").on('click', function(e){
 			$.ajax({
-				url: 'index.php?page=action',
+				url: 'index.php?Action',
 				data: {
 					action: 'requestApiKey',
 					dataID: 1
@@ -121,7 +121,7 @@ $(document).ready(function(){
 				}
 				
 				$.ajax({
-					url: 'index.php?page=action',
+					url: 'index.php?Action',
 					data: {
 						action: action,
 						dataID: dataID
@@ -239,7 +239,7 @@ $(document).ready(function(){
 			var t = $(this);
 			var dataID = t.attr('export-id');
 			$.ajax({
-				url: 'index.php?page=action',
+				url: 'index.php?Action',
 				data: {
 					action: 'export',
 					dataID: dataID
@@ -316,7 +316,7 @@ $(document).ready(function(){
 				var origin = $('#importModal').find('.modal-body').find('#importOrigin').val();
 				var zone = $('#importModal').find('.modal-body').find('#importTextarea').val();
 				$.ajax({
-					url: 'index.php?page=action',
+					url: 'index.php?Action',
 					data: {
 						action: 'import',
 						dataID: dataID ? dataID : 0, /* 0 for new zone otherwise soaID for existing zone*/
@@ -332,11 +332,11 @@ $(document).ready(function(){
 						else {
 							if (!dataID) {
 								// redirect to main page on success
-								$(location).attr('href','index.php?page=DomainList');
+								$(location).attr('href','index.php?DomainList');
 							}
 							else {
 								// redirect to record list on success
-								$(location).attr('href','index.php?page=RecordList&id=' + dataID);
+								$(location).attr('href','index.php?RecordList/' + dataID);
 							}
 						}
 					}

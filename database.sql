@@ -119,6 +119,7 @@ INSERT INTO dns_options VALUES (9, 'dns_soa_retry', '7200');
 INSERT INTO dns_options VALUES (10, 'dns_soa_expire', '604800');
 INSERT INTO dns_options VALUES (11, 'dns_soa_minimum_ttl', '60');
 INSERT INTO dns_options VALUES (12, 'enable_dnssec', '1');
+INSERT INTO dns_options VALUES (13, 'cache_source_type', 'disk');
 
 
 INSERT INTO `dns_user` VALUES (1, 'admin', 'example@example.net', '$2a$08$XfcfTGc1LlmOHWUt/2sfNeFLEwqESy6wmrIIJMyQS1j5pwembqiae', '0', '2');

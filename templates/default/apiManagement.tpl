@@ -2,8 +2,8 @@
 <div class="row">
 	<div class="col-lg-12">
 		<ol class="breadcrumb">
-			<li><a href="index.php?page=DomainList"><i class="fa fa-home"></i> Domain Control Panel</a></li>
-			<li class="active"><a href="index.php?page=ApiManagement">API</a></li>
+			<li><a href="{link controller='DomainList'}{/link}"><i class="fa fa-home"></i> Domain Control Panel</a></li>
+			<li class="active"><a href="{link controller='ApiManagement'}{/link}">API</a></li>
 		</ol>
 	</div>
 </div>

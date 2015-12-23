@@ -22,7 +22,7 @@
  * @category	Community Framework
  */
 
-function smarty_prefilter_hascontent($source, &$smarty) {
+function smarty_prefilter_hascontent($source, $smarty) {
 	$ldq = preg_quote($smarty->left_delimiter, '~');
 	$rdq = preg_quote($smarty->right_delimiter, '~');
 	
