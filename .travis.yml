@@ -8,9 +8,10 @@ php:
   - 7.0
   - hhvm
 before_script:
+  - phpenv config-rm xdebug.ini
   - travis_retry composer self-update
   - travis_retry composer require "squizlabs/php_codesniffer=*"
-  - travis_retry composer install --no-interaction --prefer-source --dev
+  - travis_retry composer install --no-interaction --prefer-source
   - git clone --branch=master --depth=1 --quiet git://github.com/WoltLab/WCF.git WCF
 script:
   - find . -type f -name '*.php' -not -path "./WCF/*" -not -path "./vendor/*" |xargs -I file php -l file  > /dev/null
