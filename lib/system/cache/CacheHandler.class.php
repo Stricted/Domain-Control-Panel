@@ -4,7 +4,7 @@ use dns\system\cache\builder\ICacheBuilder;
 use dns\system\cache\source\DiskCacheSource;
 use dns\system\SingletonFactory;
 
-define('CACHE_SOURCE_TYPE', 'disk');
+if (!defined('CACHE_SOURCE_TYPE')) define('CACHE_SOURCE_TYPE', 'disk');
 
 /**
  * Manages transparent cache access.
