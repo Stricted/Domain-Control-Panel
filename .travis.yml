@@ -6,18 +6,11 @@ php:
   - 5.5
   - 5.6
   - 7.0
-matrix:
-  fast_finish: true
-  allow_failures:
-    - php: 7.0
-before_install:
-  - pear install pear/PHP_CodeSniffer
-  - phpenv rehash
 before_script:
   - travis_retry composer self-update
   - travis_retry composer require "squizlabs/php_codesniffer=*"
   - travis_retry composer install --no-interaction --prefer-source --dev
   - git clone --branch=master --depth=1 --quiet git://github.com/WoltLab/WCF.git WCF
 script:
-  - find . -type f -name '*.php' -not -path "./WCF/*" |xargs -I file php -l file  > /dev/null
-  - vendor/bin/phpcs -p --extensions=php --standard="`pwd`/WCF/CodeSniff/WCF" --ignore="lib/system/api/" --ignore="WCF/" .
+  - find . -type f -name '*.php' -not -path "./WCF/*" -not -path "./vendor/*" |xargs -I file php -l file  > /dev/null
+  - vendor/bin/phpcs -p --extensions=php --standard="`pwd`/WCF/CodeSniff/WCF" --ignore="lib/system/api/" --ignore="WCF/" --ignore="vendor/" .
