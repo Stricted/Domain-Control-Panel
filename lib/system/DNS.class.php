@@ -6,7 +6,7 @@ if (!defined('DNS_VERSION')) define('DNS_VERSION', '3.0.0 Beta');
 /**
  * @author      Jan Altensen (Stricted)
  * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @copyright   2014-2015 Jan Altensen (Stricted)
+ * @copyright   2014-2016 Jan Altensen (Stricted)
  */
 class DNS {
 	/**

@@ -4,7 +4,7 @@ use dns\system\DNS;
 
 /**
  * @author      Jan Altensen (Stricted)
- * @copyright   2013-2015 Jan Altensen (Stricted)
+ * @copyright   2013-2016 Jan Altensen (Stricted)
  */
 class ControllerCacheBuilder extends AbstractCacheBuilder {
 	/**

@@ -2,7 +2,7 @@
 /**
  * @author      Jan Altensen (Stricted)
  * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @copyright   2014-2015 Jan Altensen (Stricted)
+ * @copyright   2014-2016 Jan Altensen (Stricted)
  */
 $data = file_get_contents("https://dns-control.eu/API/?key=xxx");
 $data = json_decode($data, true);
