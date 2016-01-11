@@ -1,6 +1,7 @@
 <?php
 /* language file for german variables */
 $lang = array();
+$lang['languageCode'] = 'de';
 $lang['header.welcome'] = 'Angemeldet als: {$username}';
 $lang['datatable.empty'] = 'Keine Daten vorhanden.';
 $lang['datatable.first'] = 'Erste';

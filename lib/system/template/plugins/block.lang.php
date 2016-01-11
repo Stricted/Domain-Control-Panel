@@ -28,8 +28,30 @@ function smarty_block_lang($params, $content, $template, &$repeat) {
 	if (isset($lang[$content])) {
 		if (strpos($lang[$content], $template->smarty->left_delimiter) !== false && strpos($lang[$content], $template->smarty->right_delimiter) !== false) {
 			$data = str_replace("\$", '$', $lang[$content]);
-			$_template = new $template->smarty->template_class('eval:'.$data, $template->smarty, $template);
-			return $_template->fetch();
+			
+			$dir = $template->smarty->getTemplateDir();
+			
+			if (is_array($dir)) {
+				$dir = $dir[0];
+			}
+			
+			$filename = "lang.".$lang['languageCode'].".".$content.".tpl";
+			if (file_exists($dir.$filename)) {
+				$mtime = filemtime($dir.$filename);
+				$maxLifetime = 3600;
+				
+				if ($mtime === false || ($maxLifetime > 0 && (time() - $mtime) > $maxLifetime)) {
+					@unlink($dir.$filename);
+				}
+			}
+			
+			if (!file_exists($dir.$filename)) {
+				$h = fopen($dir.$filename, "a+");
+				fwrite($h, $lang[$content]);
+				fclose($h);
+			}
+			
+			return $template->smarty->fetch($filename);
 		}
 		
 		return $lang[$content];

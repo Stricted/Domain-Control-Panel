@@ -1,6 +1,7 @@
 <?php
 /* language file for english variables */
 $lang = array();
+$lang['languageCode'] = 'en';
 $lang['header.welcome'] = 'Logged in as: {$username}';
 $lang['datatable.empty'] = 'No data available in table';
 $lang['datatable.first'] = 'First';

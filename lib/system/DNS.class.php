@@ -259,9 +259,29 @@ class DNS {
 		if (isset($lang[$item])) {
 			if (strpos($lang[$item], self::getTPL()->left_delimiter) !== false && strpos($lang[$item], self::getTPL()->right_delimiter) !== false) {
 				$data = str_replace("\$", '$', $lang[$item]);
-				$template_class = self::getTPL()->template_class;
-				$template = new $template_class('eval:'.$data, self::getTPL(), self::getTPL());
-				return $template->fetch();
+				$dir = self::getTPL()->getTemplateDir();
+				
+				if (is_array($dir)) {
+					$dir = $dir[0];
+				}
+				
+				$filename = "lang.".$lang['languageCode'].".".$content.".tpl";
+				if (file_exists($dir.$filename)) {
+					$mtime = filemtime($dir.$filename);
+					$maxLifetime = 3600;
+					
+					if ($mtime === false || ($maxLifetime > 0 && (time() - $mtime) > $maxLifetime)) {
+						@unlink($dir.$filename);
+					}
+				}
+				
+				if (!file_exists($dir.$filename)) {
+					$h = fopen($dir.$filename, "a+");
+					fwrite($h, $lang[$content]);
+					fclose($h);
+				}
+				
+				return self::getTPL()->fetch($filename);
 			}
 			
 			return $lang[$item];
