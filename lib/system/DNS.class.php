@@ -265,7 +265,7 @@ class DNS {
 					$dir = $dir[0];
 				}
 				
-				$filename = "lang.".$lang['languageCode'].".".$content.".tpl";
+				$filename = "lang.".$lang['languageCode'].".".$item.".tpl";
 				if (file_exists($dir.$filename)) {
 					$mtime = filemtime($dir.$filename);
 					$maxLifetime = 3600;
@@ -277,7 +277,7 @@ class DNS {
 				
 				if (!file_exists($dir.$filename)) {
 					$h = fopen($dir.$filename, "a+");
-					fwrite($h, $lang[$content]);
+					fwrite($h, $lang[$item]);
 					fclose($h);
 				}
 				
