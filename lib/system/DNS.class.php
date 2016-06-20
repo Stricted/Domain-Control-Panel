@@ -115,7 +115,7 @@ class DNS {
 			else if ($abbreviation == "Mso") {
 				array_shift($namespaces);
 				
-				$classPath = DNS_DIR.'/lib/system/api/idna-convert/src/'.implode('/', $namespaces).'.php';
+				$classPath = DNS_DIR.'/vendor/idna-convert/src/'.implode('/', $namespaces).'.php';
 				if (file_exists($classPath)) {
 					require_once($classPath);
 				}
@@ -319,11 +319,11 @@ class DNS {
 			$tpl = self::getSession()->tpl;
 		}
 		
-		if (!file_exists(DNS_DIR.'/lib/system/api/smarty/libs/Smarty.class.php')) {
+		if (!file_exists(DNS_DIR.'/vendor/smarty/libs/Smarty.class.php')) {
 			throw new SystemException('Unable to find Smarty');
 		}
 		
-		require_once(DNS_DIR.'/lib/system/api/smarty/libs/Smarty.class.php');
+		require_once(DNS_DIR.'/vendor/smarty/libs/Smarty.class.php');
 		self::$tplObj = new \Smarty;
 		
 		if (!empty(self::$module)) {
