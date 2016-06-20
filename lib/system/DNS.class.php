@@ -42,7 +42,14 @@ class DNS {
 	 *
 	 * @var	array
 	 */
-	protected $language = array();
+	protected static $language = array();
+	
+	/**
+	 * language code
+	 *
+	 * @var	string
+	 */
+	protected static $languageCode = '';
 	
 	/**
 	 * init main system
@@ -98,10 +105,20 @@ class DNS {
 	public static function autoload ($className) {
 		$namespaces = explode('\\', $className);
 		if (count($namespaces) > 1) {
-			array_shift($namespaces);
-			$classPath = DNS_DIR.'/lib/'.implode('/', $namespaces).'.class.php';
-			if (file_exists($classPath)) {
-				require_once($classPath);
+			$abbreviation = array_shift($namespaces);
+			if ($abbreviation == "dns") {
+				$classPath = DNS_DIR.'/lib/'.implode('/', $namespaces).'.class.php';
+				if (file_exists($classPath)) {
+					require_once($classPath);
+				}
+			}
+			else if ($abbreviation == "Mso") {
+				array_shift($namespaces);
+				
+				$classPath = DNS_DIR.'/lib/system/api/idna-convert/src/'.implode('/', $namespaces).'.php';
+				if (file_exists($classPath)) {
+					require_once($classPath);
+				}
 			}
 		}
 	}
@@ -208,6 +225,8 @@ class DNS {
 			}
 		}
 		
+		self::$languageCode = $languageCode;
+		
 		// @TODO: remove this later
 		/* try to load module language files */
 		if (!empty(self::$module)) {
@@ -231,7 +250,7 @@ class DNS {
 		if (file_exists($file)) {
 			require_once($file);
 			if (isset($lang) && !empty($lang) && is_array($lang)) {
-				$this->language = array_merge($this->language, $lang);
+				self::$language = array_merge(self::$language, $lang);
 			}
 		}
 		
@@ -246,7 +265,7 @@ class DNS {
 	 * @return      string          result
 	 */
 	public static function getLanguageVariable ($item, array $variables = array()) {
-		$lang = self::getTPL()->getTemplateVars('language');
+		$lang = self::$language;
 		
 		if ($lang == null) {
 			return $item;
@@ -265,7 +284,7 @@ class DNS {
 					$dir = $dir[0];
 				}
 				
-				$filename = "lang.".$lang['languageCode'].".".$item.".tpl";
+				$filename = "lang.".self::$languageCode.".".sha1($item).".tpl";
 				if (file_exists($dir.$filename)) {
 					$mtime = filemtime($dir.$filename);
 					$maxLifetime = 3600;
@@ -277,7 +296,7 @@ class DNS {
 				
 				if (!file_exists($dir.$filename)) {
 					$h = fopen($dir.$filename, "a+");
-					fwrite($h, $lang[$item]);
+					fwrite($h, '{* '.$item.' *}'.$lang[$item]);
 					fclose($h);
 				}
 				
@@ -326,7 +345,6 @@ class DNS {
 		
 		/* assign language variables */
 		self::getTPL()->assign(array(
-			"language" => $this->language,
 			"isReseller" => User::isReseller(),
 			"isAdmin" => User::isAdmin()
 		));

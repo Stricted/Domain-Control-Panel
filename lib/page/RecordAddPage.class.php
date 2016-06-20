@@ -1,8 +1,8 @@
 <?php
 namespace dns\page;
-use dns\system\api\idna\idna_convert;
 use dns\system\DNS;
 use dns\system\User;
+use Mso\IdnaConvert\IdnaConvert;
 
 /**
  * @author      Jan Altensen (Stricted)
@@ -21,7 +21,7 @@ class RecordAddPage extends AbstractPage {
 		if (!in_array($_GET['id'], $soaIDs)) {
 			throw new \Exception('Access denied. You\'re not authorized to view this page.', 403);
 		}
-		$idna = new idna_convert();
+		$idna = new IdnaConvert();
 		
 		$sql = "SELECT * FROM dns_soa WHERE id = ?";
 		$res = DNS::getDB()->query($sql, array($_GET['id']));

@@ -1,8 +1,8 @@
 <?php
 namespace dns\page;
-use dns\system\api\idna\idna_convert;
 use dns\system\DNS;
 use dns\system\User;
+use Mso\IdnaConvert\IdnaConvert;
 
 /**
  * @author      Jan Altensen (Stricted)
@@ -16,7 +16,7 @@ class RecordEditPage extends AbstractPage {
 		if (!isset($_GET['id']) || empty($_GET['id'])) {
 			throw new \Exception('The link you are trying to reach is no longer available or invalid.', 404);
 		}
-		$idna = new idna_convert();
+		$idna = new IdnaConvert();
 		
 		$sql = "SELECT * FROM dns_rr WHERE id = ?";
 		$res = DNS::getDB()->query($sql, array($_GET['id']));

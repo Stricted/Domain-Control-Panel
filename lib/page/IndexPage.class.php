@@ -1,8 +1,8 @@
 <?php
 namespace dns\page;
-use dns\system\api\idna\idna_convert;
 use dns\system\DNS;
 use dns\system\User;
+use Mso\IdnaConvert\IdnaConvert;
 
 /**
  * @author      Jan Altensen (Stricted)
@@ -15,7 +15,7 @@ class IndexPage extends AbstractPage {
 	public function prepare() {
 		$domains = array();
 		$soaIDs = User::getAccessibleDomains();
-		$idna = new idna_convert();
+		$idna = new IdnaConvert();
 		
 		$sortField = "id";
 		$sortOrder = "ASC";

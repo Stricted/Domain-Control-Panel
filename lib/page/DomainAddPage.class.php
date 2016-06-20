@@ -1,8 +1,8 @@
 <?php
 namespace dns\page;
-use dns\system\api\idna\idna_convert;
 use dns\system\DNS;
 use dns\system\User;
+use Mso\IdnaConvert\IdnaConvert;
 
 /**
  * @author      Jan Altensen (Stricted)
@@ -18,7 +18,7 @@ class DomainAddPage extends AbstractPage {
 		}
 		if (isset($_POST['origin']) && isset($_POST['submit'])) {
 			if (!empty($_POST['origin'])) {
-				$idna = new idna_convert();
+				$idna = new IdnaConvert();
 				$origin = $_POST['origin'];
 				if (substr($origin, -1) != ".") {
 					$origin = $origin.".";

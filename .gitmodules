@@ -1,3 +1,6 @@
 [submodule "lib/system/api/smarty"]
 	path = lib/system/api/smarty
 	url = https://github.com/smarty-php/smarty.git
+[submodule "lib/system/api/idna-convert"]
+	path = lib/system/api/idna-convert
+	url = https://github.com/phlylabs/idna-convert.git
