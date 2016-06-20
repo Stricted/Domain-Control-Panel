@@ -11,7 +11,7 @@ You may need for a working webinterface:
 
  * Linux machine (Debian 6+ recommended; windows may work too, but not recommended)
  * Linux knowledge
- * At least php 5.3.2+ and activated PDO-Extension (for mysql connection)
+ * At least php 5.6.0+ and activated PDO-Extension (for mysql connection)
  * MySQL-database
  * working DNS server (Bind9 with DNSSEC is supported, myDNS and PowerDNS are supported too but without DNSSEC)
  * some time and basic knowledge about DNS
