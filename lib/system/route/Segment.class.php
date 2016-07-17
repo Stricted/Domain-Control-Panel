@@ -1,7 +1,8 @@
 <?php
 namespace dns\system\route;
-use Zend\Mvc\Router\Http\Segment as SegmentBase;
+use Zend\Mvc\Router\Exception\RuntimeException;
 use Zend\Mvc\Router\Http\RouteMatch;
+use Zend\Mvc\Router\Http\Segment as SegmentBase;
 use Zend\Stdlib\RequestInterface as Request;
 
 class Segment extends SegmentBase {
@@ -16,7 +17,7 @@ class Segment extends SegmentBase {
 		
 		if ($this->translationKeys) {
 			if (!isset($options['translator']) || !$options['translator'] instanceof Translator) {
-				throw new Exception\RuntimeException('No translator provided');
+				throw new RuntimeException('No translator provided');
 			}
 			
 			$translator = $options['translator'];

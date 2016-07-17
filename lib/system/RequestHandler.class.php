@@ -71,8 +71,8 @@ class RequestHandler extends SingletonFactory {
 	/**
 	 * @see \Zend\Mvc\Router\SimpleRouteStack::addRoute()
 	 *
-     * @param  string  $name
-     * @param  mixed   $route
+	 * @param  string  $name
+	 * @param  mixed   $route
 	 */
 	public function addRoute ($name, $route) {
 		$this->router->addRoute($name, $route);
@@ -81,17 +81,17 @@ class RequestHandler extends SingletonFactory {
 	/**
 	 * @see	\Zend\Mvc\Router\SimpleRouteStack::addRoutes()
 	 *
-     * @param	array|Traversable	$routes
+	 * @param	array|Traversable	$routes
 	 */
 	public function addRoutes ($routes) {
 		$this->router->addRoutes($routes);
 	}
 	
-    /**
-     * Get the added routes
-     *
-     * @return	Traversable list of all routes
-     */
+	/**
+	 * Get the added routes
+	 *
+	 * @return	Traversable list of all routes
+	 */
 	public function getRoutes() {
 		return $this->router->getRoutes();
 	}
