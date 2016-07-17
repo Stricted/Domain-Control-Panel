@@ -5,8 +5,8 @@ use dns\system\route\Literal;
 use dns\system\route\Regex;
 use dns\system\route\Request;
 use dns\system\route\Segment;
-use Zend\Mvc\Router\Http\RouteMatch;
-use Zend\Mvc\Router\SimpleRouteStack;
+use Zend\Router\Http\RouteMatch;
+use Zend\Router\SimpleRouteStack;
 
 /**
  * @author      Jan Altensen (Stricted)

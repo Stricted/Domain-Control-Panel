@@ -1,8 +1,8 @@
 <?php
 namespace dns\system\route;
-use Zend\Mvc\Router\Exception\RuntimeException;
-use Zend\Mvc\Router\Http\RouteMatch;
-use Zend\Mvc\Router\Http\Segment as SegmentBase;
+use Zend\Router\Exception\RuntimeException;
+use Zend\Router\Http\RouteMatch;
+use Zend\Router\Http\Segment as SegmentBase;
 use Zend\Stdlib\RequestInterface as Request;
 
 class Segment extends SegmentBase {

@@ -1,7 +1,7 @@
 <?php
 namespace dns\system\route;
-use Zend\Mvc\Router\Http\Regex as RegexBase;
-use Zend\Mvc\Router\Http\RouteMatch;
+use Zend\Router\Http\Regex as RegexBase;
+use Zend\Router\Http\RouteMatch;
 use Zend\Stdlib\RequestInterface as Request;
 
 class Regex extends RegexBase {

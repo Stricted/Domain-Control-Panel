@@ -1,7 +1,7 @@
 <?php
 namespace dns\system\route;
-use Zend\Mvc\Router\Http\Literal as LiteralBase;
-use Zend\Mvc\Router\Http\RouteMatch;
+use Zend\Router\Http\Literal as LiteralBase;
+use Zend\Router\Http\RouteMatch;
 use Zend\Stdlib\RequestInterface as Request;
 
 class Literal extends LiteralBase {
@@ -11,7 +11,7 @@ class Literal extends LiteralBase {
 		}
 		
 		$path = $request->getPath();
-		
+
 		if ($pathOffset !== null) {
 			if ($pathOffset >= 0 && strlen($path) >= $pathOffset && !empty($this->route)) {
 				if (strpos($path, $this->route, $pathOffset) === $pathOffset) {
@@ -29,4 +29,3 @@ class Literal extends LiteralBase {
 		return;
 	}
 }
-
