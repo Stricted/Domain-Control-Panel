@@ -65,7 +65,10 @@ class DNS {
 		$this->initSession();
 		$this->initLanguage();
 		$this->initTPL();
-		new RequestHandler(self::$module);
+		
+		$requestHandler = RequestHandler::getInstance();
+		$requestHandler->setRoutes($module);
+		$requestHandler->handle();
 	}
 	
 	/**
@@ -116,6 +119,18 @@ class DNS {
 				array_shift($namespaces);
 				
 				$classPath = DNS_DIR.'/vendor/idna-convert/src/'.implode('/', $namespaces).'.php';
+				if (file_exists($classPath)) {
+					require_once($classPath);
+				}
+			}
+			else if ($abbreviation == "Zend") {
+				$classPath = DNS_DIR.'/vendor/Zend/'.implode('/', $namespaces).'.php';
+				if (file_exists($classPath)) {
+					require_once($classPath);
+				}
+			}
+			else if ($abbreviation == "Interop") {
+				$classPath = DNS_DIR.'/vendor/Interop/'.implode('/', $namespaces).'.php';
 				if (file_exists($classPath)) {
 					require_once($classPath);
 				}

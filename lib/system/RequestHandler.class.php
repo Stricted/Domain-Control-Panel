@@ -11,32 +11,44 @@ use Zend\Mvc\Router\SimpleRouteStack;
  * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @copyright   2013-2016 Jan Altensen (Stricted)
  */
-class RequestHandler {
-	protected $pattern = "";
-	protected $routeData = array();
+class RequestHandler extends SingletonFactory {
+	protected $router = null;
 	
 	/**
 	 * init RequestHandler
 	 */
-	public function __construct ($module = '') {
+	protected function init () {
+		$this->router = new SimpleRouteStack();
 		if (DNS::getSession()->username !== null) {
 			DNS::getTPL()->assign(array("username" => DNS::getSession()->username));
 		}
 		else {
 			DNS::getTPL()->assign(array("username" => ''));
 		}
+	}
+	
+	public function setRoutes($module='') {
+		if ($module == 'api') {
+			//api routes
+		}
 		
-		$router = new SimpleRouteStack();
-		
-		$router->addRoute('', Literal::factory([ 'route' => '', 'defaults' => [ 'controller' => 'dns\page\IndexPage' ] ]));
-		$router->addRoute('Index', Literal::factory([ 'route' => 'Index', 'defaults' => [ 'controller' => 'dns\page\IndexPage' ] ]));
-		$router->addRoute('Login', Literal::factory([ 'route' => 'Login', 'defaults' => [ 'controller' => 'dns\page\LoginPage' ] ]));
-		$router->addRoute('Logout', Literal::factory([ 'route' => 'Logout', 'defaults' => [ 'controller' => 'dns\page\LogoutPage' ] ]));
-		$router->addRoute('DomainList', Literal::factory([ 'route' => 'DomainList', 'defaults' => [ 'controller' => 'dns\page\DomainListPage' ] ]));
-		$router->addRoute('DomainAdd', Literal::factory([ 'route' => 'DomainAdd', 'defaults' => [ 'controller' => 'dns\page\DomainAddPage' ] ]));
-		//$router->addRoute('DomainEdit', Regex::factory([ 'regex' => 'DomainEdit/(?P<id>\d+)(/)?', 'defaults' => [ 'controller' => 'dns\page\DomainEditPage' ], 'spec' => '/DomainEdit/%id%' ]));
-		
-		$match = $router->match(new Request());
+		// default routes
+		$this->router->addRoute('', Literal::factory([ 'route' => '', 'defaults' => [ 'controller' => 'dns\page\IndexPage' ] ]));
+		$this->router->addRoute('Index', Literal::factory([ 'route' => 'Index', 'defaults' => [ 'controller' => 'dns\page\IndexPage' ] ]));
+		$this->router->addRoute('Login', Literal::factory([ 'route' => 'Login', 'defaults' => [ 'controller' => 'dns\page\LoginPage' ] ]));
+		$this->router->addRoute('Logout', Literal::factory([ 'route' => 'Logout', 'defaults' => [ 'controller' => 'dns\page\LogoutPage' ] ]));
+		$this->router->addRoute('DomainList', Literal::factory([ 'route' => 'DomainList', 'defaults' => [ 'controller' => 'dns\page\DomainListPage' ] ]));
+		$this->router->addRoute('DomainAdd', Literal::factory([ 'route' => 'DomainAdd', 'defaults' => [ 'controller' => 'dns\page\DomainAddPage' ] ]));
+		$this->router->addRoute('DomainEdit', Regex::factory([ 'regex' => 'DomainEdit/(?P<id>\d+)(/)?', 'defaults' => [ 'controller' => 'dns\page\DomainEditPage' ], 'spec' => '/DomainEdit/%id%' ]));
+	}	
+	
+	public function getRoutes() {
+		$this->router->getRoutes();
+	}
+	
+	public function handle () {
+		$match = $this->router->match(new Request());
+		var_dump($this->router->getRoutes());
 		if ($match !== null) {
 			foreach ($match->getParams() as $key => $value) {
 				$_GET[$key] = $value;
