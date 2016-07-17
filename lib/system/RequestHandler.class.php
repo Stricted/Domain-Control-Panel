@@ -1,6 +1,10 @@
 <?php
 namespace dns\system;
 use dns\system\cache\builder\ControllerCacheBuilder;
+use Zend\Mvc\Router\Http\Literal;
+use Zend\Mvc\Router\Http\Regex;
+use Zend\Mvc\Router\SimpleRouteStack;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * @author      Jan Altensen (Stricted)
@@ -15,9 +19,6 @@ class RequestHandler {
 	 * init RequestHandler
 	 */
 	public function __construct ($module = '') {
-		$this->pattern = '~/?(?:(?P<controller>[A-Za-z0-9\-]+)(?:/(?P<id>\d+)(?:-(?P<title>[^/]+))?)?)?~x';
-		$controllers = ControllerCacheBuilder::getInstance()->getData(array('module' => $module));
-		
 		if (DNS::getSession()->username !== null) {
 			DNS::getTPL()->assign(array("username" => DNS::getSession()->username));
 		}
@@ -25,88 +26,69 @@ class RequestHandler {
 			DNS::getTPL()->assign(array("username" => ''));
 		}
 		
-		$className = "";
-		if (!empty($_SERVER['QUERY_STRING'])) {
-			$this->matches($_SERVER['QUERY_STRING']);
-			$this->registerRouteData();
-		}
-		else {
-			$className = '\\dns'.(empty($module) ? '' : '\\'.$module).'\\page\\IndexPage';
-		}
+		$router = new SimpleRouteStack();
 		
-		if (isset($this->routeData['controller']) && !empty($this->routeData['controller'])) {
-			$controller = strtolower($this->routeData['controller']);
-			if (isset($controllers[$controller]) && !empty($controllers[$controller])) {
-				$className = $controllers[$controller];
+		$router->addRoute('', Literal::factory([ 'route' => '', 'defaults' => [ 'controller' => 'dns\page\IndexPage' ] ]));
+		$router->addRoute('Index', Literal::factory([ 'route' => 'Index', 'defaults' => [ 'controller' => 'dns\page\IndexPage' ] ]));
+		$router->addRoute('index', Literal::factory([ 'route' => 'index', 'defaults' => [ 'controller' => 'dns\page\IndexPage' ] ]));
+		$router->addRoute('Login', Literal::factory([ 'route' => 'Login', 'defaults' => [ 'controller' => 'dns\page\LoginPage' ] ]));
+		$router->addRoute('Logout', Literal::factory([ 'route' => 'Logout', 'defaults' => [ 'controller' => 'dns\page\LogoutPage' ] ]));
+		$router->addRoute('DomainList', Literal::factory([ 'route' => 'DomainList', 'defaults' => [ 'controller' => 'dns\page\DomainListPage' ] ]));
+		$router->addRoute('DomainAdd', Literal::factory([ 'route' => 'DomainAdd', 'defaults' => [ 'controller' => 'dns\page\DomainAddPage' ] ]));
+		//$router->addRoute('DomainAdd', Regex::factory([ 'regex' => 'DomainEdit/(?P<id>\d+)(/)?', 'defaults' => [ 'controller' => 'dns\page\DomainEditPage' ], 'spec' => '/DomainEdit/%id%' ]));
+		
+		$match = $router->match(new Request());
+		if ($match !== null) {
+			foreach ($match->getParams() as $key => $value) {
+				$_GET[$key] = $value;
+				$_REQUEST[$key] = $value;
 			}
-			else {
-				@header('HTTP/1.0 404 Not Found');
-				DNS::getTPL()->assign(array("activeMenuItem" => '', "error" => 'The link you are trying to reach is no longer available or invalid.'));
+			
+			$className = $match->getParam("controller");
+			
+			if (!User::isLoggedIn() && $className != 'dns\page\LoginPage' && $className != 'dns\page\ApiPage') {
+				echo $className;
+				DNS::getTPL()->display('login.tpl');
+				exit;
+			}
+			
+			if (defined('OFFLINE') && OFFLINE) {
+				$admin = User::isAdmin();
+				$available = false;
+				
+				if (defined($className . '::AVAILABLE_DURING_OFFLINE_MODE') && constant($className . '::AVAILABLE_DURING_OFFLINE_MODE')) {
+					$available = true;
+				}
+				
+				if (!$admin && !$available) {
+					@header('HTTP/1.1 503 Service Unavailable');
+					DNS::getTPL()->display('offline.tpl');
+					exit;
+				}
+			}
+			
+			try {
+				new $className();
+			}
+			catch (\Exception $e) {
+				if ($e->getCode() == 404) {
+					@header('HTTP/1.0 404 Not Found');
+				}
+				else if ($e->getCode() == 403) {
+					@header('HTTP/1.0 403 Forbidden');
+				}
+				
+				// show error page
+				DNS::getTPL()->assign(array("activeMenuItem" => '', "error" => $e->getMessage()));
 				DNS::getTPL()->display('error.tpl');
 				exit;
 			}
 		}
-		
-		if (!User::isLoggedIn() && $className != '\dns\page\LoginPage' && $className != '\dns\page\ApiPage') {
-			DNS::getTPL()->display('login.tpl');
-			exit;
-		}
-		
-		// handle offline mode
-		if (defined('OFFLINE') && OFFLINE) {
-			$admin = User::isAdmin();
-			$available = false;
-			
-			if (defined($className . '::AVAILABLE_DURING_OFFLINE_MODE') && constant($className . '::AVAILABLE_DURING_OFFLINE_MODE')) {
-				$available = true;
-			}
-			
-			if (!$admin && !$available) {
-				@header('HTTP/1.1 503 Service Unavailable');
-				DNS::getTPL()->display('offline.tpl');
-				exit;
-			}
-		}
-		
-		try {
-			new $className();
-		}
-		catch (\Exception $e) {
-			if ($e->getCode() == 404) {
-				@header('HTTP/1.0 404 Not Found');
-			}
-			else if ($e->getCode() == 403) {
-				@header('HTTP/1.0 403 Forbidden');
-			}
-			
-			/* show error page */
-			DNS::getTPL()->assign(array("activeMenuItem" => '', "error" => $e->getMessage()));
+		else {
+			@header('HTTP/1.0 404 Not Found');
+			DNS::getTPL()->assign(array("activeMenuItem" => '', "error" => 'The link you are trying to reach is no longer available or invalid.'));
 			DNS::getTPL()->display('error.tpl');
 			exit;
 		}
-	}
-
-	/**
-	 * Registers route data within $_GET and $_REQUEST.
-	 */
-	protected function registerRouteData() {
-		foreach ($this->routeData as $key => $value) {
-			$_GET[$key] = $value;
-			$_REQUEST[$key] = $value;
-		}
-	}
-	
-	public function matches($requestURL) {
-		if (preg_match($this->pattern, $requestURL, $matches)) {
-			foreach ($matches as $key => $value) {
-				if (!is_numeric($key)) {
-					$this->routeData[$key] = $value;
-				}
-			}
-			
-			return true;
-		}
-		
-		return false;
 	}
 }
