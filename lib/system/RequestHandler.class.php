@@ -5,8 +5,8 @@ use dns\system\route\Literal;
 use dns\system\route\Regex;
 use dns\system\route\Request;
 use dns\system\route\Segment;
-use Zend\Mvc\Router\SimpleRouteStack;
 use Zend\Mvc\Router\Http\RouteMatch;
+use Zend\Mvc\Router\SimpleRouteStack;
 
 /**
  * @author      Jan Altensen (Stricted)
@@ -45,7 +45,7 @@ class RequestHandler extends SingletonFactory {
 		$routes = [];
 		
 		foreach ($controllers as $name => $data) {
-			$routes[$name] = Segment::factory([ 'route' => $name.'[/:id[-:title]]', 'constraints' => [ 'id' => '[0-9]+', 'title' => '[a-zA-Z0-9_.-/]+' ], 'defaults' => [ 'controller' => $data ] ]);
+			$routes[$name] = Segment::factory([ 'route' => $name.'[/][/:id[-:title]]', 'constraints' => [ 'id' => '[0-9]+', 'title' => '[a-zA-Z0-9_.-/]+' ], 'defaults' => [ 'controller' => $data ] ]);
 		}
 		
 		$this->router->setRoutes($routes);
@@ -54,8 +54,8 @@ class RequestHandler extends SingletonFactory {
 	/**
 	 * @see \Zend\Mvc\Router\SimpleRouteStack::addRoute()
 	 *
-     * @param  string  $name
-     * @param  mixed   $route
+	 * @param  string  $name
+	 * @param  mixed   $route
 	 */
 	public function addRoute ($name, $route) {
 		$this->router->addRoute($name, $route);
@@ -64,17 +64,17 @@ class RequestHandler extends SingletonFactory {
 	/**
 	 * @see	\Zend\Mvc\Router\SimpleRouteStack::addRoutes()
 	 *
-     * @param	array|Traversable	$routes
+	 * @param	array|Traversable	$routes
 	 */
 	public function addRoutes ($routes) {
 		$this->router->addRoutes($routes);
 	}
 	
-    /**
-     * Get the added routes
-     *
-     * @return	Traversable list of all routes
-     */
+	/**
+	 * Get the added routes
+	 *
+	 * @return	Traversable list of all routes
+	 */
 	public function getRoutes() {
 		return $this->router->getRoutes();
 	}
@@ -135,8 +135,8 @@ class RequestHandler extends SingletonFactory {
 	}
 	
 	/**
-	* Registers route data within $_GET and $_REQUEST.
-	*/
+	 * Registers route data within $_GET and $_REQUEST.
+	 */
 	protected function registerRouteData(RouteMatch $route) {
 		foreach ($route->getParams() as $key => $value) {
 			$_GET[$key] = $value;
