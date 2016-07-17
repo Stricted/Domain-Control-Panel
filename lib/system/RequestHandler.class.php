@@ -58,10 +58,10 @@ class RequestHandler extends SingletonFactory {
 				'Action' => Literal::factory([ 'route' => 'Action', 'defaults' => [ 'controller' => 'dns\page\ActionPage' ] ]),
 				'DomainList' => Literal::factory([ 'route' => 'DomainList', 'defaults' => [ 'controller' => 'dns\page\DomainListPage' ] ]),
 				'DomainAdd' => Literal::factory([ 'route' => 'DomainAdd', 'defaults' => [ 'controller' => 'dns\page\DomainAddPage' ] ]),
-				'RecordList' => Regex::factory([ 'regex' => 'RecordList/(?P<id>\d+)(/)?(?:-(?P<title>[^/]+))?', 'defaults' => [ 'controller' => 'dns\page\RecordListPage' ], 'spec' => 'RecordList/%id%-%title%' ]),
-				'RecordEdit' => Regex::factory([ 'regex' => 'RecordEdit/(?P<id>\d+)(/)?', 'defaults' => [ 'controller' => 'dns\page\RecordEditPage' ], 'spec' => 'RecordEdit/%id%' ]),
-				'RecordAdd' => Regex::factory([ 'regex' => 'RecordAdd/(?P<id>\d+)(/)?', 'defaults' => [ 'controller' => 'dns\page\RecordAddPage' ], 'spec' => 'RecordAdd/%id%' ]),
-				'SecList' => Regex::factory([ 'regex' => 'SecList/(?P<id>\d+)(/)?(?:-(?P<title>[^/]+))?', 'defaults' => [ 'controller' => 'dns\page\SecListPage' ], 'spec' => 'SecList/%id%-%title%' ]),
+				'RecordList' => Segment::factory([ 'route' => 'RecordList/:id[-:title]', 'constraints' => [ 'id' => '[0-9]+', 'title' => '[a-zA-Z0-9_.-/]+' ], 'defaults' => [ 'controller' => 'dns\page\RecordListPage' ] ]),
+				'RecordEdit' => Segment::factory([ 'route' => 'RecordEdit/:id', 'constraints' => [ 'id' => '[0-9]+' ], 'defaults' => [ 'controller' => 'dns\page\RecordEditPage' ] ]),
+				'RecordAdd' => Segment::factory([ 'route' => 'RecordAdd/:id', 'constraints' => [ 'id' => '[0-9]+' ], 'defaults' => [ 'controller' => 'dns\page\RecordAddPage' ] ]),
+				'SecList' => Segment::factory([ 'route' => 'SecList/:id[-:title]', 'constraints' => [ 'id' => '[0-9]+', 'title' => '[a-zA-Z0-9_.-/]+' ], 'defaults' => [ 'controller' => 'dns\page\SecListPage' ] ]),
 			];
 			
 			$this->router->setRoutes($routes);
