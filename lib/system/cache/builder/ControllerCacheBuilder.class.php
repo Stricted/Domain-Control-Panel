@@ -21,11 +21,14 @@ class ControllerCacheBuilder extends AbstractCacheBuilder {
 		$pages = glob(DNS_DIR.'/lib/'.(empty($parameters['module']) ? '' : $parameters['module'].'/').'page/*Page.class.php');
 		
 		foreach ($pages as $page) {
-			$page = str_replace('Page.class.php', '', basename($page));
+			$pageName = str_replace('Page.class.php', '', basename($page));
 
-			$class = "\\dns".(empty($parameters['module']) ? '' : "\\".$parameters['module'])."\\page\\".$page."Page";
-			if (class_exists($class) && is_subclass_of($class, '\\dns\\page\\AbstractPage')) {
-				$data[strtolower($page)] = $class;
+			$className = "\\dns".(empty($parameters['module']) ? '' : "\\".$parameters['module'])."\\page\\".$pageName."Page";
+			if (class_exists($className) && is_subclass_of($className, '\\dns\\page\\AbstractPage')) {
+				if ($className == '\dns\page\LoginPage') {
+					$data[''] = $className;
+				}
+				$data[$pageName] = $className;
 			}
 		}
 		

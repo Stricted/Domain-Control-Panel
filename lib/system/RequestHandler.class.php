@@ -6,6 +6,7 @@ use dns\system\route\Regex;
 use dns\system\route\Request;
 use dns\system\route\Segment;
 use Zend\Mvc\Router\SimpleRouteStack;
+use Zend\Mvc\Router\Http\RouteMatch;
 
 /**
  * @author      Jan Altensen (Stricted)
@@ -35,44 +36,26 @@ class RequestHandler extends SingletonFactory {
 	 * @param	string	$module
 	 **/
 	public function setRoutes($module='') {
-		if ($module == 'api') {
-			//api routes (excludes the default routes)
+		if ($module == "api") {
 			$this->apiModule = true;
-			
-			$routes = [
-				'' => Literal::factory([ 'route' => '', 'defaults' => [ 'controller' => 'dns\api\page\IndexPage' ] ]),
-				'Index' => Literal::factory([ 'route' => 'Index', 'defaults' => [ 'controller' => 'dns\api\page\IndexPage' ] ]),
-				'Server' => Literal::factory([ 'route' => 'Server', 'defaults' => [ 'controller' => 'dns\api\page\ServerPage' ] ]),
-			];
-			
-			$this->router->setRoutes($routes);
 		}
-		else {
-			// default routes
-			$routes = [
-				'' => Literal::factory([ 'route' => '', 'defaults' => [ 'controller' => 'dns\page\IndexPage' ] ]),
-				'Index' => Literal::factory([ 'route' => 'Index', 'defaults' => [ 'controller' => 'dns\page\IndexPage' ] ]),
-				'Login' => Literal::factory([ 'route' => 'Login', 'defaults' => [ 'controller' => 'dns\page\LoginPage' ] ]),
-				'ApiManagement' => Literal::factory([ 'route' => 'ApiManagement', 'defaults' => [ 'controller' => 'dns\page\ApiManagementPage' ] ]),
-				'Logout' => Literal::factory([ 'route' => 'Logout', 'defaults' => [ 'controller' => 'dns\page\LogoutPage' ] ]),
-				'Action' => Literal::factory([ 'route' => 'Action', 'defaults' => [ 'controller' => 'dns\page\ActionPage' ] ]),
-				'DomainList' => Literal::factory([ 'route' => 'DomainList', 'defaults' => [ 'controller' => 'dns\page\DomainListPage' ] ]),
-				'DomainAdd' => Literal::factory([ 'route' => 'DomainAdd', 'defaults' => [ 'controller' => 'dns\page\DomainAddPage' ] ]),
-				'RecordList' => Segment::factory([ 'route' => 'RecordList/:id[-:title]', 'constraints' => [ 'id' => '[0-9]+', 'title' => '[a-zA-Z0-9_.-/]+' ], 'defaults' => [ 'controller' => 'dns\page\RecordListPage' ] ]),
-				'RecordEdit' => Segment::factory([ 'route' => 'RecordEdit/:id', 'constraints' => [ 'id' => '[0-9]+' ], 'defaults' => [ 'controller' => 'dns\page\RecordEditPage' ] ]),
-				'RecordAdd' => Segment::factory([ 'route' => 'RecordAdd/:id', 'constraints' => [ 'id' => '[0-9]+' ], 'defaults' => [ 'controller' => 'dns\page\RecordAddPage' ] ]),
-				'SecList' => Segment::factory([ 'route' => 'SecList/:id[-:title]', 'constraints' => [ 'id' => '[0-9]+', 'title' => '[a-zA-Z0-9_.-/]+' ], 'defaults' => [ 'controller' => 'dns\page\SecListPage' ] ]),
-			];
-			
-			$this->router->setRoutes($routes);
+		
+		/* load the controllers from cache and build routes */
+		$controllers = ControllerCacheBuilder::getInstance()->getData(array('module' => $module));
+		$routes = [];
+		
+		foreach ($controllers as $name => $data) {
+			$routes[$name] = Segment::factory([ 'route' => $name.'[/:id[-:title]]', 'constraints' => [ 'id' => '[0-9]+', 'title' => '[a-zA-Z0-9_.-/]+' ], 'defaults' => [ 'controller' => $data ] ]);
 		}
+		
+		$this->router->setRoutes($routes);
 	}
 	
 	/**
 	 * @see \Zend\Mvc\Router\SimpleRouteStack::addRoute()
 	 *
-	 * @param  string  $name
-	 * @param  mixed   $route
+     * @param  string  $name
+     * @param  mixed   $route
 	 */
 	public function addRoute ($name, $route) {
 		$this->router->addRoute($name, $route);
@@ -81,17 +64,17 @@ class RequestHandler extends SingletonFactory {
 	/**
 	 * @see	\Zend\Mvc\Router\SimpleRouteStack::addRoutes()
 	 *
-	 * @param	array|Traversable	$routes
+     * @param	array|Traversable	$routes
 	 */
 	public function addRoutes ($routes) {
 		$this->router->addRoutes($routes);
 	}
 	
-	/**
-	 * Get the added routes
-	 *
-	 * @return	Traversable list of all routes
-	 */
+    /**
+     * Get the added routes
+     *
+     * @return	Traversable list of all routes
+     */
 	public function getRoutes() {
 		return $this->router->getRoutes();
 	}
@@ -102,10 +85,7 @@ class RequestHandler extends SingletonFactory {
 	public function handle () {
 		$match = $this->router->match(new Request());
 		if ($match !== null) {
-			foreach ($match->getParams() as $key => $value) {
-				$_GET[$key] = $value;
-				$_REQUEST[$key] = $value;
-			}
+			$this->registerRouteData($match);
 			
 			$className = $match->getParam("controller");
 			
@@ -151,6 +131,16 @@ class RequestHandler extends SingletonFactory {
 			DNS::getTPL()->assign(array("activeMenuItem" => '', "error" => 'The link you are trying to reach is no longer available or invalid.'));
 			DNS::getTPL()->display('error.tpl');
 			exit;
+		}
+	}
+	
+	/**
+	* Registers route data within $_GET and $_REQUEST.
+	*/
+	protected function registerRouteData(RouteMatch $route) {
+		foreach ($route->getParams() as $key => $value) {
+			$_GET[$key] = $value;
+			$_REQUEST[$key] = $value;
 		}
 	}
 }
