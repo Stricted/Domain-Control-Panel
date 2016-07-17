@@ -1,10 +1,10 @@
 <?php
 namespace dns\system;
 use dns\system\cache\builder\ControllerCacheBuilder;
-use Zend\Mvc\Router\Http\Literal;
-use Zend\Mvc\Router\Http\Regex;
+use dns\system\route\Request;
+use dns\system\route\Literal;
+use dns\system\route\Regex;
 use Zend\Mvc\Router\SimpleRouteStack;
-use Zend\ServiceManager\ServiceManager;
 
 /**
  * @author      Jan Altensen (Stricted)
@@ -30,12 +30,11 @@ class RequestHandler {
 		
 		$router->addRoute('', Literal::factory([ 'route' => '', 'defaults' => [ 'controller' => 'dns\page\IndexPage' ] ]));
 		$router->addRoute('Index', Literal::factory([ 'route' => 'Index', 'defaults' => [ 'controller' => 'dns\page\IndexPage' ] ]));
-		$router->addRoute('index', Literal::factory([ 'route' => 'index', 'defaults' => [ 'controller' => 'dns\page\IndexPage' ] ]));
 		$router->addRoute('Login', Literal::factory([ 'route' => 'Login', 'defaults' => [ 'controller' => 'dns\page\LoginPage' ] ]));
 		$router->addRoute('Logout', Literal::factory([ 'route' => 'Logout', 'defaults' => [ 'controller' => 'dns\page\LogoutPage' ] ]));
 		$router->addRoute('DomainList', Literal::factory([ 'route' => 'DomainList', 'defaults' => [ 'controller' => 'dns\page\DomainListPage' ] ]));
 		$router->addRoute('DomainAdd', Literal::factory([ 'route' => 'DomainAdd', 'defaults' => [ 'controller' => 'dns\page\DomainAddPage' ] ]));
-		//$router->addRoute('DomainAdd', Regex::factory([ 'regex' => 'DomainEdit/(?P<id>\d+)(/)?', 'defaults' => [ 'controller' => 'dns\page\DomainEditPage' ], 'spec' => '/DomainEdit/%id%' ]));
+		//$router->addRoute('DomainEdit', Regex::factory([ 'regex' => 'DomainEdit/(?P<id>\d+)(/)?', 'defaults' => [ 'controller' => 'dns\page\DomainEditPage' ], 'spec' => '/DomainEdit/%id%' ]));
 		
 		$match = $router->match(new Request());
 		if ($match !== null) {

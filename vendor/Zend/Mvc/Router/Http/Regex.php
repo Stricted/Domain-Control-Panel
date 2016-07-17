@@ -117,7 +117,6 @@ class Regex implements RouteInterface
         }
 
         if (!$result) {
-			die("here");
             return;
         }
 
@@ -130,7 +129,7 @@ class Regex implements RouteInterface
                 $matches[$key] = rawurldecode($value);
             }
         }
-		var_dump($matches);
+		
         return new RouteMatch(array_merge($this->defaults, $matches), $matchedLength);
     }
 
