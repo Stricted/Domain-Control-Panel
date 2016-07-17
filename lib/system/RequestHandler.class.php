@@ -1,9 +1,9 @@
 <?php
 namespace dns\system;
 use dns\system\cache\builder\ControllerCacheBuilder;
-use dns\system\route\Request;
 use dns\system\route\Literal;
 use dns\system\route\Regex;
+use dns\system\route\Request;
 use Zend\Mvc\Router\SimpleRouteStack;
 
 /**
