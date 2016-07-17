@@ -6,12 +6,11 @@ use Zend\Stdlib\RequestInterface as Request;
 
 class Regex extends RegexBase {
 	public function match(Request $request, $pathOffset = null) {
-		if (!method_exists($request, 'getUri')) {
+		if (!method_exists($request, 'getPath')) {
 			return;
 		}
-
-		$uri  = $request->getUri();
-		$path = $uri->getPath();
+		
+		$path = $request->getPath();
 
 		if ($pathOffset !== null) {
 			$result = preg_match('(\G' . $this->regex . ')i', $path, $matches, null, $pathOffset);

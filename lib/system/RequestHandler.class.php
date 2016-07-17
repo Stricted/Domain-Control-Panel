@@ -4,6 +4,7 @@ use dns\system\cache\builder\ControllerCacheBuilder;
 use dns\system\route\Literal;
 use dns\system\route\Regex;
 use dns\system\route\Request;
+use dns\system\route\Segment;
 use Zend\Mvc\Router\SimpleRouteStack;
 
 /**
@@ -13,9 +14,10 @@ use Zend\Mvc\Router\SimpleRouteStack;
  */
 class RequestHandler extends SingletonFactory {
 	protected $router = null;
+	protected $apiModule = false;
 	
 	/**
-	 * init RequestHandler
+	 * init	RequestHandler
 	 */
 	protected function init () {
 		$this->router = new SimpleRouteStack();
@@ -27,25 +29,76 @@ class RequestHandler extends SingletonFactory {
 		}
 	}
 	
+	/**
+	 * set the default rules
+	 *
+	 * @param	string	$module
+	 **/
 	public function setRoutes($module='') {
 		if ($module == 'api') {
-			//api routes
+			//api routes (excludes the default routes)
+			$this->apiModule = true;
+			
+			$routes = [
+				'' => Literal::factory([ 'route' => '', 'defaults' => [ 'controller' => 'dns\api\page\IndexPage' ] ]),
+				'Index' => Literal::factory([ 'route' => 'Index', 'defaults' => [ 'controller' => 'dns\api\page\IndexPage' ] ]),
+				'Server' => Literal::factory([ 'route' => 'Server', 'defaults' => [ 'controller' => 'dns\api\page\ServerPage' ] ]),
+			];
+			
+			$this->router->setRoutes($routes);
 		}
-		
-		// default routes
-		$this->router->addRoute('', Literal::factory([ 'route' => '', 'defaults' => [ 'controller' => 'dns\page\IndexPage' ] ]));
-		$this->router->addRoute('Index', Literal::factory([ 'route' => 'Index', 'defaults' => [ 'controller' => 'dns\page\IndexPage' ] ]));
-		$this->router->addRoute('Login', Literal::factory([ 'route' => 'Login', 'defaults' => [ 'controller' => 'dns\page\LoginPage' ] ]));
-		$this->router->addRoute('Logout', Literal::factory([ 'route' => 'Logout', 'defaults' => [ 'controller' => 'dns\page\LogoutPage' ] ]));
-		$this->router->addRoute('DomainList', Literal::factory([ 'route' => 'DomainList', 'defaults' => [ 'controller' => 'dns\page\DomainListPage' ] ]));
-		$this->router->addRoute('DomainAdd', Literal::factory([ 'route' => 'DomainAdd', 'defaults' => [ 'controller' => 'dns\page\DomainAddPage' ] ]));
-		$this->router->addRoute('DomainEdit', Regex::factory([ 'regex' => 'DomainEdit/(?P<id>\d+)(/)?', 'defaults' => [ 'controller' => 'dns\page\DomainEditPage' ], 'spec' => '/DomainEdit/%id%' ]));
-	}	
-	
-	public function getRoutes() {
-		$this->router->getRoutes();
+		else {
+			// default routes
+			$routes = [
+				'' => Literal::factory([ 'route' => '', 'defaults' => [ 'controller' => 'dns\page\IndexPage' ] ]),
+				'Index' => Literal::factory([ 'route' => 'Index', 'defaults' => [ 'controller' => 'dns\page\IndexPage' ] ]),
+				'Login' => Literal::factory([ 'route' => 'Login', 'defaults' => [ 'controller' => 'dns\page\LoginPage' ] ]),
+				'ApiManagement' => Literal::factory([ 'route' => 'ApiManagement', 'defaults' => [ 'controller' => 'dns\page\ApiManagementPage' ] ]),
+				'Logout' => Literal::factory([ 'route' => 'Logout', 'defaults' => [ 'controller' => 'dns\page\LogoutPage' ] ]),
+				'Action' => Literal::factory([ 'route' => 'Action', 'defaults' => [ 'controller' => 'dns\page\ActionPage' ] ]),
+				'DomainList' => Literal::factory([ 'route' => 'DomainList', 'defaults' => [ 'controller' => 'dns\page\DomainListPage' ] ]),
+				'DomainAdd' => Literal::factory([ 'route' => 'DomainAdd', 'defaults' => [ 'controller' => 'dns\page\DomainAddPage' ] ]),
+				'RecordList' => Regex::factory([ 'regex' => 'RecordList/(?P<id>\d+)(/)?(?:-(?P<title>[^/]+))?', 'defaults' => [ 'controller' => 'dns\page\RecordListPage' ], 'spec' => 'RecordList/%id%-%title%' ]),
+				'RecordEdit' => Regex::factory([ 'regex' => 'RecordEdit/(?P<id>\d+)(/)?', 'defaults' => [ 'controller' => 'dns\page\RecordEditPage' ], 'spec' => 'RecordEdit/%id%' ]),
+				'RecordAdd' => Regex::factory([ 'regex' => 'RecordAdd/(?P<id>\d+)(/)?', 'defaults' => [ 'controller' => 'dns\page\RecordAddPage' ], 'spec' => 'RecordAdd/%id%' ]),
+				'SecList' => Regex::factory([ 'regex' => 'SecList/(?P<id>\d+)(/)?(?:-(?P<title>[^/]+))?', 'defaults' => [ 'controller' => 'dns\page\SecListPage' ], 'spec' => 'SecList/%id%-%title%' ]),
+			];
+			
+			$this->router->setRoutes($routes);
+		}
 	}
 	
+	/**
+	 * @see \Zend\Mvc\Router\SimpleRouteStack::addRoute()
+	 *
+     * @param  string  $name
+     * @param  mixed   $route
+	 */
+	public function addRoute ($name, $route) {
+		$this->router->addRoute($name, $route);
+	}
+	
+	/**
+	 * @see	\Zend\Mvc\Router\SimpleRouteStack::addRoutes()
+	 *
+     * @param	array|Traversable	$routes
+	 */
+	public function addRoutes ($routes) {
+		$this->router->addRoutes($routes);
+	}
+	
+    /**
+     * Get the added routes
+     *
+     * @return	Traversable list of all routes
+     */
+	public function getRoutes() {
+		return $this->router->getRoutes();
+	}
+	
+	/**
+	 * handle the request
+	 */
 	public function handle () {
 		$match = $this->router->match(new Request());
 		if ($match !== null) {
@@ -56,7 +109,7 @@ class RequestHandler extends SingletonFactory {
 			
 			$className = $match->getParam("controller");
 			
-			if (!User::isLoggedIn() && $className != 'dns\page\LoginPage' && $className != 'dns\page\ApiPage') {
+			if (!User::isLoggedIn() && $this->apiModule == false && $className != 'dns\page\LoginPage' && $className != 'dns\page\ApiPage') {
 				DNS::getTPL()->display('login.tpl');
 				exit;
 			}

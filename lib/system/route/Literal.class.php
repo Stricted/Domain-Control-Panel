@@ -6,13 +6,12 @@ use Zend\Stdlib\RequestInterface as Request;
 
 class Literal extends LiteralBase {
 	public function match(Request $request, $pathOffset = null) {
-		if (!method_exists($request, 'getUri')) {
+		if (!method_exists($request, 'getPath')) {
 			return;
 		}
-
-		$uri  = $request->getUri();
-		$path = $uri->getPath();
-
+		
+		$path = $request->getPath();
+		
 		if ($pathOffset !== null) {
 			if ($pathOffset >= 0 && strlen($path) >= $pathOffset && !empty($this->route)) {
 				if (strpos($path, $this->route, $pathOffset) === $pathOffset) {
