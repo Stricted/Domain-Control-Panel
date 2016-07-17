@@ -48,7 +48,6 @@ class RequestHandler extends SingletonFactory {
 	
 	public function handle () {
 		$match = $this->router->match(new Request());
-		var_dump($this->router->getRoutes());
 		if ($match !== null) {
 			foreach ($match->getParams() as $key => $value) {
 				$_GET[$key] = $value;
@@ -58,7 +57,6 @@ class RequestHandler extends SingletonFactory {
 			$className = $match->getParam("controller");
 			
 			if (!User::isLoggedIn() && $className != 'dns\page\LoginPage' && $className != 'dns\page\ApiPage') {
-				echo $className;
 				DNS::getTPL()->display('login.tpl');
 				exit;
 			}

@@ -8,6 +8,13 @@ class Request extends BaseRequest {
 	}
 	
 	public function getPath() {
-		return $_SERVER['QUERY_STRING'];
+		$queryString = $_SERVER['QUERY_STRING'];
+		
+		if (strpos($queryString, '&') !== false) {
+			$pos = strpos($queryString, '&');
+			$queryString = substr($queryString, 0, $pos);
+		}
+		echo $queryString;
+		return $queryString;
 	}
 }
