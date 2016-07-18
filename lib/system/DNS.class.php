@@ -66,6 +66,8 @@ class DNS {
 		$this->initLanguage();
 		$this->initTPL();
 		
+		AclHandler::getInstance();
+		
 		$requestHandler = RequestHandler::getInstance();
 		$requestHandler->setRoutes($module);
 		$requestHandler->handle();
