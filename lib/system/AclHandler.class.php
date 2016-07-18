@@ -79,7 +79,7 @@ class AclHandler extends SingletonFactory {
 		
 		foreach ($permissions as $permission) {
 			if ($permission['soaID'] == $soaID) {
-				$users[] = $permission['userID']
+				$users[] = $permission['userID'];
 			}
 			else {
 				continue;
@@ -95,7 +95,7 @@ class AclHandler extends SingletonFactory {
 		
 		foreach ($permissions as $permission) {
 			if ($permission['userID'] == $userID) {
-				$domains[] = $permission['soaID']
+				$domains[] = $permission['soaID'];
 			}
 			else {
 				continue;
