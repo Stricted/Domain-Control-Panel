@@ -3,8 +3,6 @@ namespace dns\system;
 use dns\system\cache\builder\AclCacheBuilder;
 use dns\system\cache\builder\DomainCacheBuilder;
 use dns\system\cache\builder\UserCacheBuilder;
-use Zend\Permissions\Acl\Resource\GenericResource as Resource;
-use Zend\Permissions\Acl\Role\GenericRole as Role;
 use Zend\Permissions\Acl\Acl;
 
 /**
@@ -34,12 +32,8 @@ class AclHandler extends SingletonFactory {
 		
 		/* ass assignments */
 		foreach ($permissions as $permission) {
-			var_dump($permission);
 			$this->acl->allow((string)$permission['userID'], (string)$permission['soaID']);
 		}
-		
-		var_dump($this->acl->getRole(1));
-		exit;
 	}
 	
 	protected function resetCache () {

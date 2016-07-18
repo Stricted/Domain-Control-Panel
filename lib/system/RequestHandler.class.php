@@ -1,8 +1,6 @@
 <?php
 namespace dns\system;
 use dns\system\cache\builder\ControllerCacheBuilder;
-use dns\system\route\Literal;
-use dns\system\route\Regex;
 use dns\system\route\Request;
 use dns\system\route\Segment;
 use Zend\Router\Http\RouteMatch;
@@ -22,6 +20,7 @@ class RequestHandler extends SingletonFactory {
 	 */
 	protected function init () {
 		$this->router = new SimpleRouteStack();
+		
 		if (DNS::getSession()->username !== null) {
 			DNS::getTPL()->assign(array("username" => DNS::getSession()->username));
 		}

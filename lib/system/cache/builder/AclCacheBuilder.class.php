@@ -3,12 +3,8 @@ namespace dns\system\cache\builder;
 use dns\system\DNS;
 
 /**
- * Caches the simple ACL settings per object type.
- * 
- * @author	Alexander Ebert
- * @copyright	2001-2016 WoltLab GmbH
- * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package	WoltLabSuite\Core\System\Cache\Builder
+ * @author      Jan Altensen (Stricted)
+ * @copyright   2013-2016 Jan Altensen (Stricted)
  */
 class AclCacheBuilder extends AbstractCacheBuilder {
 	/**
