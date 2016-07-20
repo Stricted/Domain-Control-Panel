@@ -154,7 +154,7 @@ class RequestHandler extends SingletonFactory {
 	}
 	
 	public function getLink (array $params = [], $query = '') {
-		$path_info = true; // TODO: add config constant for that
+		$path_info = false; // TODO: add config constant for that
 		
 		$url = $this->getBaseUrl() . 'index.php';
 		if ($path_info) {
@@ -173,24 +173,26 @@ class RequestHandler extends SingletonFactory {
 		
 		if (!empty($params['id'])) {
 			if (!empty($params['title'])) {
-				$url .= '/'.$params['id'].'-'.$params['title'];
+				$url .= '/' . $params['id'] . '-' . $params['title'];
 			}
 			else {
-				$url .= '/'.$params['id'];
+				$url .= '/' . $params['id'];
 			}
 		}
 		
 		if (!empty($query)) {
 			if ($path_info) {
 				if (strpos($query, '&') === 0) {
-					$query = '/' . substr($query, 1);
+					$query = '?' . substr($query, 1);
 				}
-				else if (strpos($query, '/') !== 0) {
-					$query = '/' . $query;
+				else if (strpos($query, '?') !== 0) {
+					$query = '?' . $query;
 				}
+				
+				$query = '/' . $query; 
 			}
 			else {
-				if (strpos($query, '/') === 0) {
+				if (strpos($query, '?') === 0) {
 					$query = '&' . substr($query, 1);
 				}
 				else if (strpos($query, '&') !== 0) {
