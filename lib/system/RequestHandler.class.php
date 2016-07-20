@@ -44,7 +44,7 @@ class RequestHandler extends SingletonFactory {
 		$routes = [];
 		
 		foreach ($controllers as $name => $data) {
-			$routes[$name] = Segment::factory([ 'route' => $name.'[/][/:id[-:title]]', 'constraints' => [ 'id' => '[0-9]+', 'title' => '[a-zA-Z0-9_.-/]+' ], 'defaults' => [ 'controller' => $data ] ]);
+			$routes[$name] = Segment::factory([ 'route' => '[/]' . $name . '[/][/:id[-:title]]', 'constraints' => [ 'id' => '[0-9]+', 'title' => '[a-zA-Z0-9_.-/]+' ], 'defaults' => [ 'controller' => $data ] ]);
 		}
 		
 		$this->router->setRoutes($routes);
@@ -141,5 +141,66 @@ class RequestHandler extends SingletonFactory {
 			$_GET[$key] = $value;
 			$_REQUEST[$key] = $value;
 		}
+	}
+	
+	public function getBaseUrl () {
+		$protocol = 'http://';
+		
+		if ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443 || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) {
+			$protocol = 'https://';
+		}
+		
+		return $protocol . $_SERVER['HTTP_HOST'] . '/';
+	}
+	
+	public function getLink (array $params = [], $query = '') {
+		$path_info = true; // TODO: add config constant for that
+		
+		$url = $this->getBaseUrl() . 'index.php';
+		if ($path_info) {
+			$url .= '/';
+		}
+		else {
+			$url .= '?';
+		}
+		
+		if (!empty($params['controller'])) {
+			$url .= $params['controller'];
+		}
+		else {
+			// TODO: InvalidArgumentException?
+		}
+		
+		if (!empty($params['id'])) {
+			if (!empty($params['title'])) {
+				$url .= '/'.$params['id'].'-'.$params['title'];
+			}
+			else {
+				$url .= '/'.$params['id'];
+			}
+		}
+		
+		if (!empty($query)) {
+			if ($path_info) {
+				if (strpos($query, '&') === 0) {
+					$query = '/' . substr($query, 1);
+				}
+				else if (strpos($query, '/') !== 0) {
+					$query = '/' . $query;
+				}
+			}
+			else {
+				if (strpos($query, '/') === 0) {
+					$query = '&' . substr($query, 1);
+				}
+				else if (strpos($query, '&') !== 0) {
+					$query = '&' . $query;
+				}
+			}
+			
+			$url .= $query;
+		}
+		
+		return $url;
 	}
 }

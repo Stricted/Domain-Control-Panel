@@ -363,7 +363,8 @@ class DNS {
 		/* assign language variables */
 		self::getTPL()->assign(array(
 			"isReseller" => User::isReseller(),
-			"isAdmin" => User::isAdmin()
+			"isAdmin" => User::isAdmin(),
+			'baseurl' => RequestHandler::getInstance()->getBaseUrl()
 		));
 		
 		/*self::getTPL()->assign("version", mb_substr(sha1(DNS_VERSION), 0, 8));*/

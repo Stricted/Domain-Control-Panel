@@ -1,4 +1,5 @@
 <?php
+use dns\system\RequestHandler;
 
 function smarty_block_link($params, $content, $template, &$repeat) {
 	if ($repeat) {
@@ -17,24 +18,5 @@ function smarty_block_link($params, $content, $template, &$repeat) {
 		$params['title'] = null;
 	}
 	
-	$url = 'index.php?'.$params['controller'];
-	
-	if (!empty($params['id'])) {
-		if (!empty($params['title'])) {
-			$url .= '/'.$params['id'].'-'.$params['title'];
-		}
-		else {
-			$url .= '/'.$params['id'];
-		}
-	}
-	
-	if (!empty($content)) {
-		if (strpos($content, '&') !== 0) {
-			$url .= '&';
-		}
-		
-		$url .= $content;
-	}
-	
-	return @htmlspecialchars($url, ENT_COMPAT, 'UTF-8');
+	return RequestHandler::getInstance()->getLink($params, $content);
 }
