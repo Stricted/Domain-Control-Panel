@@ -150,7 +150,8 @@ class RequestHandler extends SingletonFactory {
 			$protocol = 'https://';
 		}
 		
-		return $protocol . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/';
+		$dirname = dirname($_SERVER['PHP_SELF']);
+		return $protocol . $_SERVER['HTTP_HOST'] . ($dirname == '/' ? $dirname : $dirname . '/');
 	}
 	
 	public function getLink (array $params = [], $query = '') {
