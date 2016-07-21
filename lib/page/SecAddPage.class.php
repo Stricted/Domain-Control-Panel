@@ -1,5 +1,7 @@
 <?php
 namespace dns\page;
+use dns\system\helper\IDatabase;
+use dns\system\helper\TDatabase;
 use dns\system\DNS;
 use dns\system\User;
 
@@ -8,7 +10,8 @@ use dns\system\User;
  * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @copyright   2014-2016 Jan Altensen (Stricted)
  */
-class SecAddPage extends AbstractPage {
+class SecAddPage extends AbstractPage implements IDatabase {
+	use TDatabase;
 	
 	public function prepare() {
 		if (!isset($_GET['id']) || empty($_GET['id']) || !ENABLE_DNSSEC) {
@@ -21,9 +24,9 @@ class SecAddPage extends AbstractPage {
 		}
 		
 		$sql = "SELECT * FROM dns_soa WHERE id = ?";
-		$res = DNS::getDB()->query($sql, array($_GET['id']));
-		$soa = DNS::getDB()->fetch_array($res);
+		$res = $this->db->query($sql, array($_GET['id']));
+		$soa = $this->db->fetch_array($res);
 		
-		DNS::getTPL()->assign(array("soa" => $soa));
+		$this->tpl->assign(array("soa" => $soa));
 	}
 }

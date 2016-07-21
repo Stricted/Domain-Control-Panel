@@ -2,7 +2,7 @@
 namespace dns\system\helper;
 
 trait TDatabase {
-	private $db = null;
+	protected $db = null;
 	
 	public function setDB ($database) {
 		$this->db = $database;

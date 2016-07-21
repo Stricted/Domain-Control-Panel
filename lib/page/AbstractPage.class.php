@@ -1,5 +1,7 @@
 <?php
 namespace dns\page;
+use dns\system\helper\ITemplate;
+use dns\system\helper\TTemplate;
 use dns\system\DNS;
 
 /**
@@ -7,11 +9,13 @@ use dns\system\DNS;
  * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @copyright   2014-2016 Jan Altensen (Stricted)
  */
-abstract class AbstractPage {
+abstract class AbstractPage implements ITemplate {
+	use TTemplate;
+	
 	public $activeMenuItem = '';
 	public $template = "";
-	
-	public final function __construct() {
+		
+	public function init() {
 		$this->prepare();
 		$this->show();
 	}
@@ -30,7 +34,7 @@ abstract class AbstractPage {
 			}
 		}
 		
-		DNS::getTPL()->assign(array("activeMenuItem" => $this->activeMenuItem));
-		DNS::getTPL()->display($this->template);
+		$this->tpl->assign(array("activeMenuItem" => $this->activeMenuItem));
+		$this->tpl->display($this->template);
 	}
 }

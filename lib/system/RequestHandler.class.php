@@ -3,6 +3,8 @@ namespace dns\system;
 use dns\system\cache\builder\ControllerCacheBuilder;
 use dns\system\helper\IDatabase;
 use dns\system\helper\TDatabase;
+use dns\system\helper\ITemplate;
+use dns\system\helper\TTemplate;
 use dns\system\route\Request;
 use dns\system\route\Segment;
 use Zend\Router\Http\RouteMatch;
@@ -13,8 +15,9 @@ use Zend\Router\SimpleRouteStack;
  * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @copyright   2013-2016 Jan Altensen (Stricted)
  */
-class RequestHandler extends SingletonFactory implements IDatabase {
+class RequestHandler extends SingletonFactory implements IDatabase, ITemplate {
 	use TDatabase;
+	use TTemplate;
 	
 	protected $router = null;
 	protected $apiModule = false;
@@ -114,9 +117,16 @@ class RequestHandler extends SingletonFactory implements IDatabase {
 			
 			try {
 				$page = new $className();
+				
 				if ($page instanceof IDatabase) {
 					$page->setDB($this->db);
 				}
+				
+				if ($page instanceof ITemplate) {
+					$page->setTPL($this->tpl);
+				}
+				
+				$page->init();
 			}
 			catch (\Exception $e) {
 				if ($e->getCode() == 404) {

@@ -1,5 +1,7 @@
 <?php
 namespace dns\page;
+use dns\system\helper\IDatabase;
+use dns\system\helper\TDatabase;
 use dns\system\DNS;
 use dns\system\User;
 use Mso\IdnaConvert\IdnaConvert;
@@ -9,7 +11,8 @@ use Mso\IdnaConvert\IdnaConvert;
  * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @copyright   2014-2016 Jan Altensen (Stricted)
  */
-class RecordListPage extends AbstractPage {
+class RecordListPage extends AbstractPage implements IDatabase {
+	use TDatabase;
 	public $activeMenuItem = 'index';
 	
 	public function prepare() {
@@ -25,8 +28,8 @@ class RecordListPage extends AbstractPage {
 		$idna = new IdnaConvert();
 		
 		$sql = "SELECT count(*) as count FROM dns_rr WHERE zone = ?";
-		$res = DNS::getDB()->query($sql, array($_GET['id']));
-		$row = DNS::getDB()->fetch_array($res);
+		$res = $this->db->query($sql, array($_GET['id']));
+		$row = $this->db->fetch_array($res);
 		$count = $row['count'];
 		
 		$sortField = "type";
@@ -63,16 +66,16 @@ class RecordListPage extends AbstractPage {
 		$pages = intval(ceil($count / $itemsPerPage));
 		
 		$sql = "SELECT * FROM dns_soa WHERE id = ?";
-		$res = DNS::getDB()->query($sql, array($_GET['id']));
-		$soa = DNS::getDB()->fetch_array($res);
+		$res = $this->db->query($sql, array($_GET['id']));
+		$soa = $this->db->fetch_array($res);
 		
 		$soa['origin'] = $idna->decode($soa['origin']);
 		
 		$records = array();
 		
 		$sql = "SELECT * FROM dns_rr WHERE zone = ?".(!empty($sqlOrderBy) ? " ORDER BY ".$sqlOrderBy : '')." LIMIT " . $sqlLimit . " OFFSET " . $sqlOffset;
-		$res = DNS::getDB()->query($sql, array($_GET['id']));
-		while ($row = DNS::getDB()->fetch_array($res)) {
+		$res = $this->db->query($sql, array($_GET['id']));
+		while ($row = $this->db->fetch_array($res)) {
 			$row['name'] = $idna->decode($row['name']);
 			if ($row['type'] == "SRV") {
 				$data = explode(" ", $row['data']);
@@ -95,7 +98,7 @@ class RecordListPage extends AbstractPage {
 			$records[] = $row;
 		}
 		
-		DNS::getTPL()->assign(array(
+		$this->tpl->assign(array(
 			'records' => $records,
 			'soa' => $soa,
 			'pageNo' => $pageNo,

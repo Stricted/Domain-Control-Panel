@@ -1,5 +1,7 @@
 <?php
 namespace dns\page;
+use dns\system\helper\IDatabase;
+use dns\system\helper\TDatabase;
 use dns\system\DNS;
 use dns\system\User;
 use dns\util\ParseZone;
@@ -9,7 +11,9 @@ use dns\util\ParseZone;
  * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @copyright   2014-2016 Jan Altensen (Stricted)
  */
-class ActionPage extends AbstractPage {	
+class ActionPage extends AbstractPage implements IDatabase {
+	use TDatabase;
+	
 	public function prepare() {
 		if (!isset($_POST['action']) || empty($_POST['action']) || !isset($_POST['dataID'])) {
 			echo "failure";
@@ -31,13 +35,13 @@ class ActionPage extends AbstractPage {
 			}
 			
 			$sql = "SELECT active, serial FROM dns_soa WHERE id = ?";
-			$res = DNS::getDB()->query($sql, array($dataID));
-			$soa = DNS::getDB()->fetch_array($res);
+			$res = $this->db->query($sql, array($dataID));
+			$soa = $this->db->fetch_array($res);
 			
 			$active = ($soa['active'] ? 0 : 1);
 			
 			$sql = "UPDATE dns_soa SET active = ?, serial = ? WHERE id = ?";
-			DNS::getDB()->query($sql, array($active, $this->fixSerial($soa['serial']), $dataID));
+			$this->db->query($sql, array($active, $this->fixSerial($soa['serial']), $dataID));
 			
 			echo "success";
 			exit;
@@ -55,15 +59,15 @@ class ActionPage extends AbstractPage {
 			}
 			
 			$sql = "DELETE FROM dns_soa WHERE id = ?";
-			DNS::getDB()->query($sql, array($dataID));
+			$this->db->query($sql, array($dataID));
 			
 			echo "success";
 			exit;
 		}
 		else if ($action == "toggleRecord") {
 			$sql = "SELECT zone FROM dns_rr WHERE id = ?";
-			$res = DNS::getDB()->query($sql, array($dataID));
-			$rr = DNS::getDB()->fetch_array($res);
+			$res = $this->db->query($sql, array($dataID));
+			$rr = $this->db->fetch_array($res);
 			$soaID = $rr['zone'];
 			
 			$soaIDs = User::getAccessibleDomains();
@@ -73,28 +77,28 @@ class ActionPage extends AbstractPage {
 			}
 			
 			$sql = "SELECT active FROM dns_rr WHERE id = ?";
-			$res = DNS::getDB()->query($sql, array($dataID));
-			$rr = DNS::getDB()->fetch_array($res);
+			$res = $this->db->query($sql, array($dataID));
+			$rr = $this->db->fetch_array($res);
 			
 			$active = ($rr['active'] ? 0 : 1);
 			
 			$sql = "UPDATE dns_rr SET active = ? WHERE id = ?";
-			DNS::getDB()->query($sql, array($active, $dataID));
+			$this->db->query($sql, array($active, $dataID));
 			
 			$sql = "SELECT serial FROM dns_soa WHERE id = ?";
-			$res = DNS::getDB()->query($sql, array($soaID));
-			$soa = DNS::getDB()->fetch_array($res);
+			$res = $this->db->query($sql, array($soaID));
+			$soa = $this->db->fetch_array($res);
 			
 			$sql = "UPDATE dns_soa SET serial = ? WHERE id = ?";
-			DNS::getDB()->query($sql, array($this->fixSerial($soa['serial']), $soaID));
+			$this->db->query($sql, array($this->fixSerial($soa['serial']), $soaID));
 			
 			echo "success";
 			exit;
 		}
 		else if ($action == "deleteRecord") {
 			$sql = "SELECT zone FROM dns_rr WHERE id = ?";
-			$res = DNS::getDB()->query($sql, array($dataID));
-			$rr = DNS::getDB()->fetch_array($res);
+			$res = $this->db->query($sql, array($dataID));
+			$rr = $this->db->fetch_array($res);
 			$soaID = $rr['zone'];
 			
 			$soaIDs = User::getAccessibleDomains();
@@ -104,22 +108,22 @@ class ActionPage extends AbstractPage {
 			}
 			
 			$sql = "DELETE FROM dns_rr WHERE id = ?";
-			DNS::getDB()->query($sql, array($dataID));
+			$this->db->query($sql, array($dataID));
 			
 			$sql = "SELECT serial FROM dns_soa WHERE id = ?";
-			$res = DNS::getDB()->query($sql, array($soaID));
-			$soa = DNS::getDB()->fetch_array($res);
+			$res = $this->db->query($sql, array($soaID));
+			$soa = $this->db->fetch_array($res);
 			
 			$sql = "UPDATE dns_soa SET serial = ? WHERE id = ?";
-			DNS::getDB()->query($sql, array($this->fixSerial($soa['serial']), $soaID));
+			$this->db->query($sql, array($this->fixSerial($soa['serial']), $soaID));
 			
 			echo "success";
 			exit;
 		}
 		else if ($action == "toggleSec") {
 			$sql = "SELECT zone FROM dns_sec WHERE id = ?";
-			$res = DNS::getDB()->query($sql, array($dataID));
-			$rr = DNS::getDB()->fetch_array($res);
+			$res = $this->db->query($sql, array($dataID));
+			$rr = $this->db->fetch_array($res);
 			$soaID = $rr['zone'];
 			
 			$soaIDs = User::getAccessibleDomains();
@@ -129,28 +133,28 @@ class ActionPage extends AbstractPage {
 			}
 			
 			$sql = "SELECT active FROM dns_sec WHERE id = ?";
-			$res = DNS::getDB()->query($sql, array($dataID));
-			$rr = DNS::getDB()->fetch_array($res);
+			$res = $this->db->query($sql, array($dataID));
+			$rr = $this->db->fetch_array($res);
 			
 			$active = ($rr['active'] ? 0 : 1);
 			
 			$sql = "UPDATE dns_sec SET active = ? WHERE id = ?";
-			DNS::getDB()->query($sql, array($active, $dataID));
+			$this->db->query($sql, array($active, $dataID));
 			
 			$sql = "SELECT serial FROM dns_soa WHERE id = ?";
-			$res = DNS::getDB()->query($sql, array($soaID));
-			$soa = DNS::getDB()->fetch_array($res);
+			$res = $this->db->query($sql, array($soaID));
+			$soa = $this->db->fetch_array($res);
 			
 			$sql = "UPDATE dns_soa SET serial = ? WHERE id = ?";
-			DNS::getDB()->query($sql, array($this->fixSerial($soa['serial']), $soaID));
+			$this->db->query($sql, array($this->fixSerial($soa['serial']), $soaID));
 			
 			echo "success";
 			exit;
 		}
 		else if ($action == "deleteSec") {
 			$sql = "SELECT zone FROM dns_sec WHERE id = ?";
-			$res = DNS::getDB()->query($sql, array($dataID));
-			$rr = DNS::getDB()->fetch_array($res);
+			$res = $this->db->query($sql, array($dataID));
+			$rr = $this->db->fetch_array($res);
 			$soaID = $rr['zone'];
 			
 			$soaIDs = User::getAccessibleDomains();
@@ -160,14 +164,14 @@ class ActionPage extends AbstractPage {
 			}
 			
 			$sql = "DELETE FROM dns_sec WHERE id = ?";
-			DNS::getDB()->query($sql, array($dataID));
+			$this->db->query($sql, array($dataID));
 			
 			$sql = "SELECT serial FROM dns_soa WHERE id = ?";
-			$res = DNS::getDB()->query($sql, array($soaID));
-			$soa = DNS::getDB()->fetch_array($res);
+			$res = $this->db->query($sql, array($soaID));
+			$soa = $this->db->fetch_array($res);
 			
 			$sql = "UPDATE dns_soa SET serial = ? WHERE id = ?";
-			DNS::getDB()->query($sql, array($this->fixSerial($soa['serial']), $soaID));
+			$this->db->query($sql, array($this->fixSerial($soa['serial']), $soaID));
 			
 			echo "success";
 			exit;
@@ -175,14 +179,14 @@ class ActionPage extends AbstractPage {
 		else if ($action == "requestApiKey") {
 			if (User::isLoggedIn()) {
 				$sql = "SELECT * FROM dns_api WHERE userID = ?";
-				$res = DNS::getDB()->query($sql, array(DNS::getSession()->userID));
-				$row = DNS::getDB()->fetch_array($res);
+				$res = $this->db->query($sql, array(DNS::getSession()->userID));
+				$row = $this->db->fetch_array($res);
 				
 				if (empty($row)) {
 					$apiKey = DNS::generateUUID();
 					
 					$sql = "INSERT INTO dns_api (id, userID, apiKey) VALUES (NULL, ?, ?)";
-					DNS::getDB()->query($sql, array(DNS::getSession()->userID, $apiKey));
+					$this->db->query($sql, array(DNS::getSession()->userID, $apiKey));
 					
 					echo $apiKey;
 					exit;
@@ -210,8 +214,8 @@ class ActionPage extends AbstractPage {
 					}
 					
 					$sql = 'SELECT * FROM dns_soa where id = ?';
-					$res = DNS::getDB()->query($sql, array($dataID));
-					$res = DNS::getDB()->fetch_array($res);
+					$res = $this->db->query($sql, array($dataID));
+					$res = $this->db->fetch_array($res);
 					$soa = $res;
 					
 					$parser = new ParseZone($_POST['zone'], $soa['origin']);
@@ -243,8 +247,8 @@ class ActionPage extends AbstractPage {
 		}
 		else if ($action == "export") {
 			$sql = 'SELECT * FROM dns_soa where id = ?';
-			$res = DNS::getDB()->query($sql, array($dataID));
-			$res = DNS::getDB()->fetch_array($res);
+			$res = $this->db->query($sql, array($dataID));
+			$res = $this->db->fetch_array($res);
 			$soa = $res;
 			
 			$soaIDs = User::getAccessibleDomains();
@@ -288,8 +292,8 @@ class ActionPage extends AbstractPage {
 			$out .=	";;\n";
 			
 			$sql = 'SELECT * FROM dns_rr where zone = ?';
-			$res = DNS::getDB()->query($sql, array($soa['id']));
-			while ($record = DNS::getDB()->fetch_array($res)) {
+			$res = $this->db->query($sql, array($soa['id']));
+			while ($record = $this->db->fetch_array($res)) {
 				if (!$record['active']) {
 					$out .= ";; ";
 				}

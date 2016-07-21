@@ -1,5 +1,7 @@
 <?php
 namespace dns\page;
+use dns\system\helper\IDatabase;
+use dns\system\helper\TDatabase;
 use dns\system\DNS;
 use dns\system\User;
 use Mso\IdnaConvert\IdnaConvert;
@@ -9,7 +11,8 @@ use Mso\IdnaConvert\IdnaConvert;
  * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @copyright   2014-2016 Jan Altensen (Stricted)
  */
-class RecordEditPage extends AbstractPage {
+class RecordEditPage extends AbstractPage implements IDatabase {
+	use TDatabase;
 	public $activeMenuItem = 'index';
 	
 	public function prepare() {
@@ -19,8 +22,8 @@ class RecordEditPage extends AbstractPage {
 		$idna = new IdnaConvert();
 		
 		$sql = "SELECT * FROM dns_rr WHERE id = ?";
-		$res = DNS::getDB()->query($sql, array($_GET['id']));
-		$rr = DNS::getDB()->fetch_array($res);
+		$res = $this->db->query($sql, array($_GET['id']));
+		$rr = $this->db->fetch_array($res);
 		
 		$soaIDs = User::getAccessibleDomains();
 		if (!in_array($rr['zone'], $soaIDs)) {
@@ -28,12 +31,12 @@ class RecordEditPage extends AbstractPage {
 		}
 				
 		$sql = "SELECT * FROM dns_soa WHERE id = ?";
-		$res = DNS::getDB()->query($sql, array($rr['zone']));
-		$soa = DNS::getDB()->fetch_array($res);
+		$res = $this->db->query($sql, array($rr['zone']));
+		$soa = $this->db->fetch_array($res);
 		
 		$soa['origin'] = $idna->decode($soa['origin']);
 		
-		DNS::getTPL()->assign(array("soa" => $soa, "rr" => $rr));
+		$this->tpl->assign(array("soa" => $soa, "rr" => $rr));
 		
 		$types = array('A', 'AAAA', 'CNAME', 'MX', 'PTR', 'SRV', 'TXT', 'TLSA', 'NS', 'DS');
 		$error = array();
@@ -117,8 +120,8 @@ class RecordEditPage extends AbstractPage {
 			}
 			
 			$sql = 'SELECT * FROM dns_rr WHERE zone = ? AND name = ? AND type = ? AND data = ? AND id != ?';
-			$res = DNS::getDB()->query($sql, array($rr['zone'], $name, $type, $data, $_GET['id']));
-			$rr = DNS::getDB()->fetch_array($res);
+			$res = $this->db->query($sql, array($rr['zone'], $name, $type, $data, $_GET['id']));
+			$rr = $this->db->fetch_array($res);
 			if (!empty($rr)) {
 				$error = array_merge($error, array('type', 'data'));
 			}
@@ -127,18 +130,18 @@ class RecordEditPage extends AbstractPage {
 				
 				$sql = 'UPDATE dns_rr SET name = ?, type = ?, aux = ?, data = ?, ttl = ? WHERE id = ?';
 				if ($type == "SRV" || $type == "DS" || $type == "TLSA") {
-					DNS::getDB()->query($sql, array($name, $type, $aux, $data, $ttl, $_GET['id']));
+					$this->db->query($sql, array($name, $type, $aux, $data, $ttl, $_GET['id']));
 				}
 				else {
-					DNS::getDB()->query($sql, array($name, $type, $aux, $idna->encode($data), $ttl, $_GET['id']));
+					$this->db->query($sql, array($name, $type, $aux, $idna->encode($data), $ttl, $_GET['id']));
 				}
 				
 				$sql = "UPDATE dns_soa SET serial = ? WHERE id = ?";
-				DNS::getDB()->query($sql, array($this->fixSerial($soa['serial']), $soa['id']));
+				$this->db->query($sql, array($this->fixSerial($soa['serial']), $soa['id']));
 				
 				$sql = "SELECT * FROM dns_rr WHERE id = ?";
-				$res = DNS::getDB()->query($sql, array($_GET['id']));
-				$rr = DNS::getDB()->fetch_array($res);
+				$res = $this->db->query($sql, array($_GET['id']));
+				$rr = $this->db->fetch_array($res);
 				
 				$weight = 0;
 				$port = 0;
@@ -162,15 +165,15 @@ class RecordEditPage extends AbstractPage {
 					$data = $idna->decode($data);
 				}
 				
-				DNS::getTPL()->assign(array('name' => $name, 'type' => $type, 'weight' => $weight, 'port' => $port, 'data' => $data, 'aux' => $aux, 'ttl' => $ttl));
-				DNS::getTPL()->assign(array('success' => true));
+				$this->tpl->assign(array('name' => $name, 'type' => $type, 'weight' => $weight, 'port' => $port, 'data' => $data, 'aux' => $aux, 'ttl' => $ttl));
+				$this->tpl->assign(array('success' => true));
 			}
 			else {
 				if ($type == "SRV" || $type == "DS" || $type == "TLSA") {
-					DNS::getTPL()->assign(array('name' => $idna->decode($name), 'type' => $type, 'weight' => $_POST['weight'], 'port' => $_POST['port'], 'data' => $_POST['data'], 'aux' => $aux, 'ttl' => $ttl));
+					$this->tpl->assign(array('name' => $idna->decode($name), 'type' => $type, 'weight' => $_POST['weight'], 'port' => $_POST['port'], 'data' => $_POST['data'], 'aux' => $aux, 'ttl' => $ttl));
 				}
 				else {
-					DNS::getTPL()->assign(array('name' => $idna->decode($name), 'type' => $type, 'data' => $idna->decode($data), 'aux' => $aux, 'ttl' => $ttl));
+					$this->tpl->assign(array('name' => $idna->decode($name), 'type' => $type, 'data' => $idna->decode($data), 'aux' => $aux, 'ttl' => $ttl));
 				}
 			}
 		}
@@ -197,10 +200,10 @@ class RecordEditPage extends AbstractPage {
 				$data = $idna->decode($data);
 			}
 			
-			DNS::getTPL()->assign(array('name' => $name, 'type' => $type, 'weight' => $weight, 'port' => $port, 'data' => $data, 'aux' => $aux, 'ttl' => $ttl));
+			$this->tpl->assign(array('name' => $name, 'type' => $type, 'weight' => $weight, 'port' => $port, 'data' => $data, 'aux' => $aux, 'ttl' => $ttl));
 		}
 		
-		DNS::getTPL()->assign(array("error" => $error));
+		$this->tpl->assign(array("error" => $error));
 	}
 	
 	public function fixSerial ($old) {

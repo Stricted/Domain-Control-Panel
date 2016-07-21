@@ -1,5 +1,7 @@
 <?php
 namespace dns\page;
+use dns\system\helper\IDatabase;
+use dns\system\helper\TDatabase;
 use dns\system\DNS;
 use dns\system\User;
 use dns\util\DNSSECUtil;
@@ -9,7 +11,8 @@ use dns\util\DNSSECUtil;
  * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @copyright   2014-2016 Jan Altensen (Stricted)
  */
-class SecListPage extends AbstractPage {
+class SecListPage extends AbstractPage implements IDatabase {
+	use TDatabase;
 	public $activeMenuItem = 'index';
 	
 	public function prepare() {
@@ -23,15 +26,15 @@ class SecListPage extends AbstractPage {
 		}
 		
 		$sql = "SELECT * FROM dns_soa WHERE id = ?";
-		$res = DNS::getDB()->query($sql, array($_GET['id']));
-		$soa = DNS::getDB()->fetch_array($res);
+		$res = $this->db->query($sql, array($_GET['id']));
+		$soa = $this->db->fetch_array($res);
 		
 		$records = array();
 		$ds = array();
 		
 		$sql = "SELECT * FROM dns_sec WHERE zone = ?";
-		$res = DNS::getDB()->query($sql, array($_GET['id']));
-		while ($row = DNS::getDB()->fetch_array($res)) {
+		$res = $this->db->query($sql, array($_GET['id']));
+		while ($row = $this->db->fetch_array($res)) {
 			if ($row['type'] == 'KSK') {
 				preg_match("/".$soa['origin']." IN DNSKEY 257 3 ([0-9]+) ([\s\S]+)/i", $row['public'], $match);
 				preg_match("/; This is a key-signing key, keyid ([0-9]+), for ".$soa['origin']."/i", $row['public'], $match2);
@@ -46,6 +49,6 @@ class SecListPage extends AbstractPage {
 			$records[] = $row;
 		}
 		
-		DNS::getTPL()->assign(array("records" => $records, "soa" => $soa, 'ds' => $ds));
+		$this->tpl->assign(array("records" => $records, "soa" => $soa, 'ds' => $ds));
 	}
 }

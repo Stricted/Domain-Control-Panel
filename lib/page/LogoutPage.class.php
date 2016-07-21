@@ -12,7 +12,7 @@ class LogoutPage extends AbstractPage {
 	public function prepare() {
 		if (User::isLoggedIn()) {
 			User::logout();
-			header("Location: ?page=index");
+			header("Location: ?page=index"); // TODO: use link builder
 		}
 	}
 }

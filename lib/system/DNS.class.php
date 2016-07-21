@@ -70,6 +70,7 @@ class DNS {
 		
 		$requestHandler = RequestHandler::getInstance();
 		$requestHandler->setDB(self::getDB());
+		$requestHandler->setTPL(self::getTPL());
 		$requestHandler->setRoutes($module);
 		$requestHandler->handle();
 	}

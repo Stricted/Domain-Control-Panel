@@ -1,5 +1,7 @@
 <?php
 namespace dns\page;
+use dns\system\helper\IDatabase;
+use dns\system\helper\TDatabase;
 use dns\system\DNS;
 use dns\system\User;
 
@@ -8,13 +10,14 @@ use dns\system\User;
  * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @copyright   2014-2016 Jan Altensen (Stricted)
  */
-class ApiManagementPage extends AbstractPage {
+class ApiManagementPage extends AbstractPage implements IDatabase {
+	use TDatabase;
 	public $activeMenuItem = 'api';
 	
 	public function prepare() {
 		$sql = "SELECT * FROM dns_api WHERE userID = ?";
-		$res = DNS::getDB()->query($sql, array(DNS::getSession()->userID));
-		$row = DNS::getDB()->fetch_array($res);
+		$res = $this->db->query($sql, array(DNS::getSession()->userID));
+		$row = $this->db->fetch_array($res);
 		
 		$apiKey = "";
 		
@@ -22,6 +25,6 @@ class ApiManagementPage extends AbstractPage {
 			$apiKey = $row['apiKey'];
 		}
 		
-		DNS::getTPL()->assign(array("userID" => DNS::getSession()->userID,"apiKey" => $apiKey));
+		$this->tpl->assign(array("userID" => DNS::getSession()->userID,"apiKey" => $apiKey));
 	}
 }
