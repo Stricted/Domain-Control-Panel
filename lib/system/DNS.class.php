@@ -69,6 +69,7 @@ class DNS {
 		AclHandler::getInstance();
 		
 		$requestHandler = RequestHandler::getInstance();
+		$requestHandler->setDB(self::getDB());
 		$requestHandler->setRoutes($module);
 		$requestHandler->handle();
 	}
