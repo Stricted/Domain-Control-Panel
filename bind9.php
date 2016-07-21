@@ -44,6 +44,10 @@ if (is_array($data) && !isset($data['error'])) {
 					}
 				}
 				
+				if (strpos($txt, '" "') !== false && $txt != '" "') {
+					$record['data'] = '('.$record['data'].')'; // for dkim records
+				}
+				
 				if (strpos($record['data'], "v=spf1") !== false) {
 					$out .= $record['name']."\t".$record['ttl']."\tIN\tSPF\t" . $record['data']."\n";
 				}
