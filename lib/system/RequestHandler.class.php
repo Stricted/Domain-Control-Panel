@@ -2,8 +2,8 @@
 namespace dns\system;
 use dns\system\cache\builder\ControllerCacheBuilder;
 use dns\system\helper\IDatabase;
-use dns\system\helper\TDatabase;
 use dns\system\helper\ITemplate;
+use dns\system\helper\TDatabase;
 use dns\system\helper\TTemplate;
 use dns\system\route\Request;
 use dns\system\route\Segment;
