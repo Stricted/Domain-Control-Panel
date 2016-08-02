@@ -58,17 +58,30 @@ class ParseZone {
 		$file = preg_replace_callback('/(\([^()]*\))/', function ($matches) {
 			$a = explode("\n", $matches[0]);
 			$b = array();
-			foreach ($a as $line) {
-				
-				// unify whitespaces
-				$line = preg_replace('/\s+/', ' ', $line);
-				
-				// strip comments
-				$line = preg_replace('/(\s+)?(;|#)([\s\S]+)?/i', '', $line);
-				$b[] = $line;
+			if (strpos($matches[0], "DKIM") !== false || strpos($matches[0], "DMARC") !== false) {
+				foreach ($a as $line) {					
+					// unify whitespaces
+					$line = preg_replace('/\s+/', ' ', $line);
+					
+					// strip comments
+					$line = substr($line, 0, strrpos($line, '"')+1); // strip everything after the last "
+					
+					$b[] = $line;
+				}
 			}
-			$line = implode("", $b);
+			else {
+				foreach ($a as $line) {
+					
+					// unify whitespaces
+					$line = preg_replace('/\s+/', ' ', $line);
+					
+					// strip comments
+					$line = preg_replace('/(\s+)?(;|#)([\s\S]+)?/i', '', $line);
+					$b[] = $line;
+				}
+			}
 			
+			$line = implode("", $b);
 			return str_replace(array("( ", "(", " )", ")"), "", $line);
 		}, $file);
 		
@@ -87,12 +100,16 @@ class ParseZone {
 	 */
 	public function parse () {
 		foreach ($this->lines as $line) {
+			
 			// unify whitespaces
 			$line = preg_replace('/\s+/', ' ', $line);
 			
-			// strip comments
-			$line = preg_replace('/(\s+)?(;|#)([\s\S]+)?/i', '', $line);
-		
+			/* ignore txt records */
+			if (strpos($line, "TXT") === false) {
+				// strip comments
+				$line = preg_replace('/(\s+)?(;|#)([\s\S]+)?/i', '', $line);
+			}
+			
 			/* ignore these lines */
 			if (empty($line)) continue;
 			if (strpos($line, "RRSIG") !== false) continue;
@@ -189,9 +206,16 @@ class ParseZone {
 				$record['data'] = $matches[5];
 			}
 			
+			if ($record['type'] == "TXT") {
+				$record['data'] = substr($record['data'], 0, strrpos($record['data'], '"')+1); // strip everything after the last "
+			}
+			
 			// parse data
 			if (strpos($record['data'], "@") !== false && !empty($this->origin)) {
-				$record['data'] = str_replace("@", $this->origin, $record['data']);
+				/* replace the @ only on MX, CNAME and SRV records see: http://www.phpclasses.org/discuss/package/9033/thread/1/ */
+				if ($record['type'] == "MX" || $record['type'] == "CNAME" || $record['type'] == "SRV") {
+					$record['data'] = str_replace("@", $this->origin, $record['data']);
+				}
 			}
 			
 			$this->records[] = $record;
