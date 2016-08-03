@@ -56,10 +56,6 @@ if (is_array($data) && !isset($data['error'])) {
 					$record['data'] = '"'.$txt.'"';
 				}
 				
-				if (strpos($record['data'], "v=spf1") !== false) {
-					$out .= $record['name']."\t".$record['ttl']."\tIN\tSPF\t" . $record['data']."\n";
-				}
-				
 				$out .= $record['name']."\t".$record['ttl']."\tIN\t".$record['type']."\t" . $record['data']."\n";
 			}
 			else {
