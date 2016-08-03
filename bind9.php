@@ -38,14 +38,18 @@ if (is_array($data) && !isset($data['error'])) {
 			else if ($record['type'] == "TXT") {
 				$txt = $record['data'];
 				
-				if (strpos($txt, " ") !== false) {
-					if (substr($txt, -1) != '"' && substr($txt, 0, 1) != '"') {
-						$record['data'] = '"'.$txt.'"';
+				if (strpos($txt, " ") !== false && strpos($txt, '" "') !== false && $txt != '" "') {
+					if (substr($txt, 0, 1) != '(' && substr($txt, -1) != ')') {
+						if (substr($txt, 0, 1) != '"' && substr($txt, -1) != '"') {
+							$record['data'] = '("'.$txt.'")';
+						}
+						else {
+							$record['data'] = '('.$txt.')';
+						}
 					}
 				}
-				
-				if (strpos($txt, '" "') !== false && $txt != '" "') {
-					$record['data'] = '('.$record['data'].')'; // for dkim records
+				else if (substr($txt, 0, 1) != '"' && substr($txt, -1) != '"') {
+					$record['data'] = '"'.$txt.'"';
 				}
 				
 				if (strpos($record['data'], "v=spf1") !== false) {
